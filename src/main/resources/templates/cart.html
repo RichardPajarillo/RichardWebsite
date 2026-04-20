@@ -46,37 +46,30 @@
         </tr>
         </thead>
         <tbody>
-        <!-- This loops through 'listBooks' sent from the Controller -->
-        <tr th:each="book : ${listBooks}">
-            <td>
-                <img th:src="${book.cover}" style="width:80px;" />
-            </td>
-            <td th:text="${book.title}"></td>
-            <td th:text="${book.author}"></td>
-            <td th:text="${book.about}"></td>
-            <td th:text="${book.price}"></td>
-            <td>
-                <!-- Add to Cart -->
-                <form th:action="@{/cart/add/{id}(id=${book.id})}" method="post" style="display:inline;">
-                    <button type="submit" class="nav-btn" style="padding: 5px; font-size: 12px;">
-                        Add to Cart
-                    </button>
-                </form>
+    <tr th:each="item : ${cart.items}">
 
-                <!-- Update -->
-                <a th:href="@{/showFormForUpdate/{id}(id=${book.id})}"
-                   class="nav-btn" style="padding: 5px; font-size: 12px;">
-                    Update
-                </a>
+        <td>
+            <img th:src="${item.book.cover}" style="width:80px;" />
+        </td>
 
-                <!-- Delete -->
-                <a th:href="@{/deleteBook/{id}(id=${book.id})}"
-                   class="nav-btn" style="padding: 5px; font-size: 12px; background-color: #dc3545;">
-                    Delete
-                </a>
-            </td>
-        </tr>
-        </tbody>
+        <td th:text="${item.book.title}"></td>
+
+        <td th:text="${item.book.author}"></td>
+
+        <td th:text="${item.quantity}"></td>
+
+        <td th:text="${item.book.price}"></td>
+
+        <td>
+            <a th:href="@{/cart/remove/{id}(id=${item.book.id})}"
+               class="nav-btn"
+               style="background-color:red; padding:5px;">
+                Remove
+            </a>
+        </td>
+
+    </tr>
+    </tbody>
     </table>
 </div>
 

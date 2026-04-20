@@ -1,26 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
 <head>
-    <title>Add New Book</title>
+    <title>Update New Book</title>
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
 
 <div th:replace="~{fragments/navbar :: nav-header}"></div>
-
 <div class="content-wrapper">
-    <h2>Save Book</h2>
+    <h2>Update Book</h2>
 
-    <!-- The form sends data to /saveBook using POST -->
     <form th:action="@{/saveBook}" th:object="${book}" method="POST">
-
+        <!-- CRITICAL: Hidden ID allows the database to 'update' instead of 'create new' -->
         <input type="hidden" th:field="*{id}">
-
-        <td th:text="${book.cover}"></td>
-        <td th:text="${book.title}"></td>
-        <td th:text="${book.author}"></td>
-        <td th:text="${book.about}"></td>
-        <td th:text="${book.price}"></td>
 
         <!-- Cover Field -->
         <input type="text" th:field="*{cover}" placeholder="Book Cover" class="form-control mb-4 col-4">
@@ -40,27 +32,22 @@
 
         <!-- Price Field -->
         <input type="text" th:field="*{price}" placeholder="Price Number" class="form-control mb-4 col-4">
-        <button type="submit" class="nav-btn" style="background-color: #RED;">Save Book</button>
 
+
+        <button type="submit" class="nav-btn" style="background-color: #007bff;">Update Book</button>
+
+        <!-- The Popup Script -->
+        <script th:if="${priceError}">
+            alert([[${priceError}]]);
+        </script>
 
         <!-- success-->
         <div th:if="${message}" style="color: green; margin-bottom: 15px;">
             <p th:text="${message}"></p>
         </div>
-        <!-- ERROR MESSAGE FOR PRICE -->
-        <p th:if="${#fields.hasErrors('price')}"
-           th:errors="*{price}"
-           style="color: red; margin-bottom: 15px;">
-            Invalid Price
-        </p>
-
-
-
     </form>
-
     <hr>
     <a th:href="@{/}">Back to Book List</a>
 </div>
-
 </body>
 </html>

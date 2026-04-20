@@ -4,7 +4,9 @@ import org.example.richardwebsite.model.Book;
 import org.example.richardwebsite.repository.BookRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class BookController {
@@ -20,7 +22,6 @@ public class BookController {
     public String viewHomePage(Model model) {
         model.addAttribute("listBooks", bookRepository.findAll());
 
-        // Add this line so your index.html "message" still works!
         model.addAttribute("message", "Hello, Spring Boot with Thymeleaf!");
 
         return "index";
@@ -34,11 +35,32 @@ public class BookController {
         return "new_book";
     }
 
-    // Save book
+    // Save Book but it also has its own update logic
     @PostMapping("/saveBook")
-    public String saveBook(@ModelAttribute("book") Book book) {
+    public String saveBook(@ModelAttribute("book") Book book,
+                           BindingResult result,
+                           Model model,
+                           RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("priceError", "Invalid Price: Please enter numbers only.");
+            return book.getId() == null ? "new_book" : "update_book";
+        }
+
+        //checker for not null
+        boolean isUpdate = (book.getId() != null);
+
+
         bookRepository.save(book);
-        return "redirect:/";
+
+        //checks if it has ID for updated, if not then it is a different message
+        if (isUpdate) {
+            redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
+            return "redirect:/showFormForUpdate/" + book.getId();
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Book saved successfully!");
+            return "redirect:/showNewBookForm";
+        }
     }
 
     // Show update form
@@ -46,6 +68,8 @@ public class BookController {
     public String showFormForUpdate(@PathVariable(value = "id") Long id, Model model) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
+
+        // We put the existing book into the model
         model.addAttribute("book", book);
         return "update_book";
     }
