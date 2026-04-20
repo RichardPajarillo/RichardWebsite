@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <title>Add New Book</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
+
+<div class="content-wrapper">
+    <h2>Save Book</h2>
+
+    <!-- The form sends data to /saveBook using POST -->
+    <form th:action="@{/saveBook}" th:object="${book}" method="POST">
+1
+        <!--ID MUST HAVE A HIDDEN FIELD OR ELSE THIS BREAKS-->
+        <input type="hidden" th:field="*{id}">
+
+        <input type="text" th:field="*{title}" placeholder="Book Title" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{author}" placeholder="Author Name" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{price}" placeholder="Price Number" class="form-control mb-4 col-4">
+
+        <button type="submit" class="nav-btn" style="background-color: #28a745;">Save Book</button>
+    </form>
+
+    <hr>
+    <a th:href="@{/}">Back to Book List</a>
+</div>
+</body>
+</html>

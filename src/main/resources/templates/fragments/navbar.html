@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<body>
+
+<!-- The th:fragment name MUST match what you called in index.html -->
+<nav th:fragment="nav-header" class="navbar">
+    <meta charset="UTF-8">
+        <a th:href="@{/}" class="nav-btn">Main</a>
+        <a th:href="@{/directory}" class="nav-btn">Directory</a>
+        <a th:href="@{/news}" class="nav-btn">News</a>
+        <a th:href="@{/contact}" class="nav-btn">Contact</a>
+        <a th:href="@{/about}" class="nav-btn">About</a>
+</nav>
+</body>
+</html>

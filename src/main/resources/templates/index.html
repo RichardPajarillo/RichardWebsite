@@ -1,31 +1,71 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Spring Boot HTML</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link th:href="@{/css/style.css}" rel="stylesheet">
-        <script th:src="@{/js/messagepopup.js}" defer></script>
-    </head>
-    <body>
-    <div class="navbar">
-        <a th:href="@{/directory}">
-            <script type="text/javascript" th:src="@{/js/messagepopup.js}"></script>
-            <button type="button" th:onclick="showAlert()">Directory</button>
-        </a>
-        <a th:href="@{/news}">
-            <button type="button">News</button>
-        </a>
-        <a th:href="@{/contact}">
-            <button type="button">Contact</button>
-        </a>
-        <a th:href="@{/about}">
-            <button type="button">About</button>
-        </a>
-    </div>
+<head>
+    <title>Spring Boot Styled Page</title>
+    <meta charset="UTF-8" />
+    <!-- Thymeleaf link to static CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
 
-    <div class="content-wrapper">
-        <p th:text="${message}"></p>
-        <textarea id="test" name="test">I hope this css works</textarea>
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
+
+
+<div class="content-wrapper">
+    <!-- Dynamic message from your Spring Controller -->
+    <h2 th:text="${message}">Default Message</h2>
+
+    <p>I hope this CSS works for your project!</p>
+
+    <textarea id="test" name="test">Type something here...</textarea>
+
+    <br>
+
+    <!-- Example Popup Trigger -->
+    <div class="popup" onclick="togglePopup()">
+        <button style="padding: 10px; cursor: pointer;">Show Popup</button>
+        <span class="popuptext" id="myPopup">This is a popup!</span>
     </div>
-    </body>
+</div>
+
+<div class="content-wrapper">
+    <h2>Book Directory</h2>
+
+    <!-- Button to go to the "Add Book" page -->
+    <a th:href="@{/showNewBookForm}" class="nav-btn" style="background-color: #28a745; margin-bottom: 10px; display: inline-block;">Add New Book</a>
+
+    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- This loops through 'listBooks' sent from the Controller -->
+        <tr th:each="book : ${listBooks}">
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.price}"></td>
+            <td>
+                <a th:href="@{/showFormForUpdate/{id}(id=${book.id})}" class="nav-btn" style="padding: 5px; font-size: 12px;">Update</a>
+                <a th:href="@{/deleteBook/{id}(id=${book.id})}" class="nav-btn" style="padding: 5px; font-size: 12px; background-color: #dc3545;">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    // Inline script for the popup toggle logic
+    function togglePopup() {
+        var popup = document.getElementById("myPopup");
+        popup.classList.toggle("show");
+    }
+</script>
+
+</body>
 </html>
