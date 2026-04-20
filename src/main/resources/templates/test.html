@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Spring Boot HTML</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link th:href="@{/css/style.css}" rel="stylesheet">
+    </head>
+    <body>
+        <p th:text="${message}" /> <!-- You get it from the Controller-->
+        <textarea id="test" name="test">I hope this test works</textarea>
+        <a th:href="@{/directory}" class="button-class">Go to Directory</a>
+    </body>
+</html>

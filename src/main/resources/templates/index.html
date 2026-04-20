@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Spring Boot HTML</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link th:href="@{/css/style.css}" rel="stylesheet">
+        <script th:src="@{/js/messagepopup.js}" defer></script>
+    </head>
+    <body>
+    <div class="navbar">
+        <a th:href="@{/directory}">
+            <script type="text/javascript" th:src="@{/js/messagepopup.js}"></script>
+            <button type="button" th:onclick="showAlert()">Directory</button>
+        </a>
+        <a th:href="@{/news}">
+            <button type="button">News</button>
+        </a>
+        <a th:href="@{/contact}">
+            <button type="button">Contact</button>
+        </a>
+        <a th:href="@{/about}">
+            <button type="button">About</button>
+        </a>
+    </div>
+
+    <div class="content-wrapper">
+        <p th:text="${message}"></p>
+        <textarea id="test" name="test">I hope this css works</textarea>
+    </div>
+    </body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Boot HTML</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+    <body>
+        <p th:text="${message}"></p>
+        <p>Hello! Welcome to The Directory!</p>
+        <textarea id="test" name="test">I hope this css works</textarea>
+        <div>
+            <a th:href="@{/}">
+                <button type="button">Go to Index</button>
+            </a>
+        </div>
+    </body>
+</html>
