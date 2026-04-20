@@ -88,11 +88,9 @@
         </tbody>
     </table>
 
-    <form th:action="@{/cart/checkout}" method="post">
-        <button type="submit" class="nav-btn" style="margin-top: 15px;">
-            Checkout
-        </button>
-    </form>
+    <a th:href="@{/cart/checkout}" class="nav-btn">
+        Checkout
+    </a>
 
     <h3>
         Total: $

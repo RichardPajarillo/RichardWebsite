@@ -19,6 +19,7 @@
         <td th:text="${book.cover}"></td>
         <td th:text="${book.title}"></td>
         <td th:text="${book.author}"></td>
+        <td th:text="${book.genre}"></td>
         <td th:text="${book.about}"></td>
         <td th:text="${book.price}"></td>
 
@@ -33,6 +34,10 @@
         <!-- Author Field -->
         <input type="text" th:field="*{author}" placeholder="Author Name" class="form-control mb-4 col-4">
         <p th:if="${#fields.hasErrors('author')}" th:errors="*{author}" style="color: red;"></p>
+
+        <!-- Genre Field -->
+        <input type="text" th:field="*{genre}" placeholder="Book Genre" class="form-control mb-4 col-4">
+        <p th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}" style="color: red;"></p>
 
         <!-- About Field -->
         <input type="text" th:field="*{about}" placeholder="Book About" class="form-control mb-4 col-4">

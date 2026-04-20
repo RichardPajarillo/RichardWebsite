@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 public class BookController {
 
@@ -19,12 +21,27 @@ public class BookController {
 
     // Display list of books with a message
     @GetMapping("/")
-    public String viewBooks(Model model) {
+    public String viewBooks(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String genre,
+            Model model) {
 
-        model.addAttribute("listBooks", bookRepository.findAll());
+        List<Book> books;
+
+        if (search != null && !search.isEmpty()) {
+            books = bookRepository.findByTitleContainingIgnoreCase(search);
+
+        } else if (genre != null && !genre.isEmpty()) {
+            books = bookRepository.findByGenreIgnoreCase(genre);
+
+        } else {
+            books = bookRepository.findAll();
+        }
+
+        model.addAttribute("listBooks", books);
         model.addAttribute("message", "Book Directory");
 
-        return "index"; // or "books" if you split views later
+        return "index";
     }
 
     // Show new book form

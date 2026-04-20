@@ -12,7 +12,11 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
 
     private Double total;
@@ -31,4 +35,12 @@ public class Order {
     public Double getTotal() { return total; }
 
     public void setTotal(Double total) { this.total = total; }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

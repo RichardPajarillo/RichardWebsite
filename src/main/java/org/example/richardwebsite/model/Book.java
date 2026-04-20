@@ -10,29 +10,31 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String cover;
     private String title;
     private String author;
+    private String genre;   // ✅ ADDED
     private String about;
     private Double price;
     private Integer quantity;
 
-
-    // JPA using default constructor
+    // JPA default constructor
     public Book() {}
 
     // Full constructor
-    public Book(String cover, String title, String author, String about, Double price, Integer quantity) {
+    public Book(String cover, String title, String author, String genre,
+                String about, Double price, Integer quantity) {
         this.cover = cover;
         this.title = title;
         this.author = author;
+        this.genre = genre;
         this.about = about;
         this.price = price;
         this.quantity = quantity;
     }
 
-    //Getters Setters
+    // Getters / Setters
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -44,6 +46,9 @@ public class Book {
 
     public String getAuthor() { return author; }
     public void setAuthor(String author) { this.author = author; }
+
+    public String getGenre() { return genre; }   // ✅ ADDED
+    public void setGenre(String genre) { this.genre = genre; }
 
     public String getAbout() { return about; }
     public void setAbout(String about) { this.about = about; }

@@ -1,0 +1,42 @@
+<head>
+  <title>Spring Boot Styled Page</title>
+  <meta charset="UTF-8" />
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
+
+<div class="content-wrapper">
+  <h2>Checkout</h2>
+  <p>Review your order before confirming</p>
+
+  <h3>Order Summary</h3>
+
+  <table border="1" style="width: 100%; border-collapse: collapse;">
+    <thead>
+    <tr>
+      <th>Book</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Subtotal</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="item : ${cart.items}">
+      <td th:text="${item.book.title}"></td>
+      <td th:text="${item.book.price}"></td>
+      <td th:text="${item.quantity}"></td>
+      <td th:text="${item.book.price * item.quantity}"></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h3>Total: $<span th:text="${cart.total}"></span></h3>
+
+  <form th:action="@{/cart/checkout}" method="post">
+    <button type="submit" class="nav-btn">
+      Confirm Order
+    </button>
+  </form>
+</div>

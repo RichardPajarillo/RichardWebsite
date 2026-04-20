@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Details</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
+
+<div class="content-wrapper">
+
+    <h2>Order #<span th:text="${order.id}"></span></h2>
+
+    <h3>Total: $<span th:text="${order.total}"></span></h3>
+
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+
+        <thead>
+        <tr>
+            <th>Book</th>
+            <th>Price</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="item : ${order.items}">
+
+            <td th:text="${item.bookTitle}"></td>
+
+            <td th:text="${item.price}"></td>
+
+            <td th:text="${item.quantity}"></td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <br>
+
+    <a th:href="@{/orders}" class="nav-btn">Back to Orders</a>
+
+</div>
+
+</body>
+</html>

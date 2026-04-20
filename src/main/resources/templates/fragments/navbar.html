@@ -8,20 +8,26 @@
 
     <a th:href="@{/cart}" class="nav-btn">Cart</a>
 
-    <!-- IF USER IS LOGGED IN -->
-    <span th:if="${session.user != null}">
-        <a th:href="@{/logout}" class="nav-btn">Logout</a>
+    <!-- 🔐 LOGGED IN USER -->
+    <span sec:authorize="isAuthenticated()">
+
         <span class="nav-btn" style="background: none;">
-            Hi, <span th:text="${session.user.username}"></span>
+            👋 Hello, <span sec:authentication="name"></span>
         </span>
+
+        <a th:href="@{/login}" class="nav-btn">Logout</a>
+
+        <!-- 👑 ADMIN ONLY LINK -->
+        <a th:href="@{/admin/dashboard}"
+           class="nav-btn"
+           sec:authorize="hasRole('ADMIN')">
+            Admin
+        </a>
+
     </span>
 
-    <span th:if="${session.user != null and session.user.role == 'ADMIN'}">
-        <a th:href="@{/admin/dashboard}" class="nav-btn">Admin</a>
-    </span>
-
-    <!-- IF USER IS NOT LOGGED IN -->
-    <span th:if="${session.user == null}">
+    <!-- ❌ NOT LOGGED IN -->
+    <span sec:authorize="isAnonymous()">
         <a th:href="@{/login}" class="nav-btn">Login</a>
         <a th:href="@{/register}" class="nav-btn">Register</a>
     </span>

@@ -17,22 +17,41 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
+
+                        // 🌐 PUBLIC
                         .requestMatchers("/login", "/register", "/css/**").permitAll()
+
+                        // 👑 ADMIN ONLY
+                        .requestMatchers("/showNewBookForm").hasRole("ADMIN")
+                        .requestMatchers("/saveBook").hasRole("ADMIN")
+                        .requestMatchers("/deleteBook/**").hasRole("ADMIN")
+                        .requestMatchers("/showFormForUpdate/**").hasRole("ADMIN")
+
+                        // 🛒 USER + ADMIN (must be logged in)
+                        .requestMatchers("/cart/**").authenticated()
+
+                        // 📦 ORDERS (ONLY LOGGED IN USERS)
+                        .requestMatchers("/orders").authenticated()
+
+                        // CHECK OUT MY GOD
+                        .requestMatchers("/checkout").authenticated()
+                        .requestMatchers("/checkout", "/cart/**").authenticated()
+
+                        .requestMatchers("/orders/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // 🔒 EVERYTHING ELSE
                         .anyRequest().authenticated()
                 )
 
-                // 🔥 IMPORTANT FIX: explicit login processing
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/", true)
-                        .failureUrl("/login?error")
                         .permitAll()
                 )
 
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/login")
                 );
 
         return http.build();
