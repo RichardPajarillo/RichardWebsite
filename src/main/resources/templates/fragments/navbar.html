@@ -1,16 +1,29 @@
-<!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
-<body>
-
-<!-- The th:fragment name MUST match what you called in index.html -->
 <nav th:fragment="nav-header" class="navbar">
-    <meta charset="UTF-8">
-        <a th:href="@{/}" class="nav-btn">Main</a>
-        <a th:href="@{/directory}" class="nav-btn">Directory</a>
-        <a th:href="@{/news}" class="nav-btn">News</a>
-        <a th:href="@{/contact}" class="nav-btn">Contact</a>
-        <a th:href="@{/about}" class="nav-btn">About</a>
-        <a th:href="@{/cart}" class="nav-btn">Cart</a>
+
+    <a th:href="@{/}" class="nav-btn">Main</a>
+    <a th:href="@{/directory}" class="nav-btn">Directory</a>
+    <a th:href="@{/news}" class="nav-btn">News</a>
+    <a th:href="@{/contact}" class="nav-btn">Contact</a>
+    <a th:href="@{/about}" class="nav-btn">About</a>
+
+    <a th:href="@{/cart}" class="nav-btn">Cart</a>
+
+    <!-- IF USER IS LOGGED IN -->
+    <span th:if="${session.user != null}">
+        <a th:href="@{/logout}" class="nav-btn">Logout</a>
+        <span class="nav-btn" style="background: none;">
+            Hi, <span th:text="${session.user.username}"></span>
+        </span>
+    </span>
+
+    <span th:if="${session.user != null and session.user.role == 'ADMIN'}">
+        <a th:href="@{/admin/dashboard}" class="nav-btn">Admin</a>
+    </span>
+
+    <!-- IF USER IS NOT LOGGED IN -->
+    <span th:if="${session.user == null}">
+        <a th:href="@{/login}" class="nav-btn">Login</a>
+        <a th:href="@{/register}" class="nav-btn">Register</a>
+    </span>
+
 </nav>
-</body>
-</html>

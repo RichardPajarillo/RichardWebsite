@@ -1,9 +1,8 @@
 package org.example.richardwebsite.controller;
 
 import org.example.richardwebsite.model.*;
-import org.example.richardwebsite.repository.BookRepository;
-import org.example.richardwebsite.repository.CartRepository;
-import org.example.richardwebsite.repository.OrderRepository;
+import org.example.richardwebsite.repository.*;
+import org.example.richardwebsite.service.SecurityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,28 +14,49 @@ public class CartController {
     private final BookRepository bookRepository;
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
+    private final SecurityService securityService;
 
     public CartController(CartRepository cartRepository,
                           BookRepository bookRepository,
-                          OrderRepository orderRepository) {
+                          OrderRepository orderRepository,
+                          SecurityService securityService) {
 
         this.cartRepository = cartRepository;
         this.bookRepository = bookRepository;
         this.orderRepository = orderRepository;
+        this.securityService = securityService;
     }
 
+    // core method
     private Cart getCart() {
 
-        return cartRepository.findAll()
-                .stream()
-                .findFirst()
+        User user = securityService.getCurrentUser();
+
+        return cartRepository.findByUser_Id(user.getId())
                 .orElseGet(() -> {
                     Cart cart = new Cart();
+                    cart.setUser(user);
                     return cartRepository.save(cart);
                 });
     }
 
-    // Add to cart
+    @PostMapping("/update")
+    @ResponseBody
+    public Double updateQty(@RequestParam Long bookId,
+                            @RequestParam int qty) {
+
+        Cart cart = getCart();
+
+        cart.getItems().stream()
+                .filter(i -> i.getBook().getId().equals(bookId))
+                .findFirst()
+                .ifPresent(i -> i.setQuantity(qty));
+
+        cartRepository.saveAndFlush(cart);
+
+        return Math.round(cart.getTotal() * 100.0) / 100.0;
+    }
+
     @PostMapping("/add/{id}")
     public String addToCart(@PathVariable Long id,
                             @RequestParam(defaultValue = "1") int qty) {
@@ -53,18 +73,16 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    // View cart
     @GetMapping
     public String viewCart(Model model) {
 
         Cart cart = getCart();
-        System.out.println("CART ITEMS: " + cart.getItems().size());
+
         model.addAttribute("cart", cart);
 
         return "cart";
     }
 
-    // Remove item
     @GetMapping("/remove/{id}")
     public String removeFromCart(@PathVariable Long id) {
 
@@ -77,26 +95,47 @@ public class CartController {
         return "redirect:/cart";
     }
 
-
-    //Add Quantity
-
     @PostMapping("/increase/{bookId}")
     public String increaseQty(@PathVariable Long bookId) {
 
         Cart cart = getCart();
 
-        for (CartItem item : cart.getItems()) {
-            if (item.getBook().getId().equals(bookId)) {
-                item.setQuantity(item.getQuantity() + 1);
-                break;
-            }
-        }
+        cart.getItems().stream()
+                .filter(i -> i.getBook().getId().equals(bookId))
+                .findFirst()
+                .ifPresent(i -> i.setQuantity(i.getQuantity() + 1));
 
-        cartRepository.save(cart);
+        cartRepository.saveAndFlush(cart);
+
         return "redirect:/cart";
     }
 
-    // Checkout
+    @PostMapping("/decrease/{bookId}")
+    public String decreaseQty(@PathVariable Long bookId) {
+
+        Cart cart = getCart();
+
+        CartItem target = cart.getItems().stream()
+                .filter(i -> i.getBook().getId().equals(bookId))
+                .findFirst()
+                .orElse(null);
+
+        if (target != null) {
+
+            int newQty = target.getQuantity() - 1;
+
+            if (newQty <= 0) {
+                cart.getItems().remove(target);
+            } else {
+                target.setQuantity(newQty);
+            }
+        }
+
+        cartRepository.saveAndFlush(cart);
+
+        return "redirect:/cart";
+    }
+
     @PostMapping("/checkout")
     public String checkout() {
 
@@ -107,7 +146,6 @@ public class CartController {
         }
 
         Order order = new Order();
-
         double total = 0;
 
         for (CartItem ci : cart.getItems()) {

@@ -11,11 +11,23 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
+
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
 
     public Long getId() {
         return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<CartItem> getItems() {
@@ -26,6 +38,7 @@ public class Cart {
         this.items = items;
     }
 
+    // BUSINESS LOGIC
     public void addItem(Book book, int qty) {
 
         for (CartItem item : items) {
@@ -35,15 +48,8 @@ public class Cart {
             }
         }
 
-        CartItem newItem = new CartItem();
-        newItem.setBook(book);
-        newItem.setQuantity(qty);
-        newItem.setCart(this);
-
+        CartItem newItem = new CartItem(book, qty, this);
         items.add(newItem);
-
-        // maybe this is the issue?
-        newItem.getCart().getItems().add(newItem);
     }
 
     public void removeItem(Long bookId) {
@@ -56,9 +62,5 @@ public class Cart {
         return items.stream()
                 .mapToDouble(i -> i.getBook().getPrice() * i.getQuantity())
                 .sum();
-    }
-
-    public void clear() {
-        items.clear();
     }
 }

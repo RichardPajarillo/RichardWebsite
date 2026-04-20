@@ -15,7 +15,14 @@
     <!-- Dynamic message from your Spring Controller -->
     <h2 th:text="${message}">Default Message</h2>
 
-    <p>I hope this CSS works for your project!</p>
+    <p th:if="${user != null}">
+        Welcome, <span th:text="${user.username}"></span>
+    </p>
+
+
+    <p th:if="${user == null}">
+        You are not logged in
+    </p>
 
     <textarea id="test" name="test">Type something here...</textarea>
 
@@ -57,8 +64,15 @@
             <td th:text="${book.price}"></td>
             <td>
                 <!-- Add to Cart -->
-                <form th:action="@{/cart/add/{id}(id=${book.id})}" method="post" style="display:inline;">
-                    <button type="submit" class="nav-btn" style="padding: 5px; font-size: 12px;">
+                <form th:action="@{/cart/add/{id}(id=${book.id})}" method="post">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}" />
+
+                    <button type="submit"
+                            class="nav-btn"
+                            style="padding: 5px; font-size: 12px;">
                         Add to Cart
                     </button>
                 </form>
@@ -70,10 +84,18 @@
                 </a>
 
                 <!-- Delete -->
-                <a th:href="@{/deleteBook/{id}(id=${book.id})}"
-                   class="nav-btn" style="padding: 5px; font-size: 12px; background-color: #dc3545;">
-                    Delete
-                </a>
+                <form th:action="@{/deleteBook/{id}(id=${book.id})}" method="post" style="display:inline;">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}" />
+
+                    <button type="submit"
+                            class="nav-btn"
+                            style="padding: 5px; font-size: 12px; background-color: #dc3545;">
+                        Delete
+                    </button>
+                </form>
             </td>
         </tr>
         </tbody>
@@ -88,6 +110,5 @@
         popup.classList.toggle("show");
     }
 </script>
-
 </body>
 </html>

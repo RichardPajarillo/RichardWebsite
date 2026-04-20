@@ -3,36 +3,25 @@
 <head>
     <title>Spring Boot Styled Page</title>
     <meta charset="UTF-8" />
-    <!-- Thymeleaf link to static CSS -->
     <link th:href="@{/css/style.css}" rel="stylesheet">
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
+
 <body>
 
 <div th:replace="~{fragments/navbar :: nav-header}"></div>
 
-
 <div class="content-wrapper">
-    <!-- Dynamic message from your Spring Controller -->
+
     <h2 th:text="${message}">Default Message</h2>
 
-    <p>I hope this CSS works for your project!</p>
-
-    <textarea id="test" name="test">Type something here...</textarea>
-
-    <br>
-
-    <!-- Example Popup Trigger -->
-    <div class="popup" onclick="togglePopup()">
-        <button style="padding: 10px; cursor: pointer;">Show Popup</button>
-        <span class="popuptext" id="myPopup">This is a popup!</span>
-    </div>
 </div>
 
 <div class="content-wrapper">
-    <h2>Book Directory</h2>
 
-    <!-- Button to go to the "Add Book" page -->
-    <a th:href="@{/showNewBookForm}" class="nav-btn" style="background-color: #28a745; margin-bottom: 10px; display: inline-block;">Add New Book</a>
+    <h2>Cart Items</h2>
 
     <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
         <thead>
@@ -40,45 +29,125 @@
             <th>Cover</th>
             <th>Title</th>
             <th>Author</th>
-            <th>About</th>
+            <th>Quantity</th>
             <th>Price</th>
             <th>Actions</th>
+            <th>Controls</th>
+            <th>Subtotal</th>
         </tr>
         </thead>
+
         <tbody>
-    <tr th:each="item : ${cart.items}">
 
-        <td>
-            <img th:src="${item.book.cover}" style="width:80px;" />
-        </td>
+        <!-- ✅ SINGLE LOOP ONLY -->
+        <tr th:each="item : ${cart.items}">
 
-        <td th:text="${item.book.title}"></td>
+            <td>
+                <img th:src="${item.book.cover}" style="width:80px;" />
+            </td>
 
-        <td th:text="${item.book.author}"></td>
+            <td th:text="${item.book.title}"></td>
 
-        <td th:text="${item.quantity}"></td>
+            <td th:text="${item.book.author}"></td>
 
-        <td th:text="${item.book.price}"></td>
+            <td th:text="${item.quantity}"></td>
 
-        <td>
-            <a th:href="@{/cart/remove/{id}(id=${item.book.id})}"
-               class="nav-btn"
-               style="background-color:red; padding:5px;">
-                Remove
-            </a>
-        </td>
+            <td th:text="${item.book.price}"
+                th:attr="data-price=${item.book.price}">
+            </td>
 
-    </tr>
-    </tbody>
+            <td>
+                <a th:href="@{/cart/remove/{id}(id=${item.book.id})}"
+                   class="nav-btn"
+                   style="background-color:red; padding:5px;">
+                    Remove
+                </a>
+            </td>
+
+            <td>
+                <button onclick="updateQty(this, -1)">-</button>
+
+                <input type="number"
+                       class="qty"
+                       th:value="${item.quantity}"
+                       min="1" />
+
+                <button onclick="updateQty(this, 1)">+</button>
+
+                <input type="hidden"
+                       class="bookId"
+                       th:value="${item.book.id}" />
+            </td>
+
+            <td class="subtotal"
+                th:text="${item.book.price * item.quantity}">
+            </td>
+
+        </tr>
+
+        </tbody>
     </table>
+
+    <form th:action="@{/cart/checkout}" method="post">
+        <button type="submit" class="nav-btn" style="margin-top: 15px;">
+            Checkout
+        </button>
+    </form>
+
+    <h3>
+        Total: $
+        <span id="totalPrice"
+              th:text="${#numbers.formatDecimal(T(java.lang.Math).round(cart.total * 100.0) / 100.0, 1, 2)}">
+        </span>
+    </h3>
+
 </div>
 
-
 <script>
-    // Inline script for the popup toggle logic
     function togglePopup() {
         var popup = document.getElementById("myPopup");
         popup.classList.toggle("show");
+    }
+</script>
+
+<script>
+    function updateQty(btn, change) {
+
+        const row = btn.closest("tr");
+
+        const input = row.querySelector(".qty");
+        let qty = parseInt(input.value);
+
+        qty = Math.max(1, qty + change);
+        input.value = qty;
+
+        const bookId = row.querySelector(".bookId").value;
+
+        const price = parseFloat(
+            row.querySelector("[data-price]").dataset.price
+        ) || 0;
+
+        // update subtotal instantly
+        row.querySelector(".subtotal").innerText =
+            (qty * price).toFixed(2);
+
+        // send update
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+        fetch("/cart/update", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                [csrfHeader]: csrfToken
+            },
+            body: `bookId=${bookId}&qty=${qty}`
+        })
+        .then(r => r.text())
+        .then(total => {
+            document.getElementById("totalPrice").innerText =
+                parseFloat(total).toFixed(2);
+        });
     }
 </script>
 

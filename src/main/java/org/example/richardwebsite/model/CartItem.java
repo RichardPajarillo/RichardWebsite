@@ -15,6 +15,7 @@ public class CartItem {
     private Integer quantity;
 
     @ManyToOne
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     public CartItem() {}
@@ -23,8 +24,6 @@ public class CartItem {
         this.book = book;
         this.quantity = quantity;
         this.cart = cart;
-
-        cart.getItems().add(this); // key fix
     }
 
     public Long getId() {

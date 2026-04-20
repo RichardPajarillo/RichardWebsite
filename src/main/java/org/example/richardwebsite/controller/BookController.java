@@ -19,12 +19,12 @@ public class BookController {
 
     // Display list of books with a message
     @GetMapping("/")
-    public String viewHomePage(Model model) {
+    public String viewBooks(Model model) {
+
         model.addAttribute("listBooks", bookRepository.findAll());
+        model.addAttribute("message", "Book Directory");
 
-        model.addAttribute("message", "Hello, Spring Boot with Thymeleaf!");
-
-        return "index";
+        return "index"; // or "books" if you split views later
     }
 
     // Show new book form
@@ -75,8 +75,8 @@ public class BookController {
     }
 
     // Delete book
-    @GetMapping("/deleteBook/{id}")
-    public String deleteBook(@PathVariable(value = "id") Long id) {
+    @PostMapping("/deleteBook/{id}")
+    public String deleteBook(@PathVariable Long id) {
         bookRepository.deleteById(id);
         return "redirect:/";
     }
