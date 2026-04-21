@@ -12,6 +12,10 @@
 
   <h2>Checkout</h2>
 
+  <div th:if="${#lists.isEmpty(cart.items)}">
+    Cart has no items and you will be redirected back <!-- UI FALLBACK -->
+  </div>
+
   <table border="1" style="width:100%">
 
     <thead>
@@ -34,7 +38,7 @@
 
   </table>
 
-  <h3>Total: ₱<span th:text="${cart.total}"></span></h3>
+  <h3>Total: ₱<span th:text="${cart != null ? cart.total : 0}"></span></h3>
 
   <form th:action="@{/checkout}" method="post">
     <button type="submit" class="nav-btn">

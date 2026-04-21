@@ -1,6 +1,7 @@
 package org.example.richardwebsite.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "books")
@@ -15,7 +16,8 @@ public class Book {
     private String author;
     private String genre;   // ✅ ADDED
     private String about;
-    private Double price = 0.0;
+    @Positive(message = "Price must be greater than 0")
+    private Double price = 0.00;
     private Integer quantity = 0;
 
     // JPA default constructor

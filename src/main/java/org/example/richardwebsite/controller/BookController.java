@@ -1,5 +1,6 @@
 package org.example.richardwebsite.controller;
 
+import jakarta.validation.Valid;
 import org.example.richardwebsite.model.Book;
 import org.example.richardwebsite.repository.BookRepository;
 import org.springframework.stereotype.Controller;
@@ -9,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 @Controller
 public class BookController {
@@ -76,7 +74,7 @@ public class BookController {
 
     // Save Book but it also has its own update logic
     @PostMapping("/saveBook")
-    public String saveBook(@ModelAttribute("book") Book book,
+    public String saveBook(@Valid @ModelAttribute("book") Book book,
                            BindingResult result,
                            Model model,
                            RedirectAttributes redirectAttributes) {

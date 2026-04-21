@@ -14,8 +14,11 @@
 <div th:replace="~{fragments/navbar :: nav-header}"></div>
 
 <div class="hero">
+    <div class="hero-content">
     <h1>Our Book Collection</h1>
-    <p>Explore different collections and discover new perspectives.</p>
+    <p>Explore different formula connections and broaden new perspectives.</p>
+        <a href="#collection" class="hero-btn">Explore Bookstore</a>
+    </div>
 </div>
 
 <div class="content-wrapper">
@@ -37,7 +40,7 @@
 
         <button type="submit" class="nav">Filter</button>
 
-        <a th:href="@{/}" class="nav">Reset</a>
+        <!--<a th:href="@{/}" class="nav">Reset</a>-->
 
     </form>
 
@@ -134,7 +137,8 @@
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalAuthor').innerText = 'by ' + author;
         document.getElementById('modalGenre').innerText = genre;
-        document.getElementById('modalPrice').textContent = '₱' + parseDouble(price).toFixed(2);
+        document.getElementById('modalPrice').textContent =
+            '₱' + parseFloat(price).toFixed(2);
         document.getElementById('modalAbout').innerText = about;
         document.getElementById('modalImg').src = cover;
 

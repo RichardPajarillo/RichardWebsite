@@ -5,6 +5,7 @@ import org.example.richardwebsite.repository.*;
 import org.example.richardwebsite.service.OrderService;
 import org.example.richardwebsite.service.SecurityService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -31,12 +32,28 @@ public class CheckoutController {
         Cart cart = cartRepository.findByUser_Id(user.getId())
                 .orElseThrow();
 
+        if (cart.getItems() == null || cart.getItems().isEmpty()) {
+            return "redirect:/cart?error=empty";
+        }
+
         orderService.createOrder(user, cart);
 
         cart.getItems().clear();
         cartRepository.save(cart);
 
         return "redirect:/orders";
+    }
+
+    @GetMapping
+    public String showCheckout(Model model) {
+
+        User user = securityService.getCurrentUser();
+        Cart cart = cartRepository.findByUser_Id(user.getId())
+                .orElseThrow();
+
+        model.addAttribute("cart", cart);
+
+        return "checkout";
     }
 
 }
