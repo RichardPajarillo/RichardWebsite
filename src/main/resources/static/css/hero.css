@@ -1,0 +1,19 @@
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 40px;
+}
+
+.hero h1 {
+    font-size: 64px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.hero p {
+    max-width: 400px;
+    color: var(--muted);
+    font-size: 16px;
+}

@@ -2,6 +2,7 @@ package org.example.richardwebsite.controller;
 
 import org.example.richardwebsite.model.*;
 import org.example.richardwebsite.repository.*;
+import org.example.richardwebsite.service.OrderService;
 import org.example.richardwebsite.service.SecurityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,17 +15,21 @@ public class CartController {
     private final CartRepository cartRepository;
     private final BookRepository bookRepository;
     private final SecurityService securityService;
+    private final OrderService orderService;
 
     public CartController(CartRepository cartRepository,
                           BookRepository bookRepository,
-                          SecurityService securityService) {
+                          SecurityService securityService,
+                          OrderService orderService) {
         this.cartRepository = cartRepository;
         this.bookRepository = bookRepository;
         this.securityService = securityService;
+        this.orderService = orderService;
     }
 
     private Cart getCart() {
         User user = securityService.getCurrentUser();
+
         return cartRepository.findByUser_Id(user.getId())
                 .orElseGet(() -> {
                     Cart cart = new Cart();
@@ -77,5 +82,28 @@ public class CartController {
         cartRepository.saveAndFlush(cart);
 
         return cart.getTotal();
+    }
+
+    //checkout section here
+
+    @GetMapping("/checkout")
+    public String checkout(Model model) {
+        Cart cart = getCart();
+        model.addAttribute("cart", cart);
+        return "checkout"; // must match checkout.html
+    }
+
+    @PostMapping("/checkout")
+    public String checkout() {
+
+        User user = securityService.getCurrentUser();
+        Cart cart = getCart();
+
+        orderService.createOrder(user, cart);
+
+        cart.getItems().clear();
+        cartRepository.save(cart);
+
+        return "redirect:/orders";
     }
 }

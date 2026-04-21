@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Orders</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/cardstyle.css}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
+
+<div class="content-wrapper">
+
+    <h2>All Orders (Admin)</h2>
+
+    <div class="orders-container">
+
+        <div class="order-card" th:each="order : ${orders}">
+
+            <div class="order-header">
+                <h3>
+                    Order #<span th:text="${order.id}"></span>
+                </h3>
+
+                <div>
+                    User:
+                    <span th:text="${order.user != null ? order.user.username : 'Unknown'}"></span>
+                </div>
+
+                <span class="order-total">
+                    $<span th:text="${order.total}"></span>
+                </span>
+            </div>
+
+            <div class="order-body">
+
+                <div th:each="item : ${order.items}">
+                    <strong th:text="${item.bookTitle}"></strong>
+                    - $<span th:text="${item.price}"></span>
+                    × <span th:text="${item.quantity}"></span>
+                </div>
+
+            </div>
+
+            <div class="order-footer">
+                <a th:href="@{/admin/orders/{id}(id=${order.id})}" class="nav-btn">
+                    View Details
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -2,7 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>My Orders</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/cardstyle.css}" rel="stylesheet">
 </head>
+
 <body>
 
 <div th:replace="~{fragments/navbar :: nav-header}"></div>
@@ -11,25 +14,62 @@
 
     <h2>My Order History</h2>
 
-    <table border="1" style="width: 100%;">
+    <div class="orders-container">
 
-        <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Total</th>
-        </tr>
-        </thead>
+        <!-- 🔁 LOOP ORDERS -->
+        <div class="order-card" th:each="order : ${orders}">
 
-        <tbody>
+            <div class="order-header">
+                <div>
+                    <span class="order-label">Order #</span>
+                    <span class="order-number" th:text="${order.userOrderNumber}"></span>
+                </div>
 
-        <tr th:each="order : ${orders}">
-            <td th:text="${order.id}"></td>
-            <td th:text="${order.total}"></td>
-        </tr>
+                <span class="order-total">
+        $<span th:text="${#numbers.formatDecimal(order.total,1,2)}"></span>
+    </span>
+            </div>
 
-        </tbody>
+            <div class="order-body">
 
-    </table>
+                <!-- ✅ SHOW FIRST 3 ITEMS -->
+                <div class="order-item"
+                     th:each="item, iterStat : ${order.items}"
+                     th:if="${iterStat.index < 3}">
+
+                    <div class="item-title" th:text="${item.bookTitle}"></div>
+
+                    <div class="item-details">
+                        $<span th:text="${item.price}"></span>
+                        ×
+                        <span th:text="${item.quantity}"></span>
+                    </div>
+
+                    <div class="item-subtotal">
+                        $<span th:text="${item.price * item.quantity}"></span>
+                    </div>
+
+                </div>
+
+                <!-- ✅ SHOW REMAINING COUNT -->
+                <div th:if="${order.items.size() > 3}"
+                     style="font-size: 13px; color: #888; margin-top: 5px;">
+
+                    +<span th:text="${order.items.size() - 3}"></span> more items...
+
+                </div>
+
+            </div>
+
+            <div class="order-footer">
+                <a th:href="@{/orders/{id}(id=${order.id})}" class="nav-btn">
+                    View Details
+                </a>
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 

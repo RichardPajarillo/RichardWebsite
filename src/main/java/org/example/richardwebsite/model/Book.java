@@ -15,8 +15,8 @@ public class Book {
     private String author;
     private String genre;   // ✅ ADDED
     private String about;
-    private Double price;
-    private Integer quantity;
+    private Double price = 0.0;
+    private Integer quantity = 0;
 
     // JPA default constructor
     public Book() {}

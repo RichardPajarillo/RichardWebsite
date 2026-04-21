@@ -1,14 +1,19 @@
 package org.example.richardwebsite.repository;
 
 import org.example.richardwebsite.model.Book;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    List<Book> findByTitleContainingIgnoreCase(String title);
+    // pagination for all books
+    Page<Book> findAll(Pageable pageable);
 
-    List<Book> findByGenreIgnoreCase(String genre);
+    // search + pagination
+    Page<Book> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+
+    // genre + pagination
+    Page<Book> findByGenreIgnoreCase(String genre, Pageable pageable);
 }
 

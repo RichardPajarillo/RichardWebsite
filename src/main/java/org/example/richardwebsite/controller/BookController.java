@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -24,22 +27,41 @@ public class BookController {
     public String viewBooks(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String genre,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
             Model model) {
 
-        List<Book> books;
+        int size = 8;
 
-        if (search != null && !search.isEmpty()) {
-            books = bookRepository.findByTitleContainingIgnoreCase(search);
+        int pageNumber = (page == null || page < 0) ? 0 : page;
 
-        } else if (genre != null && !genre.isEmpty()) {
-            books = bookRepository.findByGenreIgnoreCase(genre);
+        Page<Book> booksPage;
+
+        if (search != null && !search.trim().isEmpty()) {
+
+            booksPage = bookRepository.findByTitleContainingIgnoreCase(
+                    search,
+                    PageRequest.of(pageNumber, size)
+            );
+
+        } else if (genre != null && !genre.trim().isEmpty()) {
+
+            booksPage = bookRepository.findByGenreIgnoreCase(
+                    genre,
+                    PageRequest.of(pageNumber, size)
+            );
 
         } else {
-            books = bookRepository.findAll();
+
+            booksPage = bookRepository.findAll(PageRequest.of(pageNumber, size));
         }
 
-        model.addAttribute("listBooks", books);
-        model.addAttribute("message", "Book Directory");
+        model.addAttribute("listBooks", booksPage.getContent());
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", booksPage.getTotalPages());
+
+        // IMPORTANT: keep values for pagination links
+        model.addAttribute("search", search);
+        model.addAttribute("genre", genre);
 
         return "index";
     }

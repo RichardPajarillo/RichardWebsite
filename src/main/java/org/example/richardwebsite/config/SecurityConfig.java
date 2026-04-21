@@ -40,6 +40,9 @@ public class SecurityConfig {
                         .requestMatchers("/orders/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
+                        .requestMatchers("/checkout", "/orders/**").authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/cart/**").authenticated()
                         // 🔒 EVERYTHING ELSE
                         .anyRequest().authenticated()
                 )

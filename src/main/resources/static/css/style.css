@@ -1,85 +1,229 @@
-/* --- Global Styles --- */
-body {
-    background-color: #FFFDD0; /* Cream background */
-    font-family: Verdana, sans-serif;
+
+/* =========================
+   ROOT / THEME
+========================= */
+:root {
+    --bg: #f8f8f8;
+    --white: #ffffff;
+    --oldpage: #f6eee3;
+    --text: #1a1a1a;
+    --muted: #777;
+    --border: #eaeaea;
+
+    --accent: #000;
+    --radius: 10px;
+}
+
+/* =========================
+   RESET
+========================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html, body {
     margin: 0;
     padding: 0;
 }
 
-/* --- Fixed Navbar --- */
+body {
+    padding-top: 70px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, Arial, sans-serif;
+    line-height: 1.6;
+}
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+h1, h2, h3 {
+    margin: 0;
+    font-weight: 500;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+.content-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 60px;
+}
+
+/* =========================
+   NAVBAR
+========================= */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: #333;
     z-index: 1000;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+
+    background: var(--oldpage);
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 40px;
+    transition: transform 0.3s ease;
 }
 
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.brand {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* =========================
+   NAV LINKS (SAFE)
+========================= */
 .navbar a.nav-btn {
-    float: left;
-    display: block;
-    color: red;
-    text-align: center;
-    padding: 16px 20px;
     text-decoration: none;
-    font-weight: bold;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+    background: transparent;
 }
 
 .navbar a.nav-btn:hover {
-    background-color: green;
-    color: turquoise;
+    color: var(--accent);
 }
 
-/* --- Content Wrapper --- */
-.content-wrapper {
-    /* Push content down by 60px so it doesn't hide under the fixed navbar */
-    padding: 80px 20px 20px 20px;
-    max-width: 800px;
-    margin: 0 auto;
+/* USER INFO */
+.nav-user {
+    font-size: 12px;
+    text-align: right;
+    color: var(--muted);
 }
 
-textarea#test {
-    width: 100%;
-    height: 120px;
-    margin-top: 15px;
-    padding: 10px;
-    font-family: Verdana;
-    border: 2px solid #333;
-    border-radius: 4px;
+/* =========================
+   HERO
+========================= */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 40px;
 }
 
-/* --- Popup Container --- */
-.popup {
-    position: relative;
-    display: inline-block;
+.hero h1 {
+    font-size: 56px;
+}
+
+.hero p {
+    max-width: 400px;
+    color: var(--muted);
+}
+
+/* =========================
+   INPUTS
+========================= */
+input, select {
+    padding: 10px 12px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 14px;
+}
+
+/* =========================
+   BUTTON SYSTEM (FINAL)
+========================= */
+.btn {
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
     cursor: pointer;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+.btn:hover {
+    background: black;
+    color: white;
+}
+
+/* small button variant (for tables/cards) */
+.small-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 14px;
+}
+
+/* danger button */
+.danger-btn {
+    background: #c0392b;
+    color: white;
+    border: none;
+}
+
+.danger-btn:hover {
+    background: #a93226;
+}
+
+/* =========================
+   TABLES
+========================= */
+.table-wrapper {
+    overflow-x: auto;
     margin-top: 20px;
 }
 
-.popup .popuptext {
-    visibility: hidden;
-    width: 160px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%); /* Centers the popup over the trigger */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
 }
 
-/* Toggle this class with JavaScript */
-.popup .show {
-    visibility: visible;
-    animation: fadeIn 0.5s;
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid var(--border);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+th {
+    background: #fafafa;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+
+    .content-wrapper {
+        padding: 20px;
+    }
+
+    .hero {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-left,
+    .nav-right {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }

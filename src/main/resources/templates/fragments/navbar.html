@@ -1,35 +1,71 @@
-<nav th:fragment="nav-header" class="navbar">
+<nav th:fragment="nav-header" class="navbar"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-    <a th:href="@{/}" class="nav-btn">Main</a>
-    <a th:href="@{/directory}" class="nav-btn">Directory</a>
-    <a th:href="@{/news}" class="nav-btn">News</a>
-    <a th:href="@{/contact}" class="nav-btn">Contact</a>
-    <a th:href="@{/about}" class="nav-btn">About</a>
+    <!-- LEFT SIDE LINKS -->
+    <div class="nav-left">
 
-    <a th:href="@{/cart}" class="nav-btn">Cart</a>
+        <span class="brand">FORMULA BOOK</span>
 
-    <!-- 🔐 LOGGED IN USER -->
-    <span sec:authorize="isAuthenticated()">
+        <a th:href="@{/}" class="nav-btn">Home</a>
+        <a th:href="@{/news}" class="nav-btn">News</a>
+        <a th:href="@{/contact}" class="nav-btn">Contact</a>
+        <a th:href="@{/about}" class="nav-btn">About</a>
+        <a th:href="@{/orders}" class="nav-btn">Orders</a>
+        <a th:href="@{/cart}" class="nav-btn">Cart</a>
 
-        <span class="nav-btn" style="background: none;">
-            👋 Hello, <span sec:authentication="name"></span>
-        </span>
 
-        <a th:href="@{/login}" class="nav-btn">Logout</a>
-
-        <!-- 👑 ADMIN ONLY LINK -->
         <a th:href="@{/admin/dashboard}"
            class="nav-btn"
            sec:authorize="hasRole('ADMIN')">
-            Admin
+            Admin Dashboard
         </a>
 
-    </span>
+        <a th:href="@{/admin/books}"
+           class="nav-btn"
+           sec:authorize="hasRole('ADMIN')">
+            Manage Books
+        </a>
 
-    <!-- ❌ NOT LOGGED IN -->
-    <span sec:authorize="isAnonymous()">
-        <a th:href="@{/login}" class="nav-btn">Login</a>
-        <a th:href="@{/register}" class="nav-btn">Register</a>
-    </span>
+        <a th:href="@{/admin/orders}"
+           class="nav-btn"
+           sec:authorize="hasRole('ADMIN')">
+            Orders Admin
+        </a>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="nav-right" sec:authorize="isAuthenticated()">
+
+        <span class="nav-user">
+            <span sec:authentication="name"></span>
+            <small sec:authentication="principal.authorities"
+                   style="text-transform: lowercase;"></small>
+        </span>
+
+        <!-- IMPORTANT: logout should NOT go to /login -->
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="nav-btn">Logout</button>
+        </form>
+
+    </div>
+
+    <!-- SCROLL HIDE/SHOW -->
+    <script>
+        let lastScrollTop = 0;
+        const navbar = document.querySelector(".navbar");
+
+        window.addEventListener("scroll", function () {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (scrollTop > lastScrollTop) {
+                navbar.style.transform = "translateY(-100%)";
+            } else {
+                navbar.style.transform = "translateY(0)";
+            }
+
+            lastScrollTop = scrollTop;
+        });
+    </script>
 
 </nav>

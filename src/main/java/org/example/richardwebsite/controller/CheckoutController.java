@@ -1,71 +1,40 @@
 package org.example.richardwebsite.controller;
 
 import org.example.richardwebsite.model.*;
-import org.example.richardwebsite.repository.OrderRepository;
-import org.example.richardwebsite.service.CartService;
+import org.example.richardwebsite.repository.*;
+import org.example.richardwebsite.service.OrderService;
 import org.example.richardwebsite.service.SecurityService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/cart")
+@RequestMapping("/checkout")
 public class CheckoutController {
 
-    private final CartService cartService;
-    private final OrderRepository orderRepository;
     private final SecurityService securityService;
+    private final OrderService orderService;
+    private final CartRepository cartRepository;
 
-    public CheckoutController(CartService cartService,
-                              OrderRepository orderRepository,
-                              SecurityService securityService) {
-        this.cartService = cartService;
-        this.orderRepository = orderRepository;
+    public CheckoutController(SecurityService securityService,
+                              OrderService orderService,
+                              CartRepository cartRepository) {
+
         this.securityService = securityService;
+        this.orderService = orderService;
+        this.cartRepository = cartRepository;
     }
 
-    @GetMapping("/checkout")
-    public String checkoutPage(Model model) {
-        model.addAttribute("cart", cartService.getCart());
-        return "checkout";
-    }
+    @PostMapping
+    public String checkout() {
 
-    @PostMapping("/checkout")
-    public String confirmCheckout() {
+        User user = securityService.getCurrentUser();
+        Cart cart = cartRepository.findByUser_Id(user.getId())
+                .orElseThrow();
 
-        Cart cart = cartService.getCart();
-
-        if (cart.getItems().isEmpty()) {
-            return "redirect:/cart/checkout";
-        }
-
-        Order order = new Order();
-        order.setUser(securityService.getCurrentUser());
-
-        double total = 0;
-
-        for (CartItem ci : cart.getItems()) {
-
-            OrderItem item = new OrderItem(
-                    ci.getBook().getTitle(),
-                    ci.getBook().getPrice(),
-                    ci.getQuantity()
-            );
-
-            order.addItem(item);
-
-            total += ci.getBook().getPrice() * ci.getQuantity();
-        }
-
-        order.setTotal(total);
-
-        orderRepository.save(order);
+        orderService.createOrder(user, cart);
 
         cart.getItems().clear();
-        cartService.save(cart);
+        cartRepository.save(cart);
 
         return "redirect:/orders";
     }

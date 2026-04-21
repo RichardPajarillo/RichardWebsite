@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Admin Dashboard</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
+
+<div class="content-wrapper">
+
+    <h1>Admin Dashboard</h1>
+
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+
+        <a th:href="@{/admin/orders}" class="btn">Manage Orders</a>
+
+        <a th:href="@{/admin/books}" class="btn">Manage Books</a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

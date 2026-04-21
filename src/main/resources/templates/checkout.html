@@ -1,23 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Spring Boot Styled Page</title>
-  <meta charset="UTF-8" />
+  <title>Checkout</title>
   <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
+<body>
 
 <div th:replace="~{fragments/navbar :: nav-header}"></div>
 
 <div class="content-wrapper">
+
   <h2>Checkout</h2>
-  <p>Review your order before confirming</p>
 
-  <h3>Order Summary</h3>
+  <table border="1" style="width:100%">
 
-  <table border="1" style="width: 100%; border-collapse: collapse;">
     <thead>
     <tr>
       <th>Book</th>
       <th>Price</th>
-      <th>Quantity</th>
+      <th>Qty</th>
       <th>Subtotal</th>
     </tr>
     </thead>
@@ -30,13 +31,18 @@
       <td th:text="${item.book.price * item.quantity}"></td>
     </tr>
     </tbody>
+
   </table>
 
   <h3>Total: $<span th:text="${cart.total}"></span></h3>
 
-  <form th:action="@{/cart/checkout}" method="post">
+  <form th:action="@{/checkout}" method="post">
     <button type="submit" class="nav-btn">
       Confirm Order
     </button>
   </form>
+
 </div>
+
+</body>
+</html>

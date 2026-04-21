@@ -33,4 +33,24 @@ public class OrderController {
 
         return "orders";
     }
+
+    @GetMapping("/orders/{id}")
+    public String orderDetails(@PathVariable Long id, Model model) {
+
+        Order order = orderRepository.findById(id)
+                .orElseThrow();
+
+        // 🔒 SECURITY (important)
+        User currentUser = securityService.getCurrentUser();
+
+        if (!order.getUser().getId().equals(currentUser.getId())) {
+            return "redirect:/orders"; // prevent viewing others' orders
+        }
+
+        model.addAttribute("order", order);
+
+        return "order-details";
+    }
+
+
 }

@@ -10,12 +10,11 @@ public class OrderItem {
     private Long id;
 
     private String bookTitle;
-
     private Double price;
-
     private Integer quantity;
 
     @ManyToOne
+    @JoinColumn(name = "order_id")
     private Order order;
 
     public OrderItem() {}
@@ -26,15 +25,20 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    public Long getId() { return id; }
-
     public String getBookTitle() { return bookTitle; }
-
     public Double getPrice() { return price; }
-
     public Integer getQuantity() { return quantity; }
 
+    public Order getOrder() {
+        return order;
+    }
+
+    // ✅ THIS is what you're missing
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
