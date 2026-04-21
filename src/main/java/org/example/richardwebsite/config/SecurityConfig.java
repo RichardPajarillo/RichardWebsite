@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,27 +23,21 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/register", "/css/**").permitAll()
 
                         // 👑 ADMIN ONLY
-                        .requestMatchers("/showNewBookForm").hasRole("ADMIN")
-                        .requestMatchers("/saveBook").hasRole("ADMIN")
-                        .requestMatchers("/deleteBook/**").hasRole("ADMIN")
-                        .requestMatchers("/showFormForUpdate/**").hasRole("ADMIN")
+                        .requestMatchers(
+                                "/admin/**",
+                                "/showNewBookForm",
+                                "/saveBook",
+                                "/deleteBook/**",
+                                "/showFormForUpdate/**"
+                        ).hasRole("ADMIN")
 
-                        // 🛒 USER + ADMIN (must be logged in)
-                        .requestMatchers("/cart/**").authenticated()
+                        // 🔐 AUTHENTICATED USERS
+                        .requestMatchers(
+                                "/cart/**",
+                                "/orders/**",
+                                "/checkout"
+                        ).authenticated()
 
-                        // 📦 ORDERS (ONLY LOGGED IN USERS)
-                        .requestMatchers("/orders").authenticated()
-
-                        // CHECK OUT MY GOD
-                        .requestMatchers("/checkout").authenticated()
-                        .requestMatchers("/checkout", "/cart/**").authenticated()
-
-                        .requestMatchers("/orders/**").authenticated()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        .requestMatchers("/checkout", "/orders/**").authenticated()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/cart/**").authenticated()
                         // 🔒 EVERYTHING ELSE
                         .anyRequest().authenticated()
                 )
@@ -55,14 +50,20 @@ public class SecurityConfig {
 
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
+                        .permitAll()
                 );
 
         return http.build();
     }
 
-    // ⚠️ only for development/testing
+    /* Use BCrypt in real apps
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
+    } */
+
+    // ⚠️ only for development/testing
+    @Bean public PasswordEncoder passwordEncoder() {
+     return NoOpPasswordEncoder.getInstance();
     }
 }
