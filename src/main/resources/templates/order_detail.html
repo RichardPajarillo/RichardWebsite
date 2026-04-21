@@ -10,9 +10,16 @@
 
 <div class="content-wrapper">
 
-    <h2>Order #<span th:text="${order.userOrderNumber}"></span>></h2>
+    <h2>Order #<span th:text="${order.userOrderNumber}"></span></h2>
 
-    <h3>Total: $<span th:text="${order.total}"></span></h3>
+    <div style="margin-bottom: 10px;">
+        <strong>Status: </strong>
+        <span th:text="${order.status != null ? order.status : 'PENDING'}"
+              style="text-transform: uppercase; color: #007bff; font-weight: bold;">
+        </span>
+    </div>
+
+    <h3>Total: ₱<span th:text="${order.total}"></span></h3>
 
     <table border="1" style="width: 100%; border-collapse: collapse;">
 

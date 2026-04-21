@@ -1,229 +1,111 @@
+@import url('base.css');
+@import url('layout.css');
+@import url('components.css');
+@import url('table.css');
+@import url('navbar.css');
+@import url('responsive.css');
 
-/* =========================
-   ROOT / THEME
-========================= */
-:root {
-    --bg: #f8f8f8;
-    --white: #ffffff;
-    --oldpage: #f6eee3;
-    --text: #1a1a1a;
-    --muted: #777;
-    --border: #eaeaea;
+/*auth css here first*/
 
-    --accent: #000;
-    --radius: 10px;
+.auth-page {
+    background: var(--bg); /* Light grey background to make the white card pop */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-/* =========================
-   RESET
-========================= */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
+.auth-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
 }
 
-html, body {
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    padding-top: 70px;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Inter", system-ui, Arial, sans-serif;
-    line-height: 1.6;
-}
-
-/* =========================
-   TYPOGRAPHY
-========================= */
-h1, h2, h3 {
-    margin: 0;
-    font-weight: 500;
-}
-
-/* =========================
-   LAYOUT
-========================= */
-.content-wrapper {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 40px 60px;
-}
-
-/* =========================
-   NAVBAR
-========================= */
-.navbar {
-    position: fixed;
-    top: 0;
+.auth-card {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
     width: 100%;
-    z-index: 1000;
-
-    background: var(--oldpage);
-    border-bottom: 1px solid var(--border);
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 12px 40px;
-    transition: transform 0.3s ease;
-}
-
-.nav-left,
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.brand {
-    font-size: 20px;
-    font-weight: 700;
-}
-
-/* =========================
-   NAV LINKS (SAFE)
-========================= */
-.navbar a.nav-btn {
-    text-decoration: none;
-    color: var(--text);
-    font-size: 14px;
-    font-weight: 500;
-    transition: 0.2s;
-    background: transparent;
-}
-
-.navbar a.nav-btn:hover {
-    color: var(--accent);
-}
-
-/* USER INFO */
-.nav-user {
-    font-size: 12px;
-    text-align: right;
-    color: var(--muted);
-}
-
-/* =========================
-   HERO
-========================= */
-.hero {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
-    gap: 40px;
-}
-
-.hero h1 {
-    font-size: 56px;
-}
-
-.hero p {
     max-width: 400px;
+    text-align: center;
+}
+
+.auth-card h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.auth-subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+
+.auth-card input {
+    width: 100%; /* Overrides default input sizing */
+    border-radius: 8px; /* Slightly more modern than full pills for auth */
+}
+
+.auth-btn {
+    width: 100%;
+    background: var(--text);
+    color: var(--white);
+    padding: 12px;
+    margin-top: 10px;
+}
+
+.auth-footer {
+    margin-top: 25px;
+    font-size: 14px;
     color: var(--muted);
 }
 
-/* =========================
-   INPUTS
-========================= */
-input, select {
-    padding: 10px 12px;
-    border-radius: 30px;
-    border: 1px solid var(--border);
-    background: white;
-    font-size: 14px;
+.auth-footer a {
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 5px;
 }
 
 /* =========================
-   BUTTON SYSTEM (FINAL)
+   ERROR BANNER
 ========================= */
-.btn {
-    padding: 8px 14px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: transparent;
-    cursor: pointer;
-    transition: 0.2s;
-    font-size: 14px;
+.error-banner {
+    background-color: #fff5f5; /* Very subtle red tint */
+    color: #c0392b; /* Matches your danger-btn color */
+    padding: 12px;
+    border-radius: var(--radius); /* Uses 10px from base.css */
+    border: 1px solid #f5c6cb;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: slideDown 0.3s ease-out;
 }
 
-.btn:hover {
-    background: black;
-    color: white;
-}
-
-/* small button variant (for tables/cards) */
-.small-btn {
-    padding: 6px 10px;
-    font-size: 12px;
-    border-radius: 14px;
-}
-
-/* danger button */
-.danger-btn {
-    background: #c0392b;
-    color: white;
-    border: none;
-}
-
-.danger-btn:hover {
-    background: #a93226;
-}
-
-/* =========================
-   TABLES
-========================= */
-.table-wrapper {
-    overflow-x: auto;
-    margin-top: 20px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-}
-
-th, td {
-    padding: 10px;
-    border-bottom: 1px solid var(--border);
-}
-
-th {
-    background: #fafafa;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 768px) {
-
-    .content-wrapper {
-        padding: 20px;
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
     }
-
-    .hero {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .hero h1 {
-        font-size: 32px;
-    }
-
-    .navbar {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .nav-left,
-    .nav-right {
-        flex-wrap: wrap;
-        justify-content: center;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

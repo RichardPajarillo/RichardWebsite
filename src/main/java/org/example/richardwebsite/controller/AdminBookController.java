@@ -18,7 +18,7 @@ public class AdminBookController {
 
     @GetMapping
     public String manageBooks(Model model) {
-        model.addAttribute("listBooks", bookRepository.findAll());
+        model.addAttribute("books", bookRepository.findAll());
         return "admin-books";
     }
 }

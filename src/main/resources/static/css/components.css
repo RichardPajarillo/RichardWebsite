@@ -1,0 +1,38 @@
+input, select {
+    padding: 10px 12px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 14px;
+}
+
+.btn {
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+.btn:hover {
+    background: black;
+    color: white;
+}
+
+.small-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 14px;
+}
+
+.danger-btn {
+    background: #c0392b;
+    color: white;
+    border: none;
+}
+
+.danger-btn:hover {
+    background: #a93226;
+}

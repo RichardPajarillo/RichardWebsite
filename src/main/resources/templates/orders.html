@@ -23,11 +23,13 @@
                 <div>
                     <span class="order-label">Order #</span>
                     <span class="order-number" th:text="${order.userOrderNumber}"></span>
+
+                    <span style="margin-left: 10px; font-size: 12px; padding: 2px 8px; border-radius: 12px; background: #eee;"
+                          th:text="${order.status}">
+        </span>
                 </div>
 
-                <span class="order-total">
-        $<span th:text="${#numbers.formatDecimal(order.total,1,2)}"></span>
-    </span>
+
             </div>
 
             <div class="order-body">
@@ -36,18 +38,24 @@
                 <div class="order-item"
                      th:each="item, iterStat : ${order.items}"
                      th:if="${iterStat.index < 3}">
-
+                    <p>Book: </p>
                     <div class="item-title" th:text="${item.bookTitle}"></div>
 
                     <div class="item-details">
-                        $<span th:text="${item.price}"></span>
+                        ₱<span th:text="${#numbers.formatDecimal(item.price, 1, 2)}"></span>
                         ×
                         <span th:text="${item.quantity}"></span>
                     </div>
 
                     <div class="item-subtotal">
-                        $<span th:text="${item.price * item.quantity}"></span>
+                        <p>Item Subtotal: </p>
+                        ₱<span th:text="${#numbers.formatDecimal(item.price * item.quantity, 1, 2)}"></span>
                     </div>
+
+                    <span class="order-total">
+                        <p>Total: </p>
+                        <span th:text="${#numbers.formatDecimal(order.total,1,2)}"></span>
+                    </span>
 
                 </div>
 

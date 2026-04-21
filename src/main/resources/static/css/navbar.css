@@ -1,0 +1,112 @@
+/* =========================
+   NAVBAR CONTAINER
+========================= */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--white); /* Pure white for a modern look */
+    /* Subtle shadow instead of a harsh border */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 60px; /* Increased padding for airiness */
+    transition: transform 0.3s ease;
+}
+
+/* =========================
+   NAV GROUPS
+========================= */
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 32px; /* Wider gap between links */
+}
+
+/* =========================
+   BRAND
+========================= */
+.brand {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--text);
+    text-transform: uppercase;
+    margin-right: 20px;
+}
+
+/* =========================
+   NAV LINKS
+========================= */
+.navbar a.nav-btn {
+    text-decoration: none;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease;
+    background: transparent;
+    opacity: 0.7; /* Slightly faded for secondary links */
+}
+
+.navbar a.nav-btn:hover {
+    color: var(--accent);
+    opacity: 1;
+}
+
+/* =========================
+   USER INFO & LOGOUT
+========================= */
+.nav-user {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Hide the technical role text for a cleaner UI */
+.nav-user small {
+    display: none;
+}
+
+.navbar button.nav-btn {
+    border: 1px solid var(--text);
+    background: transparent;
+    padding: 6px 15px;
+    border-radius: 4px; /* Slightly more square for bookstore vibe */
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.navbar button.nav-btn:hover {
+    background: var(--text);
+    color: var(--white);
+}
+
+/* =========================
+   RESPONSIVE NAVBAR
+========================= */
+
+@media (max-width: 768px) {
+
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-left,
+    .nav-right {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+```

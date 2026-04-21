@@ -1,0 +1,32 @@
+:root {
+    --bg: #f8f8f8;
+    --white: #ffffff;
+    --oldpage: #f6eee3;
+    --text: #1a1a1a;
+    --muted: #777;
+    --border: #eaeaea;
+
+    --accent: #000;
+    --radius: 10px;
+}
+
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    padding-top: 70px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, Arial, sans-serif;
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    margin: 0;
+    font-weight: 500;
+}

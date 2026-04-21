@@ -1,0 +1,22 @@
+.content-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 60px;
+}
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 40px;
+}
+
+.hero h1 {
+    font-size: 56px;
+}
+
+.hero p {
+    max-width: 400px;
+    color: var(--muted);
+}

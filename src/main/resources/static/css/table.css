@@ -1,0 +1,88 @@
+```css
+/* =========================
+   TABLE WRAPPER
+========================= */
+
+.table-wrapper {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+/* =========================
+   BASE TABLE
+========================= */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+/* =========================
+   TABLE HEAD
+========================= */
+
+th {
+    background: #fafafa;
+    text-align: left;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    padding: 15px 12px;
+}
+
+/* =========================
+   TABLE BODY
+========================= */
+
+td {
+    padding: 15px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top; /* keeps multi-line content aligned nicely */
+}
+
+/* =========================
+   ACTIONS COLUMN
+========================= */
+
+.actions-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* =========================
+   IMAGE HANDLING
+========================= */
+
+.book-cover-sm {
+    width: 50px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 4px;
+    background-color: #eee; /* placeholder if no image */
+    display: block;
+}
+
+/* =========================
+   ORDER LABEL (SUBTEXT)
+========================= */
+
+td .order-label {
+    color: var(--muted);
+    margin-left: 5px;
+}
+
+/* =========================
+   PRICE COLUMN
+========================= */
+
+.price-cell {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+```

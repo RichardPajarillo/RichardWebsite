@@ -3,6 +3,8 @@ package org.example.richardwebsite.model;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity
 @Table(name = "orders")
@@ -14,7 +16,14 @@ public class Order {
 
     private Double total;
 
-    private String status;
+
+    @Enumerated(EnumType.STRING) // Saves the status as text (e.g., "PENDING") in the DB
+    private OrderStatus status;
+
+    // Getter and Setter
+    public OrderStatus getStatus() { return status; }
+    public void setStatus(OrderStatus status) { this.status = status; }
+
 
     // ✅ FIX: user relationship (THIS IS REQUIRED)
     @ManyToOne
@@ -29,6 +38,8 @@ public class Order {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
+
+
 
     public void addItem(OrderItem item) {
         items.add(item);
@@ -52,4 +63,6 @@ public class Order {
     public void setUserOrderNumber(Integer userOrderNumber) {
         this.userOrderNumber = userOrderNumber;
     }
+
+
 }

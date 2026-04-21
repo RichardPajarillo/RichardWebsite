@@ -20,33 +20,20 @@
             Admin Dashboard
         </a>
 
-        <a th:href="@{/admin/books}"
-           class="nav-btn"
-           sec:authorize="hasRole('ADMIN')">
-            Manage Books
-        </a>
 
-        <a th:href="@{/admin/orders}"
-           class="nav-btn"
-           sec:authorize="hasRole('ADMIN')">
-            Orders Admin
-        </a>
 
     </div>
 
     <!-- RIGHT SIDE -->
     <div class="nav-right" sec:authorize="isAuthenticated()">
+    <span class="nav-user">
+        <span sec:authentication="name"></span>
+    </span>
 
-        <span class="nav-user">
-            <span sec:authentication="name"></span>
-            <small sec:authentication="principal.authorities"
-                   style="text-transform: lowercase;"></small>
-        </span>
-
-        <!-- IMPORTANT: logout should NOT go to /login -->
         <form th:action="@{/logout}" method="post" style="display:inline;">
             <button type="submit" class="nav-btn">Logout</button>
         </form>
+    </div>
 
     </div>
 

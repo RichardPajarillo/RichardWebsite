@@ -1,33 +1,46 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Register</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
-<body>
 
-<h2>Register</h2>
+<body class="auth-page">
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
 
-<form th:action="@{/register}" method="post">
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Create Account</h2>
+        <p class="auth-subtitle">Join us for the greater book!.</p>
 
-    <input type="text" name="username" placeholder="Username" required>
-    <br><br>
+        <form th:action="@{/register}" method="post">
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Choose a username" required>
+            </div>
 
-    <input type="password" name="password" placeholder="Password" required>
-    <br><br>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Create a password" required>
+            </div>
 
-    <!-- ROLE SELECTION -->
-    <select name="role" required>
-        <option value="USER">USER</option>
-        <option value="ADMIN">ADMIN</option>
-    </select>
+            <div class="input-group">
+                <label>Account Type</label>
+                <select name="role" required>
+                    <option value="USER">USER</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select>
+            </div>
 
-    <br><br>
+            <button type="submit" class="btn auth-btn">Register</button>
+        </form>
 
-    <button type="submit">Register</button>
-
-</form>
-
-<a href="/login">Back to Login</a>
-
+        <div class="auth-footer">
+            <span>Already have an account?</span>
+            <a href="/login">Back to Login</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

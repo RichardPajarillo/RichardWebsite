@@ -1,19 +1,25 @@
 .hero {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column; /* Stacked for a cleaner, centered look */
+    justify-content: center;
     align-items: center;
-    margin-bottom: 40px;
-    gap: 40px;
+    text-align: center;
+    padding: 100px 20px; /* More vertical breathing room */
+    margin-bottom: 20px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
 }
 
 .hero h1 {
     font-size: 64px;
-    font-weight: 500;
-    margin: 0;
+    font-weight: 600;
+    font-family: "Playfair Display", serif; /* Modern bookstore vibe */
+    letter-spacing: -1px;
+    margin-bottom: 15px;
 }
 
 .hero p {
-    max-width: 400px;
+    max-width: 500px;
+    font-size: 18px;
     color: var(--muted);
-    font-size: 16px;
 }

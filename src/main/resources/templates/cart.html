@@ -78,7 +78,7 @@
             <td>
                 <a th:href="@{/cart/remove/{id}(id=${item.book.id})}"
                    class="nav-btn"
-                   style="background-color:red; padding:5px;">
+                   style="padding:5px;">
                     Remove
                 </a>
             </td>
@@ -96,7 +96,7 @@
     </form>
 
     <h3>
-        Total: $
+        Total: ₱
         <span id="totalPrice"
               th:text="${#numbers.formatDecimal(T(java.lang.Math).round(cart.total * 100.0) / 100.0, 1, 2)}">
         </span>

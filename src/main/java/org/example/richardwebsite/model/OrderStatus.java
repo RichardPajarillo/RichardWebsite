@@ -1,4 +1,9 @@
 package org.example.richardwebsite.model;
 
-public class OrderStatus {
+
+public enum OrderStatus {
+    PENDING,
+    SHIPPED,
+    DELIVERED,
+    CANCELLED
 }

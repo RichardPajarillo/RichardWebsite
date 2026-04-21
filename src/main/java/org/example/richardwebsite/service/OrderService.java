@@ -14,7 +14,6 @@ public class OrderService {
     }
 
     public Order createOrder(User user, Cart cart) {
-
         Integer max = orderRepository.findMaxUserOrderNumber(user.getId());
         int nextNumber = (max == null) ? 1 : max + 1;
 
@@ -22,24 +21,21 @@ public class OrderService {
         order.setUser(user);
         order.setUserOrderNumber(nextNumber);
 
+        // ADD THIS LINE: Set the default starting status
+        order.setStatus(OrderStatus.PENDING);
+
         double total = 0.0;
-
-        // 👉 THIS is your "update service logic"
         for (CartItem cartItem : cart.getItems()) {
-
             OrderItem item = new OrderItem(
                     cartItem.getBook().getTitle(),
                     cartItem.getBook().getPrice(),
                     cartItem.getQuantity()
             );
-
-            order.addItem(item); // ONLY THIS LINE
-
+            order.addItem(item);
             total += cartItem.getBook().getPrice() * cartItem.getQuantity();
         }
 
         order.setTotal(total);
-
         return orderRepository.save(order);
     }
 }
