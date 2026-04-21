@@ -16,50 +16,35 @@
 
         <input type="hidden" th:field="*{id}">
 
-        <td th:text="${book.cover}"></td>
-        <td th:text="${book.title}"></td>
-        <td th:text="${book.author}"></td>
-        <td th:text="${book.genre}"></td>
-        <td th:text="${book.about}"></td>
-        <td th:text="${book.price}"></td>
+        <!-- Cover -->
+        <input type="text" th:field="*{cover}" placeholder="Book Cover">
+        <p th:errors="*{cover}" style="color:red;"></p>
 
-        <!-- Cover Field -->
-        <input type="text" th:field="*{cover}" placeholder="Book Cover" class="form-control mb-4 col-4">
-        <p th:if="${#fields.hasErrors('cover')}" th:errors="*{cover}" style="color: red;"></p>
+        <!-- Title -->
+        <input type="text" th:field="*{title}" placeholder="Book Title">
+        <p th:errors="*{title}" style="color:red;"></p>
 
-        <!-- Title Field -->
-        <input type="text" th:field="*{title}" placeholder="Book Title" class="form-control mb-4 col-4">
-        <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color: red;"></p>
+        <!-- Author -->
+        <input type="text" th:field="*{author}" placeholder="Author Name">
+        <p th:errors="*{author}" style="color:red;"></p>
 
-        <!-- Author Field -->
-        <input type="text" th:field="*{author}" placeholder="Author Name" class="form-control mb-4 col-4">
-        <p th:if="${#fields.hasErrors('author')}" th:errors="*{author}" style="color: red;"></p>
+        <!-- Genre -->
+        <input type="text" th:field="*{genre}" placeholder="Genre">
+        <p th:errors="*{genre}" style="color:red;"></p>
 
-        <!-- Genre Field -->
-        <input type="text" th:field="*{genre}" placeholder="Book Genre" class="form-control mb-4 col-4">
-        <p th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}" style="color: red;"></p>
+        <!-- About -->
+        <input type="text" th:field="*{about}" placeholder="About">
+        <p th:errors="*{about}" style="color:red;"></p>
 
-        <!-- About Field -->
-        <input type="text" th:field="*{about}" placeholder="Book About" class="form-control mb-4 col-4">
-        <p th:if="${#fields.hasErrors('about')}" th:errors="*{about}" style="color: red;"></p>
+        <!-- Price -->
+        <input type="number" th:field="*{price}" placeholder="Price">
+        <p th:errors="*{price}" style="color:red;"></p>
 
-        <!-- Price Field -->
-        <input type="text" th:field="*{price}" placeholder="Price Number" class="form-control mb-4 col-4">
-        <button type="submit" class="nav-btn" style="background-color: #RED;">Save Book</button>
+        <button type="submit" class="nav-btn">Save Book</button>
 
-
-        <!-- success-->
-        <div th:if="${message}" style="color: green; margin-bottom: 15px;">
+        <div th:if="${message}" style="color:green;">
             <p th:text="${message}"></p>
         </div>
-        <!-- ERROR MESSAGE FOR PRICE -->
-        <p th:if="${#fields.hasErrors('price')}"
-           th:errors="*{price}"
-           style="color: red; margin-bottom: 15px;">
-            Invalid Price
-        </p>
-
-
 
     </form>
 
