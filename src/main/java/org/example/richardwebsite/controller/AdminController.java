@@ -3,14 +3,11 @@ package org.example.richardwebsite.controller;
 import org.example.richardwebsite.model.Order;
 import org.example.richardwebsite.model.OrderStatus;
 import org.example.richardwebsite.repository.OrderRepository;
-import org.example.richardwebsite.service.SecurityService;
-import org.example.richardwebsite.repository.BookRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -18,15 +15,9 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     private final OrderRepository orderRepository;
-    private final SecurityService securityService;
-    private final BookRepository bookRepository;
 
-    public AdminController(OrderRepository orderRepository,
-                           SecurityService securityService,
-                           BookRepository bookRepository) {
+    public AdminController(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        this.securityService = securityService;
-        this.bookRepository = bookRepository;
     }
 
 
