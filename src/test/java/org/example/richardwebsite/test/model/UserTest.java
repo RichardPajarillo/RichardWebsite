@@ -1,5 +1,6 @@
-package org.example.richardwebsite.model;
+package org.example.richardwebsite.test.model;
 
+import org.example.richardwebsite.model.User;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

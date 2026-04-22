@@ -4,8 +4,7 @@ import org.example.richardwebsite.model.User;
 import org.example.richardwebsite.repository.UserRepository;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import java.util.List;
+
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

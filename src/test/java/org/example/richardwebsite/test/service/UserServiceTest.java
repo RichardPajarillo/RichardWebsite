@@ -1,7 +1,8 @@
-package org.example.richardwebsite.service;
+package org.example.richardwebsite.test.service;
 
 import org.example.richardwebsite.model.User;
 import org.example.richardwebsite.repository.UserRepository;
+import org.example.richardwebsite.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
