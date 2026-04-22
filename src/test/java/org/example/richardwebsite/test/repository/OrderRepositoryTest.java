@@ -1,17 +1,23 @@
-package org.example.richardwebsite.repository;
+package org.example.richardwebsite.test.repository;
 
+import jakarta.transaction.Transactional;
 import org.example.richardwebsite.model.Order;
 import org.example.richardwebsite.model.User;
+import org.example.richardwebsite.repository.OrderRepository;
+import org.example.richardwebsite.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@SpringBootTest
+@Transactional // Add this annotation
 class OrderRepositoryTest {
+    // ... tests will now run in isolation
+
 
     @Autowired
     private OrderRepository orderRepository;
@@ -22,7 +28,7 @@ class OrderRepositoryTest {
     @Test
     void findByUser_Id_shouldReturnOrdersForUser() {
         // Arrange
-        User user = new User("username", "password", "USER");
+        User user = new User("user_" + System.currentTimeMillis(), "password", "USER");
         user = userRepository.save(user);
         Order order1 = new Order();
         order1.setUser(user);
@@ -43,7 +49,7 @@ class OrderRepositoryTest {
     @Test
     void countByUser_Id_shouldReturnCount() {
         // Arrange
-        User user = new User("username", "password", "USER");
+        User user = new User("user_" + System.currentTimeMillis(), "password", "USER");
         user = userRepository.save(user);
         Order order = new Order();
         order.setUser(user);
@@ -59,7 +65,7 @@ class OrderRepositoryTest {
     @Test
     void findMaxUserOrderNumber_shouldReturnMax() {
         // Arrange
-        User user = new User("username", "password", "USER");
+        User user = new User("user_" + System.currentTimeMillis(), "password", "USER");
         user = userRepository.save(user);
         Order order1 = new Order();
         order1.setUser(user);
@@ -80,7 +86,7 @@ class OrderRepositoryTest {
     @Test
     void findMaxUserOrderNumber_shouldReturnNullWhenNoOrders() {
         // Arrange
-        User user = new User("username", "password", "USER");
+        User user = new User("user_" + System.currentTimeMillis(), "password", "USER");
         user = userRepository.save(user);
 
         // Act
