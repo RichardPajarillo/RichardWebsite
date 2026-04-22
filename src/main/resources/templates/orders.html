@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>My Orders</title>
+    <title>My Orders | Bookstore</title>
+    <meta charset="UTF-8" />
     <link th:href="@{/css/style.css}" rel="stylesheet">
     <link th:href="@{/css/cardstyle.css}" rel="stylesheet">
 </head>
@@ -11,74 +12,56 @@
 <div th:replace="~{fragments/navbar :: nav-header}"></div>
 
 <div class="content-wrapper">
-
     <h2>My Order History</h2>
+    <p class="auth-subtitle">Track and review your previous purchases</p>
 
     <div class="orders-container">
 
-        <!-- 🔁 LOOP ORDERS -->
-        <div class="order-card" th:each="order : ${orders}">
+        <div class="book-card" th:each="order : ${orders}" style="height: auto; padding-bottom: 0;">
 
-            <div class="order-header">
-                <div>
-                    <span class="order-label">Order #</span>
-                    <span class="order-number" th:text="${order.userOrderNumber}"></span>
-
-                    <span style="margin-left: 10px; font-size: 12px; padding: 2px 8px; border-radius: 12px; background: #eee;"
-                          th:text="${order.status}">
-        </span>
-                </div>
-
-
-            </div>
-
-            <div class="order-body">
-
-                <!-- ✅ SHOW FIRST 3 ITEMS -->
-                <div class="order-item"
-                     th:each="item, iterStat : ${order.items}"
-                     th:if="${iterStat.index < 3}">
-                    <p>Book: </p>
-                    <div class="item-title" th:text="${item.bookTitle}"></div>
-
-                    <div class="item-details">
-                        ₱<span th:text="${#numbers.formatDecimal(item.price, 1, 2)}"></span>
-                        ×
-                        <span th:text="${item.quantity}"></span>
-                    </div>
-
-                    <div class="item-subtotal">
-                        <p>Item Subtotal: </p>
-                        ₱<span th:text="${#numbers.formatDecimal(item.price * item.quantity, 1, 2)}"></span>
-                    </div>
-
-                    <span class="order-total">
-                        <p>Total: </p>
-                        <span th:text="${#numbers.formatDecimal(order.total,1,2)}"></span>
+            <div class="card-content">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                    <h3 class="card-title">Order #<span th:text="${order.userOrderNumber}"></span></h3>
+                    <span class="card-genre"
+                          th:text="${order.status}"
+                          style="background: #eef2ff; color: #4338ca;">
                     </span>
-
                 </div>
 
-                <!-- ✅ SHOW REMAINING COUNT -->
-                <div th:if="${order.items.size() > 3}"
-                     style="font-size: 13px; color: #888; margin-top: 5px;">
+                <hr style="border: 0; border-top: 1px solid var(--border); margin: 15px 0;" />
 
-                    +<span th:text="${order.items.size() - 3}"></span> more items...
+                <div class="order-items-preview">
+                    <div th:each="item, iterStat : ${order.items}" th:if="${iterStat.index < 3}"
+                         style="margin-bottom: 8px; font-size: 14px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-weight: 500; color: var(--text);" th:text="${item.bookTitle}"></span>
+                            <span style="color: var(--muted);">
+                                <span th:text="${item.quantity}"></span> × ₱<span th:text="${#numbers.formatDecimal(item.price, 1, 2)}"></span>
+                            </span>
+                        </div>
+                    </div>
 
+                    <p th:if="${order.items.size() > 3}"
+                       style="font-size: 12px; color: var(--muted); font-style: italic; margin-top: 5px;">
+                        +<span th:text="${order.items.size() - 3}"></span> more items...
+                    </p>
                 </div>
-
             </div>
 
-            <div class="order-footer">
-                <a th:href="@{/orders/{id}(id=${order.id})}" class="nav-btn">
-                    View Details
+
+            <div class="card-footer" style="border-top: 1px solid var(--border); margin-top: 20px; background: #fafafa;">
+                <div style = "margin-top: 20px;">
+                    <p style="font-size: 11px; text-transform: uppercase; color: var(--muted); margin: 0;">Total Amount</p>
+                    <span class="card-price">₱<span th:text="${#numbers.formatDecimal(order.total, 1, 2)}"></span></span>
+                </div>
+
+                <a th:href="@{/orders/{id}(id=${order.id})}" class="btn small-btn">
+                    Details
                 </a>
             </div>
-
         </div>
 
     </div>
-
 </div>
 
 </body>

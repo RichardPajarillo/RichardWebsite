@@ -80,7 +80,7 @@ public class BookController {
                            RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            model.addAttribute("priceError", "Invalid Price: Please enter numbers only.");
+            model.addAttribute("priceError", "Invalid Input!");
             return book.getId() == null ? "new_book" : "update_book";
         }
 
@@ -115,7 +115,7 @@ public class BookController {
     @PostMapping("/deleteBook/{id}")
     public String deleteBook(@PathVariable Long id) {
         bookRepository.deleteById(id);
-        return "redirect:/";
+        return "redirect:/admin/books";
     }
 
 

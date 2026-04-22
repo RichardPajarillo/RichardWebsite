@@ -1,57 +1,104 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Update New Book</title>
+    <title>Update Book | Admin</title>
+    <meta charset="UTF-8" />
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
-<body>
+<body class="auth-page">
 
 <div th:replace="~{fragments/navbar :: nav-header}"></div>
+
 <div class="content-wrapper">
-    <h2>Update Book</h2>
+    <div class="auth-container">
+        <div class="auth-card" style="max-width: 600px;">
+            <h2>Update Book</h2>
+            <p class="auth-subtitle">Modify the details for the selected title</p>
 
-    <form th:action="@{/saveBook}" th:object="${book}" method="POST">
-        <!-- CRITICAL: Hidden ID allows the database to 'update' instead of 'create new' -->
-        <input type="hidden" th:field="*{id}">
+            <div th:if="${message}" class="error-banner" style="background-color: #e6fffa; color: #2c7a7b; border-color: #b2f5ea;">
+                <p th:text="${message}" style="margin:0;"></p>
+            </div>
 
-        <!-- Cover Field -->
-        <input type="text" th:field="*{cover}" placeholder="Book Cover" class="form-control mb-4 col-4">
-        <p th:if="${#fields.hasErrors('cover')}" th:errors="*{cover}" style="color: red;"></p>
+            <div th:if="${priceError}" class="error-banner">
+                <p th:text="${priceError}" style="margin:0;"></p>
+            </div>
 
-        <!-- Title Field -->
-        <input type="text" th:field="*{title}" placeholder="Book Title" class="form-control mb-4 col-4">
-        <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color: red;"></p>
+            <form th:action="@{/saveBook}" th:object="${book}" method="POST">
+                <input type="hidden" th:field="*{id}">
 
-        <!-- Author Field -->
-        <input type="text" th:field="*{author}" placeholder="Author Name" class="form-control mb-4 col-4">
-        <p th:if="${#fields.hasErrors('author')}" th:errors="*{author}" style="color: red;"></p>
+                <div class="input-group">
+                    <label>Cover Image URL</label>
+                    <input type="text" th:field="*{cover}"
+                           placeholder="https://example.com/image.jpg"
+                           required
+                           maxlength="500">
+                    <p th:if="${#fields.hasErrors('cover')}" th:errors="*{cover}" class="popup-error" style="border:none; background:none; font-size:11px; color:red; margin:0; padding:5px 0;"></p>
+                </div>
 
-        <!-- Genre Field -->
-        <input type="text" th:field="*{genre}" placeholder="Genre Name" class="form-control mb-4 col-4">
-        <p th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}" style="color: red;"></p>
+                <div class="input-group">
+                    <label>Book Title</label>
+                    <input type="text" th:field="*{title}"
+                           placeholder="Enter title"
+                           required
+                           maxlength="150">
+                    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="popup-error" style="border:none; background:none; font-size:11px; color:red; margin:0; padding:5px 0;"></p>
+                </div>
 
-        <!-- About Field -->
-        <input type="text" th:field="*{about}" placeholder="Book About" class="form-control mb-4 col-4">
-        <p th:if="${#fields.hasErrors('about')}" th:errors="*{about}" style="color: red;"></p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="input-group">
+                        <label>Author</label>
+                        <input type="text" th:field="*{author}"
+                               placeholder="Author Name"
+                               required
+                               maxlength="100">
+                    </div>
 
-        <!-- Price Field -->
-        <input type="text" th:field="*{price}" placeholder="Price Number" class="form-control mb-4 col-4">
+                    <div class="input-group">
+                        <label>Genre</label>
+                        <select th:field="*{genre}" required>
+                            <option value="Fantasy">Fantasy</option>
+                            <option value="Romance">Romance</option>
+                            <option value="Horror">Horror</option>
+                            <option value="Sci-Fi">Sci-Fi</option>
+                            <option value="Action">Action</option>
+                            <option value="Humor">Humor</option>
+                        </select>
+                    </div>
+                </div>
 
+                <div class="input-group">
+                    <label>About (Max 500 characters)</label>
+                    <textarea th:field="*{about}"
+                              placeholder="Book description..."
+                              required
+                              maxlength="500"
+                              style="width: 100%; border-radius: 8px; border: 1px solid var(--border); padding: 10px; font-family: inherit; font-size: 14px; min-height: 120px;"></textarea>
+                </div>
 
-        <button type="submit" class="nav-btn" style="background-color: #007bff;">Update Book</button>
+                <div class="input-group">
+                    <label>Price (₱)</label>
+                    <input type="number"
+                           th:field="*{price}"
+                           step="0.01"
+                           min="0.01"
+                           placeholder="0.00"
+                           required>
+                </div>
 
-        <!-- The Popup Script -->
-        <script th:if="${priceError}">
-            alert([[${priceError}]]);
-        </script>
+                <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 15px;">
+                    <button type="submit" class="btn" style="background: var(--text); color: white; width: 100%; padding: 12px;">
+                        Update Book Details
+                    </button>
 
-        <!-- success-->
-        <div th:if="${message}" style="color: green; margin-bottom: 15px;">
-            <p th:text="${message}"></p>
+                    <a th:href="@{/admin/books}" class="auth-footer" style="display: block; text-decoration: none;">
+                        &larr; Return to Manage Books
+                    </a>
+                </div>
+
+            </form>
         </div>
-    </form>
-    <hr>
-    <a th:href="@{/}">Back to Book List</a>
+    </div>
 </div>
+
 </body>
 </html>

@@ -14,6 +14,31 @@
     margin-bottom: 10px;
 }
 
+/* For the quantity controls at cart.html*/
+.qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between buttons and input */
+    justify-content: center; /* Centers them inside the table cell */
+}
+
+.qty-input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px;
+    font-size: 14px;
+    background: white;
+}
+
+/* Optional: Hide the default Up/Down arrows on the number input */
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 
 /*auth css here first*/
 

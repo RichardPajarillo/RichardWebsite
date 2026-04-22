@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Contact Us | Formula Book</title>
+  <meta charset="UTF-8" />
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="auth-page">
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
+
+<div class="auth-container">
+  <div class="auth-card" style="max-width: 500px;">
+    <h2>Get in Touch</h2>
+    <p class="auth-subtitle">Have a burning question? Here are our details!</p>
+    <!--
+    <form action="#" method="POST">
+      <div class="input-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="Your Name" required>
+      </div>
+
+      <div class="input-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="email@example.com" required>
+      </div>
+
+      <div class="input-group">
+        <label>Message</label>
+        <textarea style="width: 100%; border-radius: 8px; border: 1px solid var(--border); padding: 12px; font-family: inherit; min-height: 120px;" placeholder="How can we help?"></textarea>
+      </div>
+
+      <button type="submit" class="btn auth-btn">Send Message</button>
+    </form>
+    -->
+
+    <div class="auth-footer" style="text-align: left; margin-top: 30px;">
+      <p>📍 32nd Street, corner Lane A, Taguig, 1634 Metro Manila</p>
+      <p>📧 support@formulabook.com</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

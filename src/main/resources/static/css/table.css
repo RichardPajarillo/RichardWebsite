@@ -41,7 +41,7 @@ th {
 td {
     padding: 15px 12px;
     border-bottom: 1px solid var(--border);
-    vertical-align: top; /* keeps multi-line content aligned nicely */
+
 }
 
 /* =========================

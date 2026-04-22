@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Latest News | Formula Book</title>
+    <meta charset="UTF-8" />
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/cardstyle.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
+
+<div class="content-wrapper">
+    <h2 id="collection">Latest Updates</h2>
+    <p class="auth-subtitle">Stay updated with new arrivals and literary events.</p>
+
+    <div class="orders-container">
+        <div class="book-card">
+            <div class="card-image-link" style="height: 200px;">
+                <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1000" class="card-img" alt="News Image">
+            </div>
+            <div class="card-content" style="padding: 20px;">
+                <p class="card-genre">Event | April 2026</p>
+                <h3 class="card-title">Midnight Fantasy Launch</h3>
+                <p class="card-author" style="font-size: 13px;">Join us for the release of our newest Fantasy collection this weekend.</p>
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="card-image-link" style="height: 200px;">
+                <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=1000" class="card-img" alt="News Image">
+            </div>
+            <div class="card-content" style="padding: 20px;">
+                <p class="card-genre">Update</p>
+                <h3 class="card-title">New Genre: Humor</h3>
+                <p class="card-author" style="font-size: 13px;">By popular demand, we have officially added a Humor section to our directory.</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

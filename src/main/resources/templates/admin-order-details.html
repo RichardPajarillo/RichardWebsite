@@ -25,12 +25,12 @@
 
     <hr>
 
-    <h3>Items</h3>
+    <h3>Items (admin) </h3>
 
     <div th:each="item : ${order.items}">
         <p>
             <strong th:text="${item.bookTitle}"></strong>
-            - $<span th:text="${item.price}"></span>
+            - ₱<span th:text="${item.price}"></span>
             × <span th:text="${item.quantity}"></span>
         </p>
     </div>

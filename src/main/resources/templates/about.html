@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>About Us | Formula Book</title>
+    <meta charset="UTF-8" />
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
+
+<div class="content-wrapper">
+    <div class="hero" style="min-height: 400px; margin-bottom: 40px;">
+        <div class="hero-content">
+            <h1>Our Story</h1>
+            <p>Formula Book was founded to bridge the gap between technical knowledge and creative storytelling. We believe every book is a formula for a new perspective.</p>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 60px;">
+        <div>
+            <h2 style="margin-bottom: 20px;">The Collection</h2>
+            <p style="color: var(--muted);">We curate everything from high-fantasy epics to deep-dive scientific journals. Our goal is to provide a diverse directory for the curious mind.</p>
+        </div>
+        <div>
+            <h2 style="margin-bottom: 20px;">Our Mission</h2>
+            <p style="color: var(--muted);">To foster a community of readers who aren't afraid to explore different genres and "formula connections" across literature.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

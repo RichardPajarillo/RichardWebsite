@@ -10,10 +10,10 @@
 
 <div class="content-wrapper">
 
-  <h2>Order Details</h2>
+  <h2>Order Details (User)</h2>
 
   <p>Order ID: <span th:text="${order.userOrderNumber}"></span></p>
-  <p>Total: $<span th:text="${order.total}"></span></p>
+  <p>Total: ₱<span th:text="${order.total}"></span></p>
 
   <table border="1" style="width: 100%; margin-top: 20px;">
     <thead>
@@ -28,9 +28,9 @@
     <tbody>
     <tr th:each="item : ${order.items}">
       <td th:text="${item.bookTitle}"></td>
-      <td th:text="${item.price}"></td>
+      <td th:text="${#numbers.formatDecimal(item.price, 1, 2)}"></td>
       <td th:text="${item.quantity}"></td>
-      <td th:text="${item.price * item.quantity}"></td>
+      <td th:text="${#numbers.formatDecimal(item.price * item.quantity, 1, 2)}"></td>
     </tr>
     </tbody>
   </table>

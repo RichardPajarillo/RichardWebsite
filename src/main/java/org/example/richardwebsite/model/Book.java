@@ -2,6 +2,9 @@ package org.example.richardwebsite.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.DecimalMin;
 
 @Entity
 @Table(name = "books")
@@ -11,11 +14,24 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "URL is required")
+    @Size(max = 300, message = "URL too long")
     private String cover;
+
+    @NotBlank(message = "Title is required")
+    @Size(max = 100, message = "Title too long")
     private String title;
+
+    @NotBlank(message = "Author is required")
+    @Size(max = 50, message = "Input too long")
     private String author;
+
     private String genre;   // ✅ ADDED
+
+    @NotBlank(message = "About is required")
+    @Size(max = 500, message = "About section cannot exceed 500 characters")
     private String about;
+
     @Positive(message = "Price must be greater than 0")
     private Double price = 0.00;
     private Integer quantity = 0;
