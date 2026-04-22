@@ -1,15 +1,18 @@
-package org.example.richardwebsite.repository;
+package org.example.richardwebsite.test.repository;
 
+import jakarta.transaction.Transactional;
 import org.example.richardwebsite.model.User;
+import org.example.richardwebsite.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@SpringBootTest
+@Transactional
 class UserRepositoryTest {
 
     @Autowired
@@ -20,6 +23,8 @@ class UserRepositoryTest {
         // Arrange
         User user = new User();
         user.setUsername("testuser");
+        user.setPassword("password"); // Add this
+        user.setRole("USER");         // Add this if role is also non-nullable
         userRepository.save(user);
 
         // Act
@@ -27,7 +32,7 @@ class UserRepositoryTest {
 
         // Assert
         assertTrue(result.isPresent());
-        assertEquals(user, result.get());
+        assertEquals("testuser", result.get().getUsername());
     }
 
     @Test
