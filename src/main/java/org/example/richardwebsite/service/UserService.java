@@ -14,6 +14,11 @@ public class UserService {
     }
 
     public User save(User user) {
+        // 1. Check if the username already exists
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            // You can throw a custom exception here to catch in your Controller
+            throw new RuntimeException("Username '" + user.getUsername() + "' is already taken.");
+        }
         return userRepository.save(user);
     }
 
