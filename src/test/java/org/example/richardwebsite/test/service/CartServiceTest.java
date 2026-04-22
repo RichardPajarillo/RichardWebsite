@@ -1,8 +1,10 @@
-package org.example.richardwebsite.service;
+package org.example.richardwebsite.test.service;
 
 import org.example.richardwebsite.model.Cart;
 import org.example.richardwebsite.model.User;
 import org.example.richardwebsite.repository.CartRepository;
+import org.example.richardwebsite.service.CartService;
+import org.example.richardwebsite.service.SecurityService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -66,11 +68,14 @@ class CartServiceTest {
     void save_shouldCallRepositorySave() {
         // Arrange
         Cart cart = new Cart();
+        // Stub the mock: tell it to return the cart object when save is called
+        when(cartRepository.save(cart)).thenReturn(cart);
 
         // Act
         Cart result = cartService.save(cart);
 
         // Assert
+        assertNotNull(result, "The result should not be null");
         assertEquals(cart, result);
         verify(cartRepository).save(cart);
     }
