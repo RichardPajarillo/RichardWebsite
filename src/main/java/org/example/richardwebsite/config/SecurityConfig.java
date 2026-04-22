@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         // 🌐 PUBLIC
-                        .requestMatchers("/", "/login", "/register", "/css/**").permitAll()
+                        .requestMatchers("/login", "/register", "/css/**").permitAll()
 
                         // 👑 ADMIN ONLY
                         .requestMatchers(
