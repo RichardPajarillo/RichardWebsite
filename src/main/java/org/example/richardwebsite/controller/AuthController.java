@@ -31,14 +31,18 @@ public class AuthController {
     public String register(@RequestParam String username,
                            @RequestParam String password,
                            @RequestParam String role) {
+        try {
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password); //Later bcrypt
+            user.setRole(role);
 
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password); // later BCrypt
-        user.setRole(role);
+            userService.save(user); // This is where the RuntimeException occurs
 
-        userService.save(user);
-
-        return "redirect:/login";
+            return "redirect:/login";
+        } catch (RuntimeException e) {
+            // Redirect back to registration with the error parameter
+            return "redirect:/register?error";
+        }
     }
 }
