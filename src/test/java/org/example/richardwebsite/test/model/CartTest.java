@@ -2,7 +2,6 @@ package org.example.richardwebsite.test.model;
 
 import org.example.richardwebsite.model.Book;
 import org.example.richardwebsite.model.Cart;
-import org.example.richardwebsite.model.CartItem;
 import org.example.richardwebsite.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

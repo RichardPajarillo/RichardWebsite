@@ -1,6 +1,6 @@
 package org.example.richardwebsite.test.controller;
 
-import org.example.richardwebsite.controller.CheckoutController;
+
 import org.example.richardwebsite.model.Cart;
 import org.example.richardwebsite.model.CartItem;
 import org.example.richardwebsite.model.User;
