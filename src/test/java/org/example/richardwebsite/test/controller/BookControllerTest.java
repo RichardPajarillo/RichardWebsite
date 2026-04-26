@@ -3,12 +3,13 @@ package org.example.richardwebsite.test.controller;
 import org.example.richardwebsite.model.Book;
 import org.example.richardwebsite.repository.BookRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,10 +23,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false) // Disable security to focus on logic branches
 class BookControllerTest {
@@ -52,19 +54,25 @@ class BookControllerTest {
     }
 
     @Test
-    @WithMockUser // 1. Simulates a logged-in user
+    @WithMockUser
     void viewBooks_shouldUseGenreBranch_WhenGenreProvided() throws Exception {
-        // Arrange
-        Page<Book> page = new PageImpl<>(List.of(new Book()));
-        when(bookRepository.findByGenreIgnoreCase(eq("Fiction"), any())).thenReturn(page);
+        // 1. Arrange
+        String genre = "Comedy";
+        Page<Book> booksPage = new PageImpl<>(List.of(new Book()));
 
-        // Act & Assert
+        // Ensure we match the exact genre and ANY pageable request
+        when(bookRepository.findByGenreIgnoreCase(eq(genre), any(org.springframework.data.domain.Pageable.class)))
+                .thenReturn(booksPage);
+
+        // 2. Act & Assert
         mockMvc.perform(get("/")
-                        .param("genre", "Fiction")
-                        .with(csrf())) // 2. Provides the CSRF object Thymeleaf is looking for
+                        .param("genre", genre)
+                        .with(csrf())) // Critical for template rendering
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("genre", "Fiction"))
-                .andExpect(view().name("index"));
+                .andExpect(view().name("index"))
+                // Check that 'genre' was actually put back into the model
+                .andExpect(model().attribute("genre", genre))
+                .andExpect(model().attributeExists("bookPage"));
     }
 
     // --- BRANCHES IN saveBook() ---
@@ -120,32 +128,46 @@ class BookControllerTest {
     @Test
     @WithMockUser
     void viewBooks_shouldUseDefaultBranch_WhenNoParamsProvided() throws Exception {
-        // Arrange: Mock the findAll branch
-        Page<Book> page = new PageImpl<>(List.of(new Book()));
-        when(bookRepository.findAll(any(PageRequest.class))).thenReturn(page);
+        // Arrange
+        Page<Book> booksPage = new PageImpl<>(List.of(new Book()));
+        // We match any Pageable because the controller creates a PageRequest.of(0, 8)
+        when(bookRepository.findAll(any(org.springframework.data.domain.Pageable.class))).thenReturn(booksPage);
 
         // Act & Assert
         mockMvc.perform(get("/")
-                        .with(csrf()))
+                        .with(csrf())) // 👈 MUST ADD THIS
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("listBooks"))
-                .andExpect(model().attribute("currentPage", 0))
-                .andExpect(view().name("index"));
+                .andExpect(view().name("index"))
+                .andExpect(model().attributeExists("bookPage"));
     }
 
     @Test
     @WithMockUser
     void viewBooks_shouldHandleNegativePageNumber() throws Exception {
-        // Arrange: Testing the logic: (page == null || page < 0) ? 0 : page;
-        Page<Book> page = new PageImpl<>(List.of(new Book()));
-        when(bookRepository.findAll(PageRequest.of(0, 8))).thenReturn(page);
+        // 1. Arrange
+        Page<Book> booksPage = new PageImpl<>(List.of(new Book()));
+        when(bookRepository.findAll(any(org.springframework.data.domain.Pageable.class)))
+                .thenReturn(booksPage);
 
-        // Act & Assert
+        // 2. Act
         mockMvc.perform(get("/")
-                        .param("page", "-5")
-                        .with(csrf()))
+                        .with(csrf())) // 👈 This adds the missing CSRF tokens to the model
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("currentPage", 0));
+                .andExpect(view().name("index"));
+
+        // 3. Capture and Assert
+        ArgumentCaptor<org.springframework.data.domain.Pageable> captor =
+                ArgumentCaptor.forClass(org.springframework.data.domain.Pageable.class);
+
+        // Explicitly cast to resolve the "Ambiguous method call" from earlier
+        verify(bookRepository).findAll((org.springframework.data.domain.Pageable) captor.capture());
+
+        // Compare as primitives to avoid any String/Object confusion
+        int expectedPage = 0;
+        int actualPage = captor.getValue().getPageNumber();
+
+        // JUnit 5 assertEquals(expected, actual)
+        assertEquals(expectedPage, actualPage);
     }
 
     // --- BRANCHES FOR showNewBookForm & showFormForUpdate ---

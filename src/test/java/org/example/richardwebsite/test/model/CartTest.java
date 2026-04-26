@@ -72,4 +72,25 @@ class CartTest {
         assertNotNull(cart.getItems());
         assertTrue(cart.getItems().isEmpty());
     }
+
+    @Test
+    void addItem_shouldHandleBothExistingAndNewItems() {
+        // Branch 2: Book is not in cart - should add as new item
+        cart.addItem(testBook, 1);
+        assertEquals(1, cart.getItems().size());
+        assertEquals(1, cart.getItems().get(0).getQuantity());
+
+        // Branch 1: Book is now in cart - should find it and update quantity
+        cart.addItem(testBook, 2);
+        assertEquals(1, cart.getItems().size());
+        assertEquals(3, cart.getItems().get(0).getQuantity());
+
+        // Testing a different book to ensure the loop continues correctly (No find)
+        Book secondBook = new Book();
+        secondBook.setId(2L);
+        secondBook.setPrice(15.0);
+
+        cart.addItem(secondBook, 1);
+        assertEquals(2, cart.getItems().size());
+    }
 }

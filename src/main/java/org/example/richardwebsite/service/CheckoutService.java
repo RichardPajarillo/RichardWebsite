@@ -3,7 +3,7 @@ package org.example.richardwebsite.service;
 import org.example.richardwebsite.model.*;
 import org.example.richardwebsite.repository.*;
 import org.springframework.stereotype.Service;
-
+import java.math.BigDecimal;
 @Service
 public class CheckoutService {
 
@@ -30,9 +30,12 @@ public class CheckoutService {
         Order order = new Order();
         order.setUser(securityService.getCurrentUser());
 
-        double total = 0;
+        BigDecimal total = BigDecimal.ZERO;
 
         for (CartItem ci : cart.getItems()) {
+            // Assuming getPrice() returns double or BigDecimal
+            BigDecimal price = BigDecimal.valueOf(ci.getBook().getPrice());
+            BigDecimal quantity = BigDecimal.valueOf(ci.getQuantity());
 
             OrderItem item = new OrderItem(
                     ci.getBook().getTitle(),
@@ -42,7 +45,8 @@ public class CheckoutService {
 
             order.addItem(item);
 
-            total += ci.getBook().getPrice() * ci.getQuantity();
+            // Multiply price by quantity and add to total
+            total = total.add(price.multiply(quantity));
         }
 
         order.setTotal(total);

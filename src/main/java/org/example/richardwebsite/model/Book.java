@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "books")
@@ -34,6 +35,9 @@ public class Book {
     @Positive(message = "Price must be greater than 0")
     private Double price = 0.00;
     private Integer quantity = 0;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> cartItems;
 
     // JPA default constructor
     public Book() {}

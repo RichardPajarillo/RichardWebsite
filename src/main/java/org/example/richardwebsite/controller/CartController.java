@@ -4,6 +4,8 @@ import org.example.richardwebsite.model.*;
 import org.example.richardwebsite.repository.*;
 import org.example.richardwebsite.service.OrderService;
 import org.example.richardwebsite.service.SecurityService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +18,17 @@ public class CartController {
     private final BookRepository bookRepository;
     private final SecurityService securityService;
     private final OrderService orderService;
+    private final CartItemRepository cartItemRepository;
 
     public CartController(CartRepository cartRepository,
                           BookRepository bookRepository,
                           SecurityService securityService,
-                          OrderService orderService) {
+                          OrderService orderService, CartItemRepository cartItemRepository) {
         this.cartRepository = cartRepository;
         this.bookRepository = bookRepository;
         this.securityService = securityService;
         this.orderService = orderService;
+        this.cartItemRepository = cartItemRepository;
     }
 
     private Cart getCart() {
@@ -38,9 +42,24 @@ public class CartController {
                 });
     }
 
+
+
     @GetMapping
-    public String viewCart(Model model) {
-        model.addAttribute("cart", getCart());
+    public String viewCart(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            Model model) {
+
+        User user = securityService.getCurrentUser();
+        Cart cart = getCart(); // Your existing method to get/create cart
+
+        int size = 5; // Items per page
+        Page<CartItem> itemPage = cartItemRepository.findByCart_Id(cart.getId(), PageRequest.of(page, size));
+
+        model.addAttribute("cart", cart);
+        model.addAttribute("itemPage", itemPage);
+        model.addAttribute("items", itemPage.getContent());
+        model.addAttribute("baseUrl", "/cart");
+
         return "cart";
     }
 
@@ -86,24 +105,5 @@ public class CartController {
 
     //checkout section here
 
-    @GetMapping("/checkout")
-    public String checkout(Model model) {
-        Cart cart = getCart();
-        model.addAttribute("cart", cart);
-        return "checkout"; // must match checkout.html
-    }
 
-    @PostMapping("/checkout")
-    public String checkout() {
-
-        User user = securityService.getCurrentUser();
-        Cart cart = getCart();
-
-        orderService.createOrder(user, cart);
-
-        cart.getItems().clear();
-        cartRepository.save(cart);
-
-        return "redirect:/orders";
-    }
 }
