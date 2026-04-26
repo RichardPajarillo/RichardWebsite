@@ -13,7 +13,8 @@
   <h2>Order Details (User)</h2>
 
   <p>Order ID: <span th:text="${order.userOrderNumber}"></span></p>
-  <p>Total: ₱<span th:text="${order.total}"></span></p>
+  <p>Total: ₱<span th:text="${#numbers.formatDecimal(order.total, 1, 2)}">0.00</span></p>
+
 
   <table border="1" style="width: 100%; margin-top: 20px;">
     <thead>

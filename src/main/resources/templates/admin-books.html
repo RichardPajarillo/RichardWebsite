@@ -1,32 +1,27 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <title>Manage Books</title>
+  <title>Manage Books | Admin</title>
   <meta charset="UTF-8" />
   <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
-
 <body>
 
 <div th:replace="~{fragments/navbar :: nav-header}"></div>
 
 <div class="content-wrapper">
-
   <h2>Manage Books</h2>
 
-  <a th:href="@{/showNewBookForm}" class="btn" style="margin-bottom: 15px; margin-top: 15px; display:inline-block;">
-    Add New Book
+  <a th:href="@{/admin/books/new}" class="btn" style="margin: 20px 0; display:inline-block;">
+    + Add New Book
   </a>
 
   <div class="table-wrapper">
-
     <table>
-
       <thead>
       <tr>
-        <th>ID</th>
+        <th>DB ID</th>
+        <th>Book ID</th>
         <th>Cover</th>
         <th>Title</th>
         <th>Author</th>
@@ -35,10 +30,13 @@
         <th>Actions</th>
       </tr>
       </thead>
-
       <tbody>
-      <tr th:each="book : ${books}">
+      <tr th:each="book, iterStat : ${books}">
         <td th:text="${book.id}"></td>
+
+        <td th:text="'#' + ${(bookPage.number * bookPage.size) + iterStat.count}"
+            style="color: var(--muted); font-family: monospace; font-weight: 600;">
+        </td>
 
         <td>
           <img th:src="${book.cover}" class="book-cover-sm" alt="Cover">
@@ -51,28 +49,19 @@
 
         <td>
           <div class="actions-cell">
+            <a th:href="@{/admin/books/update/{id}(id=${book.id})}" class="btn small-btn">Update</a>
 
-            <a th:href="@{/showFormForUpdate/{id}(id=${book.id})}"
-               class="btn small-btn">
-              Update
-            </a>
-
-            <form th:action="@{/deleteBook/{id}(id=${book.id})}" method="post" style="margin:0;">
-              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-              <button type="submit" class="btn small-btn danger-btn">
-                Delete
-              </button>
+            <form th:action="@{/admin/books/delete/{id}(id=${book.id})}" method="post">
+              <button type="submit" class="btn small-btn danger-btn"
+                      onclick="return confirm('Delete this book?')">Delete</button>
             </form>
-
           </div>
         </td>
       </tr>
       </tbody>
-
     </table>
-
   </div>
-
+  <div th:replace="~{fragments/pagination :: pager(pageObj=${bookPage}, baseUrl=${baseUrl}, anchor='')}"></div>
 </div>
 
 </body>

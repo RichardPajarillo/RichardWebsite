@@ -26,8 +26,10 @@
 .card-image-link {
     display: block;
     width: 100%;
-    height: 380px; /* Consistent height for all covers */
+    height: 380px;
+    background-color: #f9f9f9; /* Add this to see the box even if image is missing */
     overflow: hidden;
+    position: relative;
 }
 
 .card-img {
@@ -43,8 +45,8 @@
 
 /* CONTENT AREA */
 .card-content {
-    padding: 20px 20px 10px 20px;
-    flex-grow: 1; /* Pushes footer to bottom */
+    padding: 20px;
+    flex-direction: column;
 }
 
 .card-title {
@@ -73,10 +75,11 @@
 
 /* FOOTER (BUTTON + PRICE) */
 .card-footer {
-    padding: 0 20px 20px 20px;
+    padding: 15px 0 0 0; /* Remove side padding so it aligns with the text above */
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: auto; /* Anchors it to bottom */
 }
 
 .card-price {

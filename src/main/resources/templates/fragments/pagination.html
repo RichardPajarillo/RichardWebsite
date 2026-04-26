@@ -1,0 +1,23 @@
+<div th:fragment="pager(pageObj, baseUrl, anchor)">
+    <div th:if="${pageObj.totalPages > 1}" class="pagination-wrapper"
+         style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 40px; padding-bottom: 20px;">
+
+        <a th:href="@{${baseUrl}(page=${pageObj.number - 1})} + ${anchor != null ? anchor : ''}"
+           th:classappend="${!pageObj.hasPrevious()} ? 'disabled' : ''"
+           class="btn small-btn"
+           style="background: #eee; text-decoration: none; display: flex; align-items: center; justify-content: center; height: 35px; min-width: 80px;">&laquo; Prev</a>
+
+        <span th:each="i : ${#numbers.sequence(0, pageObj.totalPages - 1)}" style="display: flex; align-items: center;">
+            <a th:href="@{${baseUrl}(page=${i})} + ${anchor != null ? anchor : ''}"
+               th:text="${i + 1}"
+               th:style="${pageObj.number == i} ? 'background: var(--text); color: white;' : 'background: #eee;'"
+               class="btn small-btn"
+               style="text-decoration: none; display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; padding: 0;">1</a>
+        </span>
+
+        <a th:href="@{${baseUrl}(page=${pageObj.number + 1})} + ${anchor != null ? anchor : ''}"
+           th:classappend="${!pageObj.hasNext()} ? 'disabled' : ''"
+           class="btn small-btn"
+           style="background: #eee; text-decoration: none; display: flex; align-items: center; justify-content: center; height: 35px; min-width: 80px;">Next &raquo;</a>
+    </div>
+</div>

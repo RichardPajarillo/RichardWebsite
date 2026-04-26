@@ -7,6 +7,41 @@
 @import url('responsive.css');
 
 
+/* Pagination Styling */
+.pagination-wrapper .disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Card Hover Effect */
+.card-image-link {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card-image-link:hover .card-overlay {
+    opacity: 1;
+}
+
+.card-img {
+    transition: transform 0.5s ease;
+}
+
+.card-image-link:hover .card-img {
+    transform: scale(1.05);
+}
+
 .popup-error {
     background: #ffdddd;
     border: 1px solid red;
@@ -55,6 +90,7 @@
     align-items: center;
     justify-content: center;
     padding: 40px 20px;
+    width: 100%; /* Ensure the container takes up the full horizontal space */
 }
 
 .auth-card {
@@ -62,8 +98,9 @@
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-    width: 100%;
-    max-width: 400px;
+    width: 100%; /* Forces the card to try and take all available space */
+    max-width: 500px; /* Limits that expansion to exactly 500px */
+
     text-align: center;
 }
 

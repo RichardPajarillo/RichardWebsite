@@ -9,7 +9,7 @@
 
 <div class="content-wrapper">
     <div class="auth-container">
-        <div class="auth-card" style="max-width: 600px;"> <h2>Add New Book</h2>
+        <div class="auth-card"> <h2>Add New Book</h2>
             <p class="auth-subtitle">Fill in the details to expand the collection</p>
 
             <div th:if="${message}" class="error-banner" style="background-color: #e6fffa; color: #2c7a7b; border-color: #b2f5ea;">
@@ -20,11 +20,11 @@
                 <p th:text="${priceError}" style="margin:0;"></p>
             </div>
 
-            <form th:action="@{/saveBook}" th:object="${book}" method="POST">
+            <form th:action="@{/saveBook}" th:object="${book}" method="post">
                 <input type="hidden" th:field="*{id}">
 
                 <div class="input-group">
-                    <label>Cover Image URL</label>
+                    <label>Cover Image URL *</label>
                     <input type="text" th:field="*{cover}"
                            placeholder="https://example.com/image.jpg"
                            required
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Book Title</label>
+                    <label>Book Title *</label>
                     <input type="text" th:field="*{title}"
                            placeholder="Enter title"
                            required
@@ -43,7 +43,7 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="input-group">
-                        <label>Author</label>
+                        <label>Author *</label>
                         <input type="text" th:field="*{author}"
                                placeholder="Author Name"
                                required
@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label>Genre</label>
+                        <label>Genre *</label>
                         <select th:field="*{genre}" required>
                             <option value="" disabled selected>Select a genre</option> <option value="Fantasy">Fantasy</option>
                             <option value="Romance">Romance</option>
@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="input-group">
-                    <label>About (Maximum 500 characters)</label>
+                    <label>About * (Maximum 500 characters)</label>
                     <textarea th:field="*{about}"
                               placeholder="Summarize the book..."
                               required
@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Price (₱)</label>
+                    <label>Price * (₱)</label>
                     <input type="number"
                            th:field="*{price}"
                            step="0.01"

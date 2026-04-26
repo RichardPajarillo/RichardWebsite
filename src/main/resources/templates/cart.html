@@ -28,10 +28,12 @@
         Your cart is currently empty.
     </div>
 
+    <br>
     <div class="table-wrapper" th:if="${!#lists.isEmpty(cart.items)}">
         <table>
             <thead>
             <tr>
+                <th>Item</th>
                 <th>Cover</th>
                 <th>Title</th>
                 <th>Author</th>
@@ -42,7 +44,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="item : ${cart.items}">
+            <tr th:each="item, iterStat : ${items}">
+                <td th:text="'#' + ${(itemPage.number * itemPage.size) + iterStat.count}"
+                    style="color: var(--muted); font-family: monospace; font-weight: 600;">
+                </td>
+
                 <td>
                     <img th:src="${item.book.cover}" class="book-cover-sm" alt="Cover" />
                 </td>
@@ -69,12 +75,14 @@
             </tbody>
         </table>
     </div>
-
+    <br>
+    <div th:replace="~{fragments/pagination :: pager(pageObj=${itemPage}, baseUrl=${baseUrl}, anchor='')}"></div>
+    <br>
     <div style="margin-top: 30px; display: flex; justify-content: space-between; align-items: center;">
         <h3>Total: <span class="card-price" id="totalPrice"
                          th:text="${'₱' + #numbers.formatDecimal(cart.total, 1, 2)}"></span></h3>
 
-        <form th:action="@{/cart/checkout}" method="get">
+        <form th:action="@{/checkout}" method="get">
             <button class="btn" style="background: var(--text); color: white;">Proceed to Checkout</button>
         </form>
     </div>

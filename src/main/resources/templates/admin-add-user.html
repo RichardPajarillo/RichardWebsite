@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Create New User | Admin</title>
+  <meta charset="UTF-8" />
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="auth-page" style="display: block;">
+
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
+
+<div class="content-wrapper">
+  <div class="auth-container">
+    <div class="auth-card" style="max-width: 500px;">
+      <h2>Create New User</h2>
+      <p class="auth-subtitle">Add a new user and assign their roles.</p>
+
+      <div th:if="${param.error}" class="error-banner">
+        <p style="margin:0;">Error: This username is already taken.</p>
+      </div>
+
+      <form th:action="@{/admin/users/add}" th:object="${user}" method="post">
+
+        <div class="input-group">
+          <label>Username *</label>
+          <input type="text" th:field="*{username}" placeholder="Username must be between 1 and 50 characters" required />
+          <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error-text" style="color: #ff4d4d; font-size: 0.85rem; margin-top: 5px;"></p>
+        </div>
+
+        <div class="input-group">
+          <label>Password *</label>
+          <input type="password" th:field="*{password}" placeholder="Password must be at least 1-50 characters long" required />
+          <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-text" style="color: #ff4d4d; font-size: 0.85rem; margin-top: 5px;"></p>
+        </div>
+
+
+        <div class="input-group">
+          <label>Assign Role *</label>
+          <select th:field="*{role}" class="form-control">
+            <option value="USER">USER</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+        </div>
+
+        <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 15px;">
+          <button type="submit" class="btn auth-btn">
+            Create User Account
+          </button>
+
+          <a th:href="@{/admin/users}" class="auth-footer" style="display: block; text-decoration: none; text-align: center;">
+            &larr; Return to User Management
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

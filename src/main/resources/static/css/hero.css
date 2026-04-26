@@ -11,8 +11,27 @@
 
     /* Background Split Logic */
     background:
-        linear-gradient(to right, rgba(255,255,255,1) 40%, rgba(255,255,255,0) 100%),
+        linear-gradient(to right, rgba(255,255,255,1) 25%, rgba(255,255,255,0) 100%),
         url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=2000');
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-about {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Keeps text to the left/center */
+    min-height: 550px;
+    padding: 0 80px;
+    margin-bottom: 60px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+
+    /* Background Split Logic */
+    background:
+        linear-gradient(to right, rgba(255,255,255,1) 25%, rgba(255,255,255,0) 100%),
+        url('https://www.worldhistory.org/uploads/images/14298.png');
     background-size: cover;
     background-position: center;
 }
@@ -42,6 +61,8 @@
     font-size: 18px;
     color: #4a4a4a;
     line-height: 1.6;
+
+    margin-top: 30px;
     margin-bottom: 30px;
 }
 

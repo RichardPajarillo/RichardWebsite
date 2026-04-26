@@ -13,6 +13,8 @@
   <h2>Order Summary</h2>
   <p class="auth-subtitle">Please confirm your items before placing the order.</p>
 
+  <div th:replace="~{fragments/pagination :: pager(pageObj=${itemPage}, baseUrl=${baseUrl}, anchor='')}"></div>
+  <br>
   <div class="table-wrapper">
     <table>
       <thead>
@@ -24,7 +26,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="item : ${cart.items}">
+      <tr th:each="item : ${itemPage.content}">
         <td th:text="${item.book.title}" style="font-weight: 500;"></td>
         <td th:text="${'₱' + #numbers.formatDecimal(item.book.price, 1, 2)}"></td>
         <td th:text="${item.quantity}"></td>
