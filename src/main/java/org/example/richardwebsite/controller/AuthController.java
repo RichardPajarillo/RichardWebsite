@@ -1,8 +1,11 @@
 package org.example.richardwebsite.controller;
 
+import jakarta.validation.Valid;
 import org.example.richardwebsite.model.User;
 import org.example.richardwebsite.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model; // Add this
+import org.springframework.validation.BindingResult; // Add this
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -21,28 +24,40 @@ public class AuthController {
     }
 
     // 🔵 REGISTER PAGE
+    // 🔵 Updated: Pass an empty User object to the registration page
     @GetMapping("/register")
-    public String showRegisterPage() {
+    public String showRegisterPage(Model model) {
+        model.addAttribute("user", new User());
         return "register";
     }
 
     // 🔴 REGISTER HANDLER
     @PostMapping("/register")
-    public String register(@RequestParam String username,
-                           @RequestParam String password,
-                           @RequestParam String role) {
+    public String register(@Valid @ModelAttribute("user") User user,
+                           BindingResult result,
+                           Model model) {
+
+        // 1. If validation fails (like spacebar-only input), return to register.html
+        // If password was only spaces, it is now empty and will trigger a validation error
+        if (result.hasErrors()) {
+            return "register";
+        }
+
+        // 2. Check for duplicate username manually
+        if (userService.findByUsername(user.getUsername()).isPresent()) {
+            // This adds the error to the 'username' field so th:errors can see it
+            result.rejectValue("username", "error.user", "Username is already taken.");
+            return "register";
+        }
+
+
         try {
-            User user = new User();
-            user.setUsername(username);
-            user.setPassword(password); //Later bcrypt
-            user.setRole(role);
-
-            userService.save(user); // This is where the RuntimeException occurs
-
-            return "redirect:/login";
-        } catch (RuntimeException e) {
-            // Redirect back to registration with the error parameter
-            return "redirect:/register?error";
+            userService.save(user);
+            return "redirect:/login?success";
+        } catch (Exception e) {
+            model.addAttribute("registrationError", "An unexpected error occurred.");
+            return "register";
         }
     }
+
 }

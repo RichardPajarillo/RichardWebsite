@@ -3,6 +3,8 @@ package org.example.richardwebsite.controller;
 import org.example.richardwebsite.model.Order;
 import org.example.richardwebsite.model.OrderStatus;
 import org.example.richardwebsite.repository.OrderRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,15 +31,7 @@ public class AdminController {
     }
 
 
-    // ALL ORDERS
-    @GetMapping("/orders")
-    public String allOrders(Model model) {
-        List<Order> orders = orderRepository.findAll();
-        model.addAttribute("orders", orders);
-        // This allows the <select> to see all possible status options
-        model.addAttribute("statusValues", OrderStatus.values());
-        return "admin-orders";
-    }
+
 
     // ORDER DETAILS
     @GetMapping("/orders/{id}")
@@ -63,14 +57,6 @@ public class AdminController {
         order.setStatus(newStatus);
         orderRepository.save(order);
 
-        return "redirect:/admin/orders";
-    }
-
-    // delete orders
-
-    @PostMapping("/orders/delete/{id}")
-    public String deleteOrder(@PathVariable Long id) {
-        orderRepository.deleteById(id);
         return "redirect:/admin/orders";
     }
 
