@@ -20,7 +20,7 @@ public class User {
     }
 
     @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+    @Size(min = 3, max = 50, message = "Username must be between 3-50 characters long")
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -66,7 +66,11 @@ public class User {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        if (username != null) {
+            this.username = username.trim(); // Removes leading and trailing spaces
+        } else {
+            this.username = null;
+        }
     }
 
     public String getPassword() {

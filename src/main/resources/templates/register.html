@@ -23,13 +23,13 @@
 
             <div class="input-group">
                 <label>Username *</label>
-                <input type="text" th:field="*{username}" placeholder="Username must be between 1 and 50 characters" required>
+                <input type="text" th:field="*{username}" placeholder="Username must be between 3-50 characters long" required>
                 <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error-text" style="color: #ff4d4d; font-size: 0.85rem; margin-top: 5px;"></p>
             </div>
 
             <div class="input-group">
                 <label>Password *</label>
-                <input type="password" th:field="*{password}" placeholder="Password must be at least 1-25 characters long" required>
+                <input type="password" th:field="*{password}" placeholder="Password must be at least 3-50 characters long" required>
                 <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-text" style="color: #ff4d4d; font-size: 0.85rem; margin-top: 5px;"></p>
             </div>
 
