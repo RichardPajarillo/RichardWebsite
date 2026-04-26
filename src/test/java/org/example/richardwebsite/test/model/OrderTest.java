@@ -7,7 +7,7 @@ import org.example.richardwebsite.model.User;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import java.math.BigDecimal;
 class OrderTest {
 
     @Test
@@ -26,12 +26,20 @@ class OrderTest {
         Order order = new Order();
         User user = new User();
 
-        order.setTotal(150.0);
+        // 1. Create a BigDecimal instead of a double
+        BigDecimal testTotal = new BigDecimal("150.00");
+
+        // 2. Pass the BigDecimal to the setter
+        order.setTotal(testTotal);
         order.setStatus(OrderStatus.PENDING);
         order.setUser(user);
         order.setUserOrderNumber(101);
 
-        assertEquals(150.0, order.getTotal());
+        // 3. FIX: Use compareTo to check equality
+        // compareTo returns 0 if the values are equal (e.g. 150.0 == 150.00)
+        assertNotNull(order.getTotal());
+        assertTrue(testTotal.compareTo(order.getTotal()) == 0, "The totals should match numerically");
+
         assertEquals(OrderStatus.PENDING, order.getStatus());
         assertEquals(user, order.getUser());
         assertEquals(101, order.getUserOrderNumber());

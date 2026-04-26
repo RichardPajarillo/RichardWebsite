@@ -3,8 +3,7 @@ package org.example.richardwebsite.model;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "orders")
@@ -14,55 +13,48 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double total;
+    // We use 'total' to match your OrderService.java
+    @Column(precision = 13, scale = 2)
+    private BigDecimal total;
 
-
-    @Enumerated(EnumType.STRING) // Saves the status as text (e.g., "PENDING") in the DB
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    // Getter and Setter
-    public OrderStatus getStatus() { return status; }
-    public void setStatus(OrderStatus status) { this.status = status; }
+    private String customerName; // The snapshot for deleted users
 
-
-    // ✅ FIX: user relationship (THIS IS REQUIRED)
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
     @Column(name = "user_order_number")
     private Integer userOrderNumber;
 
-    // order items
-    @OneToMany(mappedBy = "order",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
-
-
-    public void addItem(OrderItem item) {
-        items.add(item);
-        item.setOrder(this); // CRITICAL
-    }
+    // --- GETTERS AND SETTERS ---
 
     public Long getId() { return id; }
 
-    public Double getTotal() { return total; }
-    public void setTotal(Double total) { this.total = total; }
+    public BigDecimal getTotal() { return total; }
+    public void setTotal(BigDecimal total) { this.total = total; }
+
+    public OrderStatus getStatus() { return status; }
+    public void setStatus(OrderStatus status) { this.status = status; }
+
+    public String getCustomerName() { return customerName; }
+    public void setCustomerName(String customerName) { this.customerName = customerName; }
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
+    public Integer getUserOrderNumber() { return userOrderNumber; }
+    public void setUserOrderNumber(Integer userOrderNumber) { this.userOrderNumber = userOrderNumber; }
+
     public List<OrderItem> getItems() { return items; }
 
-    public Integer getUserOrderNumber() {
-        return userOrderNumber;
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
     }
-
-    public void setUserOrderNumber(Integer userOrderNumber) {
-        this.userOrderNumber = userOrderNumber;
-    }
-
-
 }

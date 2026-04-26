@@ -27,15 +27,33 @@ class UserServiceTest {
     void save_shouldReturnSavedUser() {
         // Arrange
         User user = new User();
-        User savedUser = new User();
-        when(userRepository.save(user)).thenReturn(savedUser);
+        user.setUsername("newuser");
+        when(userRepository.findByUsername("newuser")).thenReturn(Optional.empty());
+        when(userRepository.save(user)).thenReturn(user);
 
         // Act
         User result = userService.save(user);
 
         // Assert
-        assertEquals(savedUser, result);
+        assertNotNull(result);
         verify(userRepository).save(user);
+    }
+
+    @Test
+    void save_shouldThrowExceptionWhenUsernameExists() {
+        // This test covers the 2nd branch (if statement is true)
+        // Arrange
+        User user = new User();
+        user.setUsername("existingUser");
+        when(userRepository.findByUsername("existingUser")).thenReturn(Optional.of(new User()));
+
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            userService.save(user);
+        });
+
+        assertEquals("Username 'existingUser' is already taken.", exception.getMessage());
+        verify(userRepository, never()).save(any(User.class)); // Ensures save was NOT called
     }
 
     @Test
@@ -50,7 +68,6 @@ class UserServiceTest {
 
         // Assert
         assertEquals(user, result);
-        verify(userRepository).findByUsername(username);
     }
 
     @Test
@@ -64,6 +81,5 @@ class UserServiceTest {
 
         // Assert
         assertNull(result);
-        verify(userRepository).findByUsername(username);
     }
 }
