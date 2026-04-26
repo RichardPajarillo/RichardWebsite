@@ -46,7 +46,7 @@ class AuthControllerTest {
                         .param("role", "USER")
                         .with(csrf())) // 2. ADD THIS LINE
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login"));
+                .andExpect(redirectedUrl("/login?success"));
 
         // Verify that userService.save was called
         // Note: Since User is created inside controller, we can verify save was called with any User

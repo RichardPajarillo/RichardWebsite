@@ -61,25 +61,38 @@ class UserServiceTest {
         // Arrange
         String username = "testuser";
         User user = new User();
+        user.setUsername(username);
+        // Mocking the repository to return an Optional containing our user
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
         // Act
-        User result = userService.findByUsername(username);
+        Optional<User> result = userService.findByUsername(username);
 
         // Assert
-        assertEquals(user, result);
+        // 1. Verify the Optional is not empty
+        assertTrue(result.isPresent(), "Optional should contain a user");
+
+        // 2. Compare the object INSIDE the Optional to our expected user
+        assertEquals(user, result.get(), "The user inside the Optional should match");
+
+        // 3. (Optional) Double check the data
+        assertEquals(username, result.get().getUsername());
     }
 
     @Test
-    void findByUsername_shouldReturnNullWhenNotExists() {
+    void findByUsername_shouldReturnEmptyWhenNotExists() {
         // Arrange
         String username = "testuser";
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
         // Act
-        User result = userService.findByUsername(username);
+        Optional<User> result = userService.findByUsername(username);
 
         // Assert
-        assertNull(result);
+        // Option 1: The most accurate check for Optionals
+        assertTrue(result.isEmpty(), "The result should be an empty Optional");
+
+        // Option 2: Comparing against the Optional.empty() constant
+        assertEquals(Optional.empty(), result);
     }
 }

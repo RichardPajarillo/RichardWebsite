@@ -67,8 +67,13 @@ public class AdminUserController {
             return "admin-add-user"; // 4. Return to the form instead of crashing
         }
 
+        // 2. CHECK FOR DUPLICATE HERE
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            return "redirect:/admin/users/add?error";
+            // This adds the error to the 'username' field specifically
+            result.rejectValue("username", "error.user", "This username is already taken.");
+
+            // Return the view name directly (Status 200) so the test passes
+            return "admin-add-user";
         }
 
         userRepository.save(user);

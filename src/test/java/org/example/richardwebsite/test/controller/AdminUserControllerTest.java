@@ -118,7 +118,8 @@ class AdminUserControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/users"));
 
-        verify(userRepository, times(1)).deleteById(2L);
+        // CHANGE THIS LINE: Verify 'delete' instead of 'deleteById'
+        verify(userRepository, times(1)).delete(any(User.class));
     }
 
     @Test
@@ -129,22 +130,12 @@ class AdminUserControllerTest {
         mockMvc.perform(post("/admin/users/add")
                         .flashAttr("user", new User())
                         .param("username", "newUser")
+                        .param("password", "securePassword123") // ADD THIS LINE
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/users"));
     }
 
-    @Test
-    @WithMockUser(username = "adminUser", roles = {"ADMIN"})
-    void addUser_shouldRedirectWithErrorIfUsernameExists() throws Exception {
-        when(userRepository.findByUsername("existingUser")).thenReturn(Optional.of(new User()));
-
-        mockMvc.perform(post("/admin/users/add")
-                        .param("username", "existingUser")
-                        .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/users/add?error"));
-    }
 
     @Test
     @WithMockUser(username = "adminUser", roles = {"ADMIN"})
@@ -166,5 +157,20 @@ class AdminUserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin-add-user"))
                 .andExpect(model().attributeExists("user"));
+    }
+
+    // Updated test for the rejectValue approach
+    @Test
+    @WithMockUser(username = "adminUser", roles = {"ADMIN"})
+    void addUser_shouldShowErrorIfUsernameExists() throws Exception {
+        when(userRepository.findByUsername("existingUser")).thenReturn(Optional.of(new User()));
+
+        mockMvc.perform(post("/admin/users/add")
+                        .param("username", "existingUser")
+                        .param("password", "password123")
+                        .with(csrf()))
+                .andExpect(status().isOk()) // Expect 200 OK now
+                .andExpect(view().name("admin-add-user")) // Stays on the form
+                .andExpect(model().hasErrors()); // Check that errors exist
     }
 }

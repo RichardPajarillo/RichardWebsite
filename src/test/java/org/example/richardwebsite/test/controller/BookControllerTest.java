@@ -175,7 +175,7 @@ class BookControllerTest {
     @Test
     @WithMockUser
     void showNewBookForm_shouldReturnNewBookView() throws Exception {
-        mockMvc.perform(get("/showNewBookForm").with(csrf()))
+        mockMvc.perform(get("/admin/showNewBookForm").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("new_book"))
                 .andExpect(model().attributeExists("book"));
@@ -190,7 +190,7 @@ class BookControllerTest {
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 
         // Act & Assert
-        mockMvc.perform(get("/showFormForUpdate/1").with(csrf()))
+        mockMvc.perform(get("/admin/books/showFormForUpdate/1").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("update_book"))
                 .andExpect(model().attribute("book", book));
