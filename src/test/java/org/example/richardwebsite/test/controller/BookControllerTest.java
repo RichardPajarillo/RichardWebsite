@@ -105,21 +105,27 @@ class BookControllerTest {
         // id is null
 
         mockMvc.perform(post("/saveBook")
-                        .flashAttr("book", newBook))
+                        .flashAttr("book", newBook)
+                        .with(csrf())) // Ensure CSRF is included
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/showNewBookForm")) // Branch 3: success && !isUpdate
+                // Match the actual path in AdminBookController
+                .andExpect(redirectedUrl("/admin/books/new"))
                 .andExpect(flash().attribute("message", "Book saved successfully!"));
     }
 
     @Test
     void saveBook_shouldRedirectToUpdateForm_WhenUpdateSuccessful() throws Exception {
+        // Arrange
         Book existingBook = new Book("url", "Title", "Author", "Genre", "About", 10.0, 1);
         existingBook.setId(55L);
 
+        // Act & Assert
         mockMvc.perform(post("/saveBook")
-                        .flashAttr("book", existingBook))
+                        .flashAttr("book", existingBook)
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/showFormForUpdate/55")) // Branch 4: success && isUpdate
+                // Change the expected URL to match the path in AdminBookController
+                .andExpect(redirectedUrl("/admin/books/update/55"))
                 .andExpect(flash().attribute("message", "Book updated successfully!"));
     }
 
@@ -175,7 +181,8 @@ class BookControllerTest {
     @Test
     @WithMockUser
     void showNewBookForm_shouldReturnNewBookView() throws Exception {
-        mockMvc.perform(get("/admin/showNewBookForm").with(csrf()))
+        // Change "/admin/showNewBookForm" to "/admin/books/new"
+        mockMvc.perform(get("/admin/books/new").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("new_book"))
                 .andExpect(model().attributeExists("book"));
@@ -187,10 +194,12 @@ class BookControllerTest {
         // Arrange
         Book book = new Book();
         book.setId(1L);
+        // Mock the repository to return our book when ID 1 is requested
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 
         // Act & Assert
-        mockMvc.perform(get("/admin/books/showFormForUpdate/1").with(csrf()))
+        // Match the @GetMapping("/admin/books/update/{id}") in AdminBookController
+        mockMvc.perform(get("/admin/books/update/1").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("update_book"))
                 .andExpect(model().attribute("book", book));
@@ -202,12 +211,61 @@ class BookControllerTest {
     @WithMockUser
     void deleteBook_shouldRedirectToAdminBooks() throws Exception {
         // Act & Assert
-        mockMvc.perform(post("/deleteBook/1")
+        // Change "/deleteBook/1" to "/admin/books/delete/1"
+        mockMvc.perform(post("/admin/books/delete/1")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/books"));
 
         // Verify repository was called
         verify(bookRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    @WithMockUser
+    void viewBooks_shouldUseDefaultBranch_WhenSearchIsWhitespace() throws Exception {
+        // This covers the !search.trim().isEmpty() branch being false
+        Page<Book> booksPage = new PageImpl<>(List.of(new Book()));
+        when(bookRepository.findAll(any(org.springframework.data.domain.Pageable.class))).thenReturn(booksPage);
+
+        mockMvc.perform(get("/")
+                        .param("search", "   ") // Whitespace search
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("search", "   "))
+                .andExpect(view().name("index"));
+    }
+
+    @Test
+    @WithMockUser
+    void viewBooks_shouldUseDefaultBranch_WhenGenreIsEmpty() throws Exception {
+        // This covers the !genre.trim().isEmpty() branch being false
+        Page<Book> booksPage = new PageImpl<>(List.of(new Book()));
+        when(bookRepository.findAll(any(org.springframework.data.domain.Pageable.class))).thenReturn(booksPage);
+
+        mockMvc.perform(get("/")
+                        .param("genre", "") // Empty genre
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("genre", ""))
+                .andExpect(view().name("index"));
+    }
+
+    @Test
+    @WithMockUser
+    void viewBooks_shouldHandleValidPositivePage() throws Exception {
+        // Covers the branch where (page == null || page < 0) is FALSE
+        Page<Book> booksPage = new PageImpl<>(List.of(new Book()));
+        when(bookRepository.findAll(any(org.springframework.data.domain.Pageable.class))).thenReturn(booksPage);
+
+        mockMvc.perform(get("/")
+                        .param("page", "2")
+                        .with(csrf()))
+                .andExpect(status().isOk());
+
+        ArgumentCaptor<org.springframework.data.domain.Pageable> captor = ArgumentCaptor.forClass(org.springframework.data.domain.Pageable.class);
+        verify(bookRepository).findAll(captor.capture());
+
+        assertEquals(2, captor.getValue().getPageNumber());
     }
 }
