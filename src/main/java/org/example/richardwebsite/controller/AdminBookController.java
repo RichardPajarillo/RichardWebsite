@@ -41,6 +41,7 @@ public class AdminBookController { // RENAME THIS to avoid ambiguity
         return "new_book"; // This MUST match the HTML file name exactly
     }
 
+
     @PostMapping("/saveBook")
     public String saveBook(@Valid @ModelAttribute("book") Book book,
                            BindingResult result,
@@ -52,10 +53,27 @@ public class AdminBookController { // RENAME THIS to avoid ambiguity
             return book.getId() == null ? "new_book" : "update_book";
         }
 
+        // 1. Capture whether this is an update before saving
+        Long originalId = book.getId();
+
         bookRepository.save(book);
-        redirectAttributes.addFlashAttribute("message", "Book saved successfully!");
-        return "redirect:/admin/books"; // Redirect back to the table
+
+        // 2. Set the message dynamically based on whether it was an update
+        String successMessage = (originalId == null)
+                ? "Book saved successfully!"
+                : "Book updated successfully!";
+
+        redirectAttributes.addFlashAttribute("message", successMessage);
+
+        // 3. Handle redirects based on update vs new
+        if (originalId != null) {
+            return "redirect:/admin/books/update/" + originalId;
+        }
+
+        return "redirect:/admin/books/new";
     }
+
+
 
     // 1. Show the Update Form
     @GetMapping("/admin/books/update/{id}")
