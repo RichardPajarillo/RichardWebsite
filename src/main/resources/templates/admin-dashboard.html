@@ -1,30 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
 <head>
-    <title>Admin Dashboard</title>
+    <title>Admin Control Center</title>
     <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-
 <body>
 
 <div th:replace="~{fragments/navbar :: nav-header}"></div>
 
 <div class="content-wrapper">
+    <header class="dashboard-header">
+        <div>
+            <h1>Admin Dashboard</h1>
+            <p class="auth-subtitle">Welcome back, <span sec:authentication="name">Admin</span>. System is operational.</p>
+        </div>
+    </header>
 
-    <h1>Admin Dashboard</h1>
-
-    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
-
-        <a th:href="@{/admin/orders}" class="btn">Manage Orders</a>
-
-        <a th:href="@{/admin/books}" class="btn">Manage Books</a>
-
-        <a th:href="@{/admin/users}" class="btn">Manage Users</a>
-
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+            <div class="stat-info">
+                <h3>Orders</h3>
+                <p>Process pending sales</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-book"></i></div>
+            <div class="stat-info">
+                <h3>Inventory</h3>
+                <p>Manage book catalog</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-info">
+                <h3>Users</h3>
+                <p>Security & permissions</p>
+            </div>
+        </div>
     </div>
 
+    <hr class="section-divider">
+
+    <div class="admin-management-grid">
+        <a th:href="@{/admin/orders}" class="mgmt-tile">
+            <i class="fas fa-boxes-stacked"></i>
+            <span>Order Management</span>
+            <small>View, update status, and track history</small>
+        </a>
+
+        <a th:href="@{/admin/books}" class="mgmt-tile">
+            <i class="fas fa-edit"></i>
+            <span>Manage Books</span>
+            <small>Add new releases or edit current stock</small>
+        </a>
+
+        <a th:href="@{/admin/users}" class="mgmt-tile">
+            <i class="fas fa-user-shield"></i>
+            <span>User Management</span>
+            <small>Manage roles and administrative access</small>
+        </a>
+    </div>
 </div>
 
 </body>
