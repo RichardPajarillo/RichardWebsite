@@ -3,8 +3,6 @@ package org.example.richardwebsite.controller;
 import org.example.richardwebsite.model.Order;
 import org.example.richardwebsite.model.OrderStatus;
 import org.example.richardwebsite.repository.OrderRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
