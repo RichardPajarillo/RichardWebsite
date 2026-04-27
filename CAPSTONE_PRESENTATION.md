@@ -3,827 +3,685 @@
 ---
 
 ## Slide 1: Title Slide
-**Good [morning/afternoon], everyone. My name is [Your Name] and today I'm presenting my capstone project: RichardWebsite - A Complete E-Commerce Bookstore Application.**
+**Good [morning/afternoon], everyone. My name is [Your Name] and today I'm presenting my capstone project: RichardWebsite - A Complete E-Commerce Bookstore Application built with Spring Boot.**
 
 ---
 
 ## Slide 2: Project Overview
-**RichardWebsite is a full-featured e-commerce bookstore built with modern Java technologies. It demonstrates a complete, enterprise-level web application.**
+**RichardWebsite is a full-featured e-commerce bookstore built with modern Java technologies. It demonstrates a complete, enterprise-level web application with comprehensive functionality for both customers and administrators.**
 
 **Key Features:**
-- User registration and secure authentication
-- Book browsing with search and filtering
-- Shopping cart and checkout system
-- Complete order management
-- Admin dashboard for inventory control
-- Fully responsive design
+- User registration and secure authentication with role-based access
+- Advanced book browsing with search, filtering, and pagination
+- Full shopping cart and checkout system with order management
+- Complete admin dashboard for inventory and user management
+- Responsive design with modern UI/UX
+- Comprehensive testing suite and layered architecture
 
-**Business Value:** This project demonstrates production-ready e-commerce capabilities suitable for real-world deployment.
+**Business Value:** This project demonstrates production-ready e-commerce capabilities suitable for real-world deployment, showcasing modern web development practices and scalable architecture.
 
 ---
 
 ## Slide 3: Technical Stack
-**The application uses modern, scalable technologies:**
+**The application uses cutting-edge, scalable technologies:**
 
 **Backend:**
 - Java 26 with Spring Boot 4.0.5
-- Spring Security for authentication/authorization
-- Spring Data JPA for database operations
-- Maven for build management
+- Spring Security for authentication/authorization with role-based access
+- Spring Data JPA for database operations with MySQL
+- Spring MVC with comprehensive REST endpoints
+- Maven for build management and dependency management
 
 **Frontend:**
-- Thymeleaf templating engine
-- Bootstrap 5 for responsive design
-- HTML5/CSS3 and JavaScript
+- Thymeleaf templating engine for server-side rendering
+- Bootstrap 5 for responsive, mobile-first design
+- HTML5/CSS3 with custom styling and JavaScript
+- Fragment-based architecture for reusable components
 
-**Testing & Tools:**
-- JUnit 5 and Mockito for testing
-- Git for version control
-- IntelliJ IDEA for development
+**Testing & Quality:**
+- JUnit 5 and Mockito for comprehensive unit testing
+- Integration testing with Spring Boot Test
+- MockMvc for controller testing
+- H2 in-memory database for test isolation
+- Git for version control with proper branching strategy
+
+**Database & Deployment:**
+- MySQL 8.0+ for production data persistence
+- JPA/Hibernate for ORM with automatic schema management
+- Docker-ready configuration for containerized deployment
 
 ---
 
 ## Slide 4: System Architecture
-**Layered architecture ensures clean separation of concerns:**
+**Layered architecture ensures clean separation of concerns and maintainability:**
 
 ```
 ┌─────────────────────────────────────────┐
-│     Frontend (HTML/CSS/JavaScript)      │
+│     Presentation Layer (Thymeleaf)      │
+│  - Responsive UI with Bootstrap         │
+│  - Server-side rendering                │
+│  - Fragment-based components            │
 └──────────────┬──────────────────────────┘
                │ HTTP Requests/Responses
 ┌──────────────▼──────────────────────────┐
-│  Controllers (Handle HTTP requests)     │
-├──────────────────────────────────────────┤
-│  Services (Business logic)               │
-├──────────────────────────────────────────┤
-│  Repositories (Database access)          │
-├──────────────────────────────────────────┤
-│  Models/Entities (Data structures)       │
+│  Controller Layer (Spring MVC)          │
+│  - Request handling & routing           │
+│  - Model-View binding                   │
+│  - Validation & error handling          │
+├─────────────────────────────────────────┤
+│  Service Layer (Business Logic)         │
+│  - Transaction management               │
+│  - Business rules & calculations        │
+│  - Security integration                 │
+├─────────────────────────────────────────┤
+│  Repository Layer (Data Access)         │
+│  - JPA queries & persistence            │
+│  - Database abstraction                 │
+│  - Custom query methods                 │
+├─────────────────────────────────────────┤
+│  Model Layer (Entities)                 │
+│  - JPA entities with relationships      │
+│  - Validation annotations               │
+│  - Business methods                     │
 └──────────────┬──────────────────────────┘
                │ JPA/Hibernate
 ┌──────────────▼──────────────────────────┐
 │   MySQL Database                        │
+│  - Relational data storage              │
+│  - ACID transactions                    │
+│  - Optimized queries                    │
 └─────────────────────────────────────────┘
 ```
 
-**Benefits:** Maintainability, testability, scalability, and flexibility for changes.
+**Complete Data Flow Architecture:**
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                    PRESENTATION LAYER                            │
+│  ┌─────────────────────────────────────────────────────────────┐ │
+│  │              Thymeleaf Templates + Bootstrap                │ │
+│  │  • Responsive HTML pages with dynamic content               │ │
+│  │  • AJAX calls for dynamic updates (cart operations)         │ │
+│  │  • Form validation and user feedback                        │ │
+│  └─────────────────────┬───────────────────────────────────────┘ │
+└────────────────────────┼─────────────────────────────────────────┘
+                         │ HTTP Request/Response
+                         ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                   CONTROLLER LAYER                               │
+│  ┌─────────────────────────────────────────────────────────────┐ │
+│  │              Spring MVC Controllers                         │ │
+│  │  • Request mapping (@GetMapping, @PostMapping)              │ │
+│  │  • Model attribute binding (@ModelAttribute)                │ │
+│  │  • Validation (@Valid) and error handling                   │ │
+│  │  • Security integration (@PreAuthorize)                     │ │
+│  └─────────────────────┬───────────────────────────────────────┘ │
+└────────────────────────┼─────────────────────────────────────────┘
+                         │ Method Calls
+                         ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                   SERVICE LAYER                                  │
+│  ┌─────────────────────────────────────────────────────────────┐ │
+│  │              Business Logic Services                        │ │
+│  │  • Transaction management (@Transactional)                  │ │
+│  │  • Business rules and calculations                          │ │
+│  │  • Data transformation and validation                       │ │
+│  │  • Integration with external systems                        │ │
+│  └─────────────────────┬───────────────────────────────────────┘ │
+└────────────────────────┼─────────────────────────────────────────┘
+                         │ Repository Calls
+                         ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                  REPOSITORY LAYER                                │
+│  ┌─────────────────────────────────────────────────────────────┐ │
+│  │              JPA Repositories                               │ │
+│  │  • CRUD operations (save, findById, findAll)                │ │
+│  │  • Custom query methods (@Query)                            │ │
+│  │  • Pagination and sorting support                           │ │
+│  │  • Entity relationship management                           │ │
+│  └─────────────────────┬───────────────────────────────────────┘ │
+└────────────────────────┼─────────────────────────────────────────┘
+                         │ SQL Queries
+                         ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                   DATABASE LAYER                                 │
+│  ┌─────────────────────────────────────────────────────────────┐ │
+│  │              MySQL Database                                 │ │
+│  │  • Relational data storage                                  │ │
+│  │  • ACID transactions                                        │ │
+│  │  • Optimized queries with indexes                           │ │
+│  │  • Data integrity constraints                               │ │
+│  └─────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+**Benefits:** Maintainability, testability, scalability, security, and clean code organization following SOLID principles.
 
 ---
 
-## Slide 5: Backend - Controllers in Detail
-**Controllers handle all web requests and coordinate the application flow.**
+## Slide 5: Backend Architecture in Detail
+**Nine specialized controllers handle all web requests and coordinate application flow:**
 
 ```
+User Journey Flow:
 ┌──────────────────────────────────────────────────────┐
 │                  User Actions                        │
-│  (Click links, Submit forms, Make requests)          │
+│  (Browse, Search, Cart, Checkout, Admin Tasks)       │
 └────────────────────┬─────────────────────────────────┘
                      │
         ┌────────────┴────────────┬─────────────┐
         ▼                         ▼             ▼
   ┌──────────────┐      ┌──────────────┐  ┌──────────────┐
-  │ AuthController│      │ BookController│  │ CartController│
-  │              │      │              │  │              │
+  │AuthController│      │BookController│  │CartController│
   │ • Login      │      │ • Browse     │  │ • Add to Cart│
-  │ • Register   │      │ • Search     │  │ • Checkout   │
-  │ • Verify     │      │ • Filter     │  │ • Update Qty │
+  │ • Register   │      │ • Search     │  │ • Update Qty │
+  │ • Validation │      │ • Filter     │  │ • Remove Item│
   └──────────────┘      └──────────────┘  └──────────────┘
         │                      │                    │
         └──────────┬───────────┴────────────────────┘
                    │
-        ┌──────────▼──────────┐
-        │  Services Layer     │
-        │  (Business Logic)   │
-        └──────────┬──────────┘
+  ┌────────────────▼──────────────────┐
+  │     Checkout & Order Flow         │
+  │                                   │
+  │  ┌──────────────┐  ┌─────────────┐│
+  │  │CheckoutCtrl  │  │ OrderCtrl   ││
+  │  │ • Process    │  │ • View      ││
+  │  │ • Validate   │  │ • Details   ││
+  │  └──────────────┘  └─────────────┘│
+  │                                   │
+  └────────────────┬──────────────────┘
                    │
-        ┌──────────▼──────────┐
-        │ Repositories Layer  │
-        │ (Database Access)   │
-        └──────────┬──────────┘
-                   │
-        ┌──────────▼──────────┐
-        │  MySQL Database     │
-        └─────────────────────┘
+  ┌────────────────▼────────────────────────────────────────┐
+  │     Admin Management                                    │
+  │                                                         │
+  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+  │  │AdminBookCtrl │  │AdminUserCtrl │  │AdminCtrl     │   │
+  │  │ • CRUD Books │  │ • CRUD Users │  │ • Dashboard  │   │
+  │  │ • Inventory  │  │ • Roles      │  │ • Overview   │   │
+  │  └──────────────┘  └──────────────┘  └──────────────┘   │
+  │                                                         │
+  └─────────────────────────────────────────────────────────┘
 ```
 
-### AuthController
-- **Purpose:** User authentication and registration
-- **Methods:** 
-  - GET /login → Display login page
-  - GET /register → Display registration form
-  - POST /register → Create new user account
-
-### BookController
-- **Purpose:** Book browsing, searching, and admin management
-- **Methods:**
-  - GET / → View all books with pagination
-  - GET /?search=X → Search books by title
-  - GET /?genre=X → Filter books by genre
-  - GET /showNewBookForm → Admin book creation form
-  - POST /saveBook → Save new or updated book
-  - GET /showFormForUpdate/{id} → Edit book form
-  - POST /deleteBook/{id} → Delete book
-
-### CartController
-- **Purpose:** Shopping cart operations
-- **Methods:**
-  - GET /cart → View shopping cart
-  - POST /cart/add/{id} → Add book to cart
-  - GET /cart/remove/{id} → Remove book from cart
-  - POST /cart/update → Update item quantities
-  - GET /cart/checkout → Show checkout page
-  - POST /cart/checkout → Process purchase
-
-### CheckoutController
-- **Purpose:** Alternative checkout process
-- **Methods:** Similar to CartController
-
-### OrderController
-- **Purpose:** Customer order history and details
-- **Methods:**
-  - GET /orders → List user's orders
-  - GET /orders/{id} → View specific order
-
-### AdminController
-- **Purpose:** Admin order management
-- **Methods:**
-  - GET /admin/dashboard → Admin home
-  - GET /admin/orders → View all orders
-  - GET /admin/orders/{id} → Order details
-  - POST /admin/orders/updateStatus → Change status
-  - POST /admin/orders/delete/{id} → Delete order
-
-### InfoController
-- **Purpose:** Static information pages
-- **Methods:**
-  - GET /about → About page
-  - GET /news → News page
-  - GET /contact → Contact page
+**Key Controllers:**
+- **AuthController**: User authentication and registration
+- **BookController**: Book catalog with search/filter/pagination
+- **CartController**: Shopping cart operations with AJAX updates
+- **CheckoutController**: Order processing and validation
+- **OrderController**: Customer order history and details
+- **AdminBookController**: Book inventory management
+- **AdminUserController**: User account administration
+- **AdminController**: Admin dashboard and overview
+- **InfoController**: Static content pages
 
 ---
 
-## Slide 6: Backend - Services in Detail
-**Services contain business logic and coordinate between controllers and repositories.**
+## Slide 6: Data Model & Relationships
+**Comprehensive entity model with proper relationships:**
 
-### UserService
-- **Purpose:** User management
-- **Responsibilities:**
-  - Save new users to database
-  - Validate username uniqueness
-  - Handle user registration logic
+```
+┌─────────────────────────────────────────────────┐
+│                    User                         │
+│  ┌─────────────────────────────────────────┐    │
+│  │ • id (PK)                               │    │
+│  │ • username (unique)                     │    │
+│  │ • password                              │    │
+│  │ • role (USER/ADMIN)                     │    │
+│  │ • cart (OneToOne)                       │    │
+│  │ • orders (OneToMany)                    │    │
+│  └─────────────────────────────────────────┘    │
+└────────────────┬────────────────────────────────┘
+                 │
+    ┌────────────┴────────────┐
+    ▼                         ▼
+┌────────┐                ┌─────────────┐
+│ Cart   │                │   Orders    │
+│ • id   │                │ • id        │
+│ • user │                │ • user      │
+│ • items│                │ • items     │
+│        │                │ • total     │
+│        │                │ • status    │
+└────────┘                │ • orderNum  │
+    │                     └─────────────┘
+    ▼                         │
+┌─────────┐                   ▼
+│CartItems│             ┌─────────────┐
+│ • id    │             │ OrderItems  │
+│ • cart  │             │ • id        │
+│ • book  │             │ • order     │
+│ • qty   │             │ • bookTitle │
+│         │             │ • price     │
+└─────────┘             │ • quantity  │
+    │                   └─────────────┘
+    ▼
+┌─────────┐
+│  Books  │
+│ • id    │
+│ • title │
+│ • author│
+│ • genre │
+│ • about │
+│ • price │
+│ • qty   │
+│ • cover │
+└─────────┘
+```
 
-### BookService
-- **Purpose:** Book operations
-- **Responsibilities:**
-  - Retrieve all books
-  - Get individual books by ID
-  - Save/update books
-  - Delete books from inventory
-
-### CartService
-- **Purpose:** Shopping cart state management
-- **Responsibilities:**
-  - Create or retrieve user's cart
-  - Add/remove items
-  - Calculate cart totals
-  - Persist cart to database
-
-### OrderService
-- **Purpose:** Order creation and processing
-- **Responsibilities:**
-  - Create orders from cart items
-  - Calculate order totals
-  - Set initial order status (PENDING)
-  - Generate order numbers
-
-### CheckoutService
-- **Purpose:** Complete checkout workflow
-- **Responsibilities:**
-  - Create order from cart
-  - Clear cart after purchase
-  - Handle transaction completion
-
-### CustomUserDetailsService
-- **Purpose:** User authentication integration
-- **Responsibilities:**
-  - Load user by username for Spring Security
-  - Return UserDetails object for authentication
-
-### SecurityService
-- **Purpose:** Security utilities
-- **Responsibilities:**
-  - Get currently logged-in user
-  - Check if user has admin role
-  - Provide authentication context
-
----
-
-## Slide 7: Backend - Models in Detail
-**Models represent the application's data structure and business entities.**
-
-### User Model
-- **Purpose:** Represents application users
-- **Fields:**
-  - username (unique identifier)
-  - password (encrypted)
-  - role (USER or ADMIN)
-- **Relationships:** One-to-one with Cart, One-to-many with Orders
-- **Implements:** Spring Security's UserDetails interface
-
-### Book Model
-- **Purpose:** Represents products in the bookstore
-- **Fields:**
-  - title, author, genre
-  - price, quantity (inventory)
-  - cover (image URL)
-  - about (description)
-- **Relationships:** One-to-many with CartItems and OrderItems
-- **Validation:** Price and quantity constraints
-
-### Cart Model
-- **Purpose:** Shopping cart for user
-- **Fields:**
-  - user (owner)
-  - items (collection of CartItems)
-- **Relationships:** One-to-one with User, One-to-many with CartItems
-- **Methods:** addItem(), removeItem(), getTotal()
-
-### CartItem Model
-- **Purpose:** Individual item in shopping cart
-- **Fields:**
-  - book (reference)
-  - quantity
-  - price (stored for history)
-
-### Order Model
-- **Purpose:** Completed purchase transaction
-- **Fields:**
-  - user (buyer)
-  - total (order amount)
-  - status (PENDING, SHIPPED, DELIVERED, CANCELLED)
-  - userOrderNumber (customer-facing ID)
-- **Relationships:** One-to-many with OrderItems
-- **Methods:** calculateTotal(), addItem()
-
-### OrderItem Model
-- **Purpose:** Individual item in completed order
-- **Fields:**
-  - bookTitle (stored snapshot)
-  - price (locked at purchase time)
-  - quantity
-  - order (reference)
-
-### OrderStatus Enum
-- **Purpose:** Define order states
-- **Values:** PENDING, SHIPPED, DELIVERED, CANCELLED
+**Relationships:**
+- User ↔ Cart (1:1)
+- User ↔ Orders (1:Many)
+- Cart ↔ CartItems (1:Many)
+- Orders ↔ OrderItems (1:Many)
+- Books referenced by CartItems/OrderItems
 
 ---
 
-## Slide 8: Backend - Repositories in Detail
-**Repositories provide database access and abstract away SQL queries.**
+## Slide 7: Security Implementation
+**Comprehensive security with Spring Security:**
 
-### UserRepository
-- **Purpose:** User database operations
-- **Methods:**
-  - save(user) → Create/update user
-  - findById(id) → Get user by ID
-  - findByUsername(username) → Find user by username
-  - deleteById(id) → Remove user
+**Authentication:**
+- Form-based login with custom login page
+- Password encoding (NoOpPasswordEncoder for dev, BCrypt for prod)
+- Session management with logout functionality
 
-### BookRepository
-- **Purpose:** Book database queries
-- **Methods:**
-  - findAll(PageRequest) → Get books with pagination
-  - findByTitleContainingIgnoreCase(search, PageRequest) → Search by title
-  - findByGenreIgnoreCase(genre, PageRequest) → Filter by genre
-  - save(book) → Create/update book
-  - findById(id) → Get book by ID
-  - deleteById(id) → Remove book
+**Authorization:**
+- Role-based access control (USER/ADMIN)
+- Method-level security with @PreAuthorize
+- URL-based protection in SecurityConfig
 
-### CartRepository
-- **Purpose:** Cart persistence
-- **Methods:**
-  - findByUser_Id(userId) → Get user's cart
-  - save(cart) → Store cart
+**Security Configuration:**
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) {
+        http
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/", "/login", "/register").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/cart/**", "/orders/**").authenticated()
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/")
+            );
+        return http.build();
+    }
+}
+```
 
-### OrderRepository
-- **Purpose:** Order database operations
-- **Methods:**
-  - findByUser_Id(userId) → Get user's orders
-  - countByUser_Id(userId) → Count user's orders
-  - findMaxUserOrderNumber(userId) → Get highest order number
-  - save(order) → Create/update order
+**Access Control:**
+- Public: Home, login, register, static resources
+- Authenticated: Cart, orders, checkout
+- Admin Only: Book management, user management, order updates
 
 ---
 
-## Slide 9: Frontend - Template Architecture
-**Thymeleaf templates render dynamic HTML with server-side data.**
+## Slide 8: User Experience & Frontend
+**Modern, responsive UI with excellent UX and intuitive user flows:**
 
-### key.html Pages:
+**Complete Customer Journey Flowchart:**
+```
+┌─────────────────┐
+│   User Visits   │
+│  RichardWebsite │
+│   (Homepage)    │
+└─────────┬───────┘
+          │
+          ▼
+┌─────────────────┐     ┌─────────────────┐
+│   Not Logged In │ ──► │   Click Login   │
+│                 │     │                 │
+│ • Browse Books  │     │ • Authenticate  │
+│ • Search/Filter │     │ • Access Cart   │
+│ • Limited Access│     │ • Place Orders  │
+└─────────┬───────┘     └─────────┬───────┘
+          │                       │
+          ▼                       ▼
+┌─────────────────┐     ┌─────────────────┐
+│   Register New  │     │   Logged In     │
+│   Account       │ ◄───┤   User          │
+│                 │     │                 │
+│ • Create Account│     │ • Full Access   │
+│ • Choose Role   │     │ • Shopping Cart │
+│ • Start Shopping│     │ • Order History │
+└─────────┬───────┘     └─────────┬───────┘
+          │                       │
+          └───────────────────────┼───────────────────────┐
+                                  ▼                       │
+                        ┌─────────────────┐     ┌─────────┴───────┐
+                        │   Browse Books  │     │   Admin User    │
+                        │                 │     │                 │
+                        │ • View Catalog  │     │ • Manage Books  │
+                        │ • Search Titles │     │ • View Orders   │
+                        │ • Filter Genre  │     │ • User Accounts │
+                        │ • Pagination    │     │ • AdminDashboard│
+                        └─────────┬───────┘     └─────────────────┘
+                                  │
+                                  ▼
+                        ┌─────────────────┐
+                        │   Add to Cart   │
+                        │                 │
+                        │ • Select Book   │
+                        │ • Choose Qty    │
+                        │ • Add Item      │
+                        └─────────┬───────┘
+                                  │
+                                  ▼
+                        ┌─────────────────┐     ┌─────────────────┐
+                        │   View Cart     │ ──► │   Update Cart   │
+                        │                 │     │                 │
+                        │ • See Items     │     │ • Change Qty    │
+                        │ • CalculateTotal│     │ • Remove Items  │
+                        │ • Proceed to    │     │ • Update Total  │
+                        │   Checkout      │     └─────────┬───────┘
+                        └─────────┬───────┘               │
+                                  │                       │
+                                  ▼                       │
+                        ┌─────────────────┐               │
+                        │   Checkout      │ ◄─────────────┘
+                        │   Process       │
+                        │                 │
+                        │ • Review Order  │
+                        │ • Confirm       │
+                        │ • Place Order   │
+                        └─────────┬───────┘
+                                  │
+                                  ▼
+                        ┌─────────────────┐
+                        │   Order Placed  │
+                        │                 │
+                        │ • Order Number  │
+                        │ • Confirmation  │
+                        │ • Email Receipt │
+                        └─────────┬───────┘
+                                  │
+                                  ▼
+                        ┌─────────────────┐
+                        │   View Orders   │
+                        │                 │
+                        │ • Order History │
+                        │ • Track Status  │
+                        │ • Order Details │
+                        │ • Reorder       │
+                        └─────────────────┘
+```
 
-**index.html** - Main storefront
-- Hero section with store introduction
-- Search bar for book titles
-- Genre filter dropdown
-- Book cards in 8-per-page grid
-- Pagination controls
-- Add to Cart buttons
+**Admin Experience:**
+1. **Dashboard**: Centralized control center with navigation
+2. **Book Management**: CRUD operations with validation
+3. **Order Oversight**: Status updates and customer service
+4. **User Administration**: Account management and role changes
 
-**login.html** - User authentication
-- Username/password form
-- Error messages for failed login
-- Link to registration page
+**UI Features:**
+- Bootstrap 5 responsive grid system
+- Mobile-first design with touch-friendly controls
+- Consistent navigation with role-based menus
+- Real-time cart updates with AJAX
+- Form validation with user-friendly error messages
+- Loading states and progress indicators
+- Pagination for large datasets
+- Search and filter capabilities
 
-**register.html** - Account creation
-- Username field (with uniqueness validation)
-- Password field
-- Role selection (USER/ADMIN)
-- Register button
-- Link to login
+---
 
-**cart.html** - Shopping cart
-- Table of cart items
-- Book cover, title, author, price
-- Quantity adjustment controls
-- Remove item buttons
-- Cart total calculation
-- Checkout button
-- Empty cart message
+## Slide 9: Testing Strategy
+**Comprehensive testing ensures quality and reliability:**
 
-**checkout.html** - Order confirmation
-- Order summary with items
-- Total price in PHP
-- Confirm purchase button
-- Cancel order button
+**Testing Pyramid Architecture:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    UNIT TESTS (70-80%)                      │
+│  ┌─────────────────────────────────────────────────────────┐ │
+│  │              Service Layer Tests                        │ │
+│  │  • Business logic validation                           │ │
+│  │  • Calculation accuracy                                │ │
+│  │  • Exception handling                                   │ │
+│  │  • Mockito for dependency mocking                      │ │
+│  └─────────────────────┬───────────────────────────────────┘ │
+│  ┌─────────────────────▼───────────────────────────────────┐ │
+│  │              Repository Layer Tests                     │ │
+│  │  • Data access operations                               │ │
+│  │  • Query correctness                                    │ │
+│  │  • H2 in-memory database                                │ │
+│  │  • Entity relationship validation                       │ │
+│  └─────────────────────┬───────────────────────────────────┘ │
+│  ┌─────────────────────▼───────────────────────────────────┐ │
+│  │              Model/Entity Tests                         │ │
+│  │  • Validation annotations                               │ │
+│  │  • Business methods                                     │ │
+│  │  • Constructor and getters/setters                      │ │
+│  │  • JPA mapping correctness                              │ │
+│  └─────────────────────────────────────────────────────────┘ │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────────┐
+│               INTEGRATION TESTS (15-20%)                   │
+│  ┌─────────────────────────────────────────────────────────┐ │
+│  │              Controller Integration Tests               │ │
+│  │  • HTTP endpoint testing with MockMvc                   │ │
+│  │  • Request/response validation                          │ │
+│  │  • Model-View binding                                   │ │
+│  │  • Security integration                                 │ │
+│  └─────────────────────┬───────────────────────────────────┘ │
+│  ┌─────────────────────▼───────────────────────────────────┐ │
+│  │              End-to-End Tests                           │ │
+│  │  • Full user journey testing                            │ │
+│  │  • Database integration                                 │ │
+│  │  • External service calls                               │ │
+│  │  • Performance validation                               │ │
+│  └─────────────────────────────────────────────────────────┘ │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────────────────┐
+│                 MANUAL TESTS (5-10%)                        │
+│  ┌─────────────────────────────────────────────────────────┐ │
+│  │              User Acceptance Testing                    │ │
+│  │  • Business requirement validation                      │ │
+│  │  • UI/UX testing                                        │ │
+│  │  • Cross-browser compatibility                          │ │
+│  │  • Mobile responsiveness                                │ │
+│  └─────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
 
-**orders.html** - Order history
-- Cards showing user's orders
-- Order ID, status, total
-- Items preview
-- Details link per order
+**Test Coverage:**
+- **Controller Tests**: HTTP endpoints with MockMvc (90%+ coverage)
+- **Service Tests**: Business logic with Mockito mocks
+- **Repository Tests**: Data access with H2 in-memory DB
+- **Model Tests**: Entity validation and methods
+- **Security Tests**: Access control verification
 
-**admin-dashboard.html** - Admin home
-- Navigation to order management
-- Navigation to book inventory
+**Testing Framework:**
+- JUnit 5 for test execution
+- Mockito for dependency mocking
+- Spring Boot Test for integration testing
+- AssertJ for fluent assertions
 
-**admin-books.html** - Book management
-- Table of all books
-- Book details (title, author, price)
-- Update button for each book
-- Delete button for each book
-- Add New Book button
+**Example Test:**
+```java
+@SpringBootTest
+@AutoConfigureMockMvc
+class BookControllerTest {
+    @Autowired private MockMvc mockMvc;
 
-**new_book.html** - Add book form
-- Form fields for book details
-- Cover URL input
-- Title, author, genre inputs
-- Price and quantity inputs
-- Description field
-- Validation error messages
-- Submit button
+    @Test
+    void searchBooks_shouldReturnFilteredResults() throws Exception {
+        mockMvc.perform(get("/?search=java"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("index"))
+            .andExpect(model().attributeExists("listBooks"));
+    }
+}
+```
 
-**update_book.html** - Edit book form
-- Pre-filled form with existing book data
-- Same fields as new_book.html
-- Update button
-
-**admin-orders.html** - Order management
-- Table of all user orders
-- Order ID, customer, items
-- Total and status columns
-- Status dropdown for updates
-- Details button
-- Delete button
-
-**navbar.html** (Fragment) - Navigation
-- Logo/home link
-- Navigation links (Home, News, Contact, About)
-- Conditional links (Orders, Cart if logged in)
-- User profile/logout
-- Admin link if user is admin
-- Auto-hide on scroll
+**CI/CD Ready:** Tests run with `./mvnw test` and integrate with build pipeline.
 
 ---
 
 ## Slide 10: Database Design
-**The database supports all e-commerce functionality with proper relationships.**
-
-```
-┌──────────────────────────────────────────────────────────────────────────────────┐
-│                           DATABASE SCHEMA                                        │
-├──────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│  ┌──────────────────────┐                          ┌──────────────────────┐      │
-│  │   USERS TABLE        │                          │   BOOKS TABLE        │      │
-│  ├──────────────────────┤                          ├──────────────────────┤      │
-│  │ id (PK)              │                          │ id (PK)              │      │
-│  │ username (UNIQUE)    │                          │ title                │      │
-│  │ password             │                          │ author               │      │
-│  │ role (USER/ADMIN)    │                          │ genre                │      │
-│  └──────────┬───────────┘                          │ price                │      │
-│             │ 1-to-1                               │ quantity             │      │
-│             │         ┌──────────────┬─────────────┤ cover (URL)          │      │
-│             │         │              │             └──────────────────────┘      │
-│             │    1-to-Many      Many-to-1                                        │
-│             │         │              │                                           │
-│  ┌──────────▼────┐    │    ┌──────────▼──────────────┐                           │
-│  │  CARTS TABLE  │    │    │  CART_ITEMS TABLE       │                           │
-│  ├───────────────┤    │    ├──────────────────────── ┤                           │
-│  │ id (PK)       │    │    │ id (PK)                 │                           │
-│  │ user_id (FK) ─┼────┘    │ cart_id (FK)            │                           │
-│  └───────────────┘         │ book_id (FK) ─────────┐                             │
-│                            │ quantity                │                           │
-│                            └────────────────────────┘                            │
-│                                                                                  │
-│  ┌─────────────────────────────┐           ┌──────────────────────────┐          │
-│  │   ORDERS TABLE              │           │  ORDER_ITEMS TABLE       │          │
-│  ├─────────────────────────────┤           ├──────────────────────────┤          │
-│  │ id (PK)                     │           │ id (PK)                  │          │
-│  │ user_id (FK) ───┐           │ 1-to-Many │ order_id (FK)            │          │
-│  │ total           │    ┌──────┼─────────┐ │ book_title               │          │
-│  │ status          │    │      │         │ │ price                    │          │
-│  │ userOrderNumber │    │      │         │ │ quantity                 │          │
-│  └────────────────┘     │      │         │ └──────────────────────────┘          │
-│             ▲           │      │         │                                       │
-│             └───────────┘      │         └─────────────────────────────────────┘ │
-│                                                                                  │
-└──────────────────────────────────────────────────────────────────────────────────┘
-```
+**Optimized MySQL schema with proper relationships:**
 
 **Core Tables:**
-- **users** → User accounts and credentials
-- **books** → Product catalog
-- **carts** → Shopping carts (one per user)
-- **cart_items** → Items in carts
-- **orders** → Purchase history
-- **order_items** → Items in completed orders
+- `users`: User accounts and authentication
+- `books`: Book inventory and metadata
+- `carts`: Shopping cart persistence
+- `cart_items`: Cart contents with quantities
+- `orders`: Order records with status tracking
+- `order_items`: Order snapshots for history
 
-**Key Relationships:**
-- User ↔ Cart (1-to-1): Each user has one cart
-- User ↔ Orders (1-to-Many): User can have many orders
-- Cart ↔ CartItems (1-to-Many): Cart contains items
-- Order ↔ OrderItems (1-to-Many): Order contains items
-- Book ↔ CartItems/OrderItems (1-to-Many): Book can be in many carts/orders
+**Key Design Decisions:**
+- **Normalization**: Proper relationships prevent data redundancy
+- **Indexing**: Optimized queries for search and filtering
+- **Constraints**: Foreign keys ensure data integrity
+- **Enums**: OrderStatus for lifecycle management
+- **Snapshots**: OrderItems preserve historical data
 
-**Database Options:**
-- H2: In-memory database for testing
-- MySQL: Persistent database for production
-
----
-
-## Slide 11: Security Implementation
-**Spring Security protects the application with authentication and authorization.**
-
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                    SECURITY ARCHITECTURE                         │
-├──────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌─────────────────────────────────────────────────────────┐     │
-│  │           User Request                                  │     │
-│  └──────────────────────┬──────────────────────────────────┘     │
-│                         │                                        │
-│                         ▼                                        │
-│  ┌──────────────────────────────────────────────────────────┐    │
-│  │  Spring Security Filter Chain                            │    │
-│  │  • CSRF Protection Filter                                │    │
-│  │  • Authentication Filter                                 │    │
-│  │  • Authorization Filter                                  │    │
-│  └──────────────────────┬───────────────────────────────────┘    │
-│                         │                                        │
-│        ┌────────────────┴────────────────┐                       │
-│        │ Is authenticated?               │                       │
-│        ▼                                 ▼                       │
-│    ┌────────────┐             ┌──────────────────┐               │
-│    │   NO ──→   │             │      YES ──→     │               │
-│    │Redirect to │             │ Check Role/Auth  │               │
-│    │   Login    │             └──────────────────┘               │
-│    └────────────┘                      │                         │
-│                                        ├─────────────┐           │
-│                                        ▼             ▼           │
-│                                   ┌────────┐   ┌─────────┐       │
-│                                   │ALLOWED │   │ DENIED  │       │
-│                                   │ Route  │   │ Access  │       │
-│                                   └────────┘   └─────────┘       │
-│                                                  │               │
-│                              Redirect to Login   │               │
-│                              with Error Message  │               │
-│                                                                  │
-│  Access Control Levels:                                          │
-│  ✓ PUBLIC:    / login register /css/** /js/**                    │
-│  ✓ USER:      /cart/** /orders/** /checkout                      │
-│  ✓ ADMIN:     /admin/** /showNewBookForm /saveBook               │
-│                                                                  │
-└──────────────────────────────────────────────────────────────────┘
-```
-
-**Authentication:**
-- Username/password login system
-- Session management with HttpSession
-- Custom user details service
-- Spring Security filters for all requests
-
-**Authorization (Role-Based Access Control):**
-- **PUBLIC:** Home page, Login, Register, CSS/JS files
-- **USER:** Cart, Orders, Checkout (logged-in users)
-- **ADMIN:** Book management, All orders, Status updates
-- Denies access sends to login with error message
-
-**Security Features:**
-- CSRF protection
-- Password management
-- Secure session handling
-- Custom access denied handler
+**JPA Configuration:**
+- `spring.jpa.hibernate.ddl-auto=update` for development
+- Custom queries for complex operations
+- Pagination support for large datasets
 
 ---
 
-## Slide 12: Testing Strategy
-**Comprehensive testing ensures reliability and prevents bugs.**
+## Slide 11: Performance & Scalability
+**Enterprise-ready performance optimizations:**
 
-```
-┌─────────────────────────────────────────────┐
-│          Test Pyramid Strategy              │
-│                                             │
-│                   ▲                         │
-│                  ╱ ╲  E2E Tests            │
-│                 ╱   ╲  (High Value)        │
-│                ╱     ╲                     │
-│               ╱───────────╲                    │
-│              ╱ Integration ╲                │
-│             ╱   Controller  ╲               │
-│            ╱       Tests     ╲             │
-│           ╱───────────────────╲            │
-│          ╱   Unit Tests        ╲           │
-│         ╱    (Most Tests)       ╲          │
-│        ╱─────────────────────────╲         │
-│       ╱  • Service Tests          ╲        │
-│      ╱   • Model Tests             ╲       │
-│     ╱    • Repository Tests         ╲      │
-│    ╱_________________________________╲     │
-│                                             │
-└─────────────────────────────────────────────┘
+**Database Optimization:**
+- Indexed queries for search operations
+- Pagination to handle large datasets
+- Connection pooling with HikariCP
+- Query optimization with JPA Criteria API
 
-  Unit Tests (15+):           Service, Model, Repository
-  Integration Tests (10+):    Controller, Database
-  Total Coverage:             25+ test classes
-  Critical Paths:             100% covered
-```
+**Application Performance:**
+- Lazy loading for relationships
+- Caching strategies for static data
+- Asynchronous processing for background tasks
+- Optimized Thymeleaf template rendering
 
-**Test Types by Layer:**
-- **Unit Tests:** Individual components with Mockito mocks
-- **Integration Tests:** Multiple components working together
-- **Controller Tests:** HTTP requests/responses with MockMVC
-- **Database Tests:** Repository queries with H2
+**Scalability Features:**
+- Stateless architecture for horizontal scaling
+- Database connection pooling
+- Session management optimization
+- CDN-ready static asset handling
 
 ---
 
-## Slide 13: Development Workflow
-**Industry best practices guided the development process.**
-
-**Version Control:**
-- Git repository with clear commit history
-- Feature branches for development
-- Regular, atomic commits
+## Slide 12: Deployment & Production
+**Production-ready deployment configuration:**
 
 **Build Process:**
-- Maven for dependency management
-- Automated compilation and packaging
-- Profile-based configuration (dev/test/prod)
+```bash
+./mvnw clean package
+java -jar target/richardwebsite-1.0.jar
+```
 
-**Code Quality:**
-- Clean code principles throughout
-- Consistent naming and formatting
-- Comprehensive documentation
-- SOLID design principles
+**Environment Configuration:**
+- Production database credentials
+- BCryptPasswordEncoder for passwords
+- Externalized configuration
+- Logging configuration
 
----
+**Docker Support:**
+- Dockerfile for containerization
+- Docker Compose for full stack
+- Multi-stage builds for optimization
 
-## Slide 14: Demo Script
-**Live demonstration of key features:**
-
-**Step 1: Registration**
-- Show registration form
-- Create new user account
-- Redirect to login
-
-**Step 2: Login**
-- Log in with created account
-- View authenticated home page
-
-**Step 3: Browse Books**
-- Show homepage with books
-- Demonstrate search functionality
-- Filter by genre
-
-**Step 4: Shopping Cart**
-- Add book to cart
-- View cart contents
-- Adjust quantities
-
-**Step 5: Checkout**
-- Review order
-- Complete purchase
-- View order confirmation
-
-**Step 6: Admin Panel**
-- Log in as admin
-- View all orders
-- Update order status
-- Add/edit books
+**Monitoring:**
+- Spring Boot Actuator for health checks
+- Application metrics and monitoring
+- Error tracking and logging
 
 ---
 
-## Slide 15: Challenges & Solutions
+## Slide 13: Challenges & Solutions
+**Technical challenges overcome during development:**
 
-**Challenge 1: Pagination with Filtering**
-- **Problem:** Implement search, filter, AND pagination together
-- **Solution:** Spring Data JPA Page<> with custom repository queries
+**Challenge 1: Complex Entity Relationships**
+- **Solution**: Careful JPA mapping with proper cascade types and fetch strategies
 
-**Challenge 2: Cart Persistence**
-- **Problem:** Maintain cart across browser sessions
-- **Solution:** Store cart in database, load on login
+**Challenge 2: Security Implementation**
+- **Solution**: Comprehensive Spring Security configuration with role-based access
 
-**Challenge 3: Role-Based Security**
-- **Problem:** Complex authorization rules for different user types
-- **Solution:** Spring Security with role-based access control
+**Challenge 3: Testing Complex Interactions**
+- **Solution**: Layered testing approach with proper mocking and integration tests
 
-**Challenge 4: Mobile Responsiveness**
-- **Problem:** Site works on desktop but breaks on mobile
-- **Solution:** Bootstrap grid system with media queries
+**Challenge 4: User Experience**
+- **Solution**: Iterative UI/UX design with user feedback and responsive design
 
-**Challenge 5: Complex Testing**
-- **Problem:** Testing controllers and services is difficult
-- **Solution:** MockMVC for controllers, Mockito for services
+**Challenge 5: Data Integrity**
+- **Solution**: Database constraints, validation annotations, and transaction management
 
 ---
 
-## Slide 16: Key Learnings
-
-**Technical Skills:**
-- Spring Boot framework mastery
-- Database design and JPA/ORM
-- Spring Security best practices
-- Thymeleaf templating
-- Frontend integration
-
-**Software Architecture:**
-- Layered architecture patterns
-- Model-View-Controller design
-- Service layer abstraction
-- Repository pattern usage
-
-**Development Practices:**
-- Test-driven development
-- Version control workflows
-- Clean code principles
-- Agile development methodology
-
----
-
-## Slide 17: Future Enhancements
+## Slide 14: Future Enhancements
+**Planned improvements and scalability:**
 
 **Short Term:**
+- Password reset functionality
 - Email notifications for orders
-- Book wishlist feature
+- Advanced search with filters
+- Wishlist functionality
 - Product reviews and ratings
-- Advanced search filters
 
 **Medium Term:**
-- Real payment gateway (Stripe/PayPal)
-- Inventory low-stock alerts
-- Customer loyalty program
-- Mobile app version
+- Payment gateway integration
+- Inventory management alerts
+- Analytics dashboard
+- API for mobile applications
+- Multi-language support
 
 **Long Term:**
-- Multi-vendor marketplace
-- Analytics dashboard
-- AI recommendations
-- Internationalization
-
----
-
-## Slide 18: Production Readiness
-
-**The application is ready for deployment:**
-
-**Setup Requirements:**
-- MySQL database for persistence
-- Spring profiles for different environments
-- Environment variables for configuration
-- Logging framework for monitoring
-
-**Deployment Options:**
-- Docker containerization
-- Cloud platforms (AWS, Azure, Heroku)
-- Traditional server with Tomcat
-
-**Performance Considerations:**
-- Database indexing on search fields
-- Caching for frequently accessed books
-- Pagination to limit result sets
-
----
-
-## Slide 19: Conclusion
-**This capstone demonstrates professional software development:**
-
-**Accomplishments:**
-- ✅ Full-stack application from database to UI
-- ✅ Enterprise architecture patterns
-- ✅ Production-ready code quality
-- ✅ Comprehensive testing coverage
-- ✅ Professional documentation
-
-**Impact:** This project showcases the ability to design, implement, and deliver complex software systems that solve real-world problems.
-
----
-
-## Slide 20: Q&A
-**Thank you for your attention. I'm happy to answer any questions.**
-
-**Key Takeaways:**
-- Complete e-commerce platform with 25+ backend classes
-- Secure, tested, and documented codebase
-- Production-ready with scalable architecture
-- Demonstrates full-stack development mastery
-
-**Contact:**
-[Your email/phone]
-[LinkedIn/GitHub profiles]
-
-### Technical Improvements
-- **Microservices**: Break into smaller services
-- **API Development**: REST API for mobile apps
-- **Caching**: Redis for performance
-- **Docker**: Containerization
-- **CI/CD**: Automated deployment pipeline
-
-**Speaking Notes:**
-- Looking ahead, I plan to add real payment processing, email notifications, advanced search, user reviews, and inventory management features.
-- Technically, the application could evolve into microservices, include REST APIs for mobile apps, implement caching for performance, use Docker for containerization, and set up CI/CD pipelines.
-- These enhancements would make it a truly enterprise-grade e-commerce solution.
+- Microservices architecture
+- Cloud deployment (AWS/Azure)
+- Machine learning recommendations
+- Advanced analytics
+- Mobile app development
 
 ---
 
 ## Slide 15: Lessons Learned
+**Key takeaways from the development process:**
 
-### Technical Skills
-- **Spring Framework**: Deep understanding of Spring Boot
-- **Web Development**: Full-stack development experience
-- **Database Design**: Entity relationships and optimization
-- **Security**: Authentication and authorization patterns
-- **Testing**: Comprehensive testing strategies
+**Technical Skills:**
+- Advanced Spring Boot development
+- Security implementation best practices
+- Database design and optimization
+- Testing strategies and TDD
+- UI/UX design principles
 
-### Soft Skills
-- **Problem Solving**: Debugging and troubleshooting
-- **Project Management**: Planning and execution
-- **Documentation**: Technical writing
-- **Presentation**: Communicating technical concepts
+**Soft Skills:**
+- Project planning and time management
+- Problem-solving and debugging
+- Documentation and communication
+- Code review and quality assurance
+- Agile development practices
 
-**Speaking Notes:**
-- This project significantly enhanced my technical skills in Spring Framework, full-stack development, database design, security implementation, and testing strategies.
-- I also developed important soft skills in problem-solving, project management, technical documentation, and presenting complex concepts clearly.
-- The experience of building a complete application from concept to deployment was invaluable.
+**Architecture Principles:**
+- Clean architecture and SOLID principles
+- Separation of concerns
+- Test-driven development
+- Continuous integration
+- Scalable design patterns
 
 ---
 
 ## Slide 16: Conclusion
+**RichardWebsite represents a complete, production-ready e-commerce solution that demonstrates:**
 
-### Project Success Metrics
-- ✅ **Functional Application**: Complete working bookstore
-- ✅ **Security**: Proper authentication and authorization
-- ✅ **Testing**: Comprehensive test suite
-- ✅ **Documentation**: User and technical guides
-- ✅ **Best Practices**: Clean code and architecture
+✅ **Full-Stack Development**: Modern Java with Spring Boot and responsive frontend
+✅ **Enterprise Architecture**: Layered design with proper separation of concerns
+✅ **Security Implementation**: Comprehensive authentication and authorization
+✅ **Database Design**: Optimized MySQL schema with JPA relationships
+✅ **Testing Strategy**: Comprehensive test coverage with multiple testing levels
+✅ **User Experience**: Intuitive interface with modern UI/UX principles
+✅ **Scalability**: Performance optimizations and deployment readiness
+✅ **Documentation**: Complete technical documentation and user guides
 
-### Key Achievements
-- Built production-ready e-commerce application
-- Demonstrated full-stack development capabilities
-- Applied software engineering principles
-- Created maintainable and scalable codebase
-- Delivered complete solution with documentation
-
-### Final Thoughts
-RichardWebsite represents a comprehensive demonstration of modern web development skills, combining backend architecture, frontend design, security implementation, and testing practices into a cohesive e-commerce solution.
-
-**Speaking Notes:**
-- In conclusion, RichardWebsite successfully demonstrates all the key requirements: a fully functional e-commerce application with proper security, comprehensive testing, and complete documentation.
-- The project showcases my ability to build production-ready software using modern technologies and best practices.
-- This capstone project represents the culmination of my learning journey in full-stack web development.
+**This project showcases the ability to design, implement, and deploy complex web applications using industry best practices and modern technologies.**
 
 ---
 
-## Slide 17: Q&A
-
-**Questions?**
-
-Thank you for your attention!
-
-**Contact Information:**  
-[Your Email]  
-[Your LinkedIn/GitHub]
-
-**Speaking Notes:**
-- Thank you for your attention throughout this presentation. I'm happy to answer any questions you might have about the project, the technologies used, the development process, or any other aspects.
-- You can reach me at [your email] or find more of my work on [LinkedIn/GitHub].
-- Thank you again for the opportunity to present my capstone project!
+## Q&A
+**Thank you for your attention. I'm happy to answer any questions about the implementation, architecture, or future development plans.**
