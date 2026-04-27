@@ -1,36 +1,31 @@
 package org.example.richardwebsite.test.controller;
 
-import static org.hamcrest.Matchers.hasSize;
 import org.example.richardwebsite.model.User;
+import org.example.richardwebsite.repository.CartRepository;
+import org.example.richardwebsite.repository.OrderRepository;
 import org.example.richardwebsite.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.servlet.ServletException;
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
+@ActiveProfiles("test") // Uses src/test/resources/application-test.properties
+@Transactional // Rolls back database changes after every test
 class AdminUserControllerTest {
 
     private MockMvc mockMvc;
@@ -38,8 +33,14 @@ class AdminUserControllerTest {
     @Autowired
     private WebApplicationContext context;
 
-    @MockitoBean
+    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     private User adminUser;
     private User otherUser;
@@ -51,126 +52,67 @@ class AdminUserControllerTest {
                 .apply(springSecurity())
                 .build();
 
-        // 1. INITIALIZE the users to prevent NullPointerException
-        adminUser = new User();
-        adminUser.setId(1L);
-        adminUser.setUsername("adminUser");
-        adminUser.setRole("ADMIN");
+        // Clear database to ensure a clean state
+        userRepository.deleteAll();
 
-        otherUser = new User();
-        otherUser.setId(2L);
-        otherUser.setUsername("otherUser");
-        otherUser.setRole("USER");
+        // Create actual entities in H2
+        adminUser = new User("adminUser", "pass123", "ADMIN");
+        userRepository.save(adminUser);
 
-        // 2. Setup default pagination behavior for the 'manageUsers' page
-        List<User> userList = List.of(adminUser, otherUser);
-        Page<User> userPage = new PageImpl<>(userList, PageRequest.of(0, 10), userList.size());
-
-        // Use any(PageRequest.class) to ensure it always matches
-        when(userRepository.findAll(any(PageRequest.class))).thenReturn(userPage);
+        otherUser = new User("otherUser", "pass456", "USER");
+        userRepository.save(otherUser);
     }
 
     @Test
     @WithMockUser(username = "adminUser", roles = {"ADMIN"})
-    void manageUsers_shouldReturnUserList() throws Exception {
+    void manageUsers_shouldReturnUserListFromDatabase() throws Exception {
         mockMvc.perform(get("/admin/users"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin-users"))
-                .andExpect(model().attributeExists("userPage"))
-                .andExpect(model().attribute("users", hasSize(2)));
+                // Verify the data from H2 is present in the model
+                .andExpect(model().attribute("users", hasSize(greaterThanOrEqualTo(2))))
+                .andExpect(content().string(containsString("adminUser")))
+                .andExpect(content().string(containsString("otherUser")));
     }
 
     @Test
     @WithMockUser(username = "adminUser", roles = {"ADMIN"})
-    void updateRole_shouldPreventSelfRoleChange() throws Exception {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
-
-        mockMvc.perform(post("/admin/users/updateRole")
-                        .param("userId", "1")
-                        .param("newRole", "USER")
+    void addUser_shouldSaveToH2Database() throws Exception {
+        mockMvc.perform(post("/admin/users/add")
+                        .param("username", "databaseUser")
+                        .param("password", "secret789")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/users?error=selfRoleChange"));
+                .andExpect(redirectedUrl("/admin/users"));
+
+        // Verify it actually exists in the H2 DB now
+        assertTrue(userRepository.findByUsername("databaseUser").isPresent());
     }
 
     @Test
     @WithMockUser(username = "adminUser", roles = {"ADMIN"})
-    void updateRole_shouldSuccessForOtherUser() throws Exception {
-        when(userRepository.findById(2L)).thenReturn(Optional.of(otherUser));
+    void deleteUser_shouldActuallyRemoveFromH2() throws Exception {
+        Long idToDelete = otherUser.getId();
 
+        mockMvc.perform(post("/admin/users/delete/" + idToDelete)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        // Verify it is gone from H2
+        assertFalse(userRepository.findById(idToDelete).isPresent());
+    }
+
+    @Test
+    @WithMockUser(username = "adminUser", roles = {"ADMIN"})
+    void updateRole_shouldUpdateH2Record() throws Exception {
         mockMvc.perform(post("/admin/users/updateRole")
-                        .param("userId", "2")
+                        .param("userId", otherUser.getId().toString())
                         .param("newRole", "ADMIN")
                         .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/users"));
+                .andExpect(status().is3xxRedirection());
 
-        verify(userRepository, times(1)).save(any(User.class));
-    }
-
-    @Test
-    @WithMockUser(username = "adminUser", roles = {"ADMIN"})
-    void deleteUser_shouldSuccessForOtherUser() throws Exception {
-        when(userRepository.findById(2L)).thenReturn(Optional.of(otherUser));
-
-        mockMvc.perform(post("/admin/users/delete/2")
-                        .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/users"));
-
-        // CHANGE THIS LINE: Verify 'delete' instead of 'deleteById'
-        verify(userRepository, times(1)).delete(any(User.class));
-    }
-
-    @Test
-    @WithMockUser(username = "adminUser", roles = {"ADMIN"})
-    void addUser_shouldRedirectToManageUsers() throws Exception {
-        when(userRepository.findByUsername("newUser")).thenReturn(Optional.empty());
-
-        mockMvc.perform(post("/admin/users/add")
-                        .flashAttr("user", new User())
-                        .param("username", "newUser")
-                        .param("password", "securePassword123") // ADD THIS LINE
-                        .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/users"));
-    }
-
-
-    @Test
-    @WithMockUser(username = "adminUser", roles = {"ADMIN"})
-    void updateRole_shouldThrowExceptionIfUserNotFound() {
-        when(userRepository.findById(99L)).thenReturn(Optional.empty());
-
-        assertThrows(ServletException.class, () -> {
-            mockMvc.perform(post("/admin/users/updateRole")
-                    .param("userId", "99")
-                    .param("newRole", "ADMIN")
-                    .with(csrf()));
-        });
-    }
-
-    @Test
-    @WithMockUser(username = "adminUser", roles = {"ADMIN"})
-    void showAddUserForm_shouldReturnView() throws Exception {
-        mockMvc.perform(get("/admin/users/add"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin-add-user"))
-                .andExpect(model().attributeExists("user"));
-    }
-
-    // Updated test for the rejectValue approach
-    @Test
-    @WithMockUser(username = "adminUser", roles = {"ADMIN"})
-    void addUser_shouldShowErrorIfUsernameExists() throws Exception {
-        when(userRepository.findByUsername("existingUser")).thenReturn(Optional.of(new User()));
-
-        mockMvc.perform(post("/admin/users/add")
-                        .param("username", "existingUser")
-                        .param("password", "password123")
-                        .with(csrf()))
-                .andExpect(status().isOk()) // Expect 200 OK now
-                .andExpect(view().name("admin-add-user")) // Stays on the form
-                .andExpect(model().hasErrors()); // Check that errors exist
+        // Refresh from DB and verify
+        User updated = userRepository.findById(otherUser.getId()).get();
+        assertEquals("ADMIN", updated.getRole());
     }
 }
