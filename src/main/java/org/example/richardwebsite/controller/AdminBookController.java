@@ -76,29 +76,28 @@ public class AdminBookController { // RENAME THIS to avoid ambiguity
     @PostMapping("/saveBook")
     public String saveBook(@Valid @ModelAttribute("book") Book book,
                            BindingResult result,
-                           Model model,
                            RedirectAttributes redirectAttributes) {
 
-        if (book.getQuantity() == null) {
-            book.setQuantity(0);
-        }
-
         if (result.hasErrors()) {
-            System.out.println("VALIDATION ERRORS:");
-            result.getAllErrors().forEach(System.out::println);
-
-            model.addAttribute("book", book);
-            return "new_book";
+            return (book.getId() == null) ? "new_book" : "update_book";
         }
 
         boolean isUpdate = (book.getId() != null);
 
-        bookRepository.save(book);
+        Book saved = bookRepository.save(book);
+
+        if (saved == null || saved.getId() == null) {
+            throw new IllegalStateException("Book save failed");
+        }
 
         redirectAttributes.addFlashAttribute("message",
-                isUpdate ? "Book updated!" : "Book saved!");
+                isUpdate ? "Book updated successfully!" : "Book saved successfully!");
 
-        return "redirect:/admin/books";
+        if (isUpdate) {
+            return "redirect:/admin/books/update/" + saved.getId();
+        }
+
+        return "redirect:/admin/books/new";
     }
 
 

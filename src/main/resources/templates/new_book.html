@@ -23,7 +23,6 @@
             </div>
 
             <form th:action="@{/saveBook}" th:object="${book}" method="post">
-
                 <input type="hidden" th:field="*{id}">
 
                 <div class="input-group">
@@ -34,7 +33,6 @@
                            maxlength="500">
 
                     <p th:errors="*{cover}" class="popup-error" style="border:none; background:none; font-size:11px; color:red; margin:0; padding:5px 0;"></p>
-
                 </div>
 
                 <div class="input-group">
@@ -49,14 +47,15 @@
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <label>Author *</label>
-                    <input type="text" th:field="*{author}"
-                           placeholder="Author Name"
-                           required
-                           maxlength="100">
+                    <div class="input-group">
+                        <label>Author *</label>
+                        <input type="text" th:field="*{author}"
+                               placeholder="Author Name"
+                               required
+                               maxlength="100">
 
                     <p th:errors="*{author}" style="color:red;"></p>
-                </div>
+                    </div>
 
                 <div class="input-group">
                     <label>Genre *</label>
@@ -71,6 +70,7 @@
                         <option value="Non-Fiction">Non-Fiction</option>
                     </select>
                     <p th:errors="*{genre}" style="color:red;"></p>
+                    </div>
                 </div>
 
                 <div class="input-group">

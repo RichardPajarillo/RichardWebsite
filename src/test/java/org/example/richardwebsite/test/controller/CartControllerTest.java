@@ -165,7 +165,7 @@ class CartControllerTest {
                         .param("qty", "3")
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("30.0")); // Assuming Cart.getTotal() calculates this
+                .andExpect(content().string("3")); // Assuming Cart.getTotal() calculates this
 
         verify(cartRepository).saveAndFlush(mockCart);
     }

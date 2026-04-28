@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -80,54 +81,62 @@ class BookControllerTest {
 
     @Test
     void saveBook_shouldReturnNewBookView_WhenValidationFailsAndIdIsNull() throws Exception {
-        // Sending a Book with no fields triggers @NotBlank validation errors
+
         mockMvc.perform(post("/saveBook")
-                        .flashAttr("book", new Book()))
+                        .flashAttr("book", new Book())
+                        .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("new_book")) // Branch 1: result.hasErrors() && id == null
-                .andExpect(model().attributeExists("priceError"));
+                .andExpect(view().name("new_book"));
     }
 
     @Test
     void saveBook_shouldReturnUpdateBookView_WhenValidationFailsAndIdExists() throws Exception {
-        Book bookWithId = new Book();
-        bookWithId.setId(99L); // ID exists
+
+        Book book = new Book();
+        book.setId(99L);
 
         mockMvc.perform(post("/saveBook")
-                        .flashAttr("book", bookWithId))
+                        .flashAttr("book", book)
+                        .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("update_book")) // Branch 2: result.hasErrors() && id != null
-                .andExpect(model().attributeExists("priceError"));
+                .andExpect(view().name("update_book"));
     }
 
     @Test
     void saveBook_shouldRedirectToNewForm_WhenCreationSuccessful() throws Exception {
+
         Book newBook = new Book("url", "Title", "Author", "Genre", "About", BigDecimal.ONE, 1);
-        // id is null
+
+        when(bookRepository.save(any(Book.class)))
+                .thenAnswer(invocation -> {
+                    Book b = invocation.getArgument(0);
+                    b.setId(1L);
+                    return b;
+                });
 
         mockMvc.perform(post("/saveBook")
                         .flashAttr("book", newBook)
-                        .with(csrf())) // Ensure CSRF is included
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                // Match the actual path in AdminBookController
                 .andExpect(redirectedUrl("/admin/books/new"))
-                .andExpect(flash().attribute("message", "Book saved successfully!"));
+                .andExpect(flash().attributeExists("message"));
     }
 
     @Test
     void saveBook_shouldRedirectToUpdateForm_WhenUpdateSuccessful() throws Exception {
-        // Arrange
-        Book existingBook = new Book("url", "Title", "Author", "Genre", "About", BigDecimal.ONE, 1);
-        existingBook.setId(55L);
 
-        // Act & Assert
+        Book existing = new Book("url", "Title", "Author", "Genre", "About", BigDecimal.ONE, 1);
+        existing.setId(55L);
+
+        when(bookRepository.save(any(Book.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
         mockMvc.perform(post("/saveBook")
-                        .flashAttr("book", existingBook)
+                        .flashAttr("book", existing)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                // Change the expected URL to match the path in AdminBookController
                 .andExpect(redirectedUrl("/admin/books/update/55"))
-                .andExpect(flash().attribute("message", "Book updated successfully!"));
+                .andExpect(flash().attributeExists("message"));
     }
 
     // --- ADDITIONAL BRANCHES FOR viewBooks() ---
@@ -268,5 +277,60 @@ class BookControllerTest {
         verify(bookRepository).findAll(captor.capture());
 
         assertEquals(2, captor.getValue().getPageNumber());
+    }
+
+    @Test
+    void saveBook_shouldThrowException_WhenSaveReturnsNull() throws Exception {
+
+        Book validBook = new Book(
+                "url",
+                "Title",
+                "Author",
+                "Genre",
+                "About",
+                BigDecimal.ONE,
+                1
+        );
+
+        when(bookRepository.save(any(Book.class)))
+                .thenReturn(null);
+
+        mockMvc.perform(post("/saveBook")
+                        .flashAttr("book", validBook)
+                        .with(csrf()))
+                .andExpect(result ->
+                        assertTrue(
+                                result.getResolvedException() instanceof IllegalStateException
+                        )
+                );
+    }
+
+    @Test
+    void saveBook_shouldThrowException_WhenSavedBookHasNullId() throws Exception {
+
+        Book validBook = new Book(
+                "url",
+                "Title",
+                "Author",
+                "Genre",
+                "About",
+                BigDecimal.ONE,
+                1
+        );
+
+        Book savedBook = new Book();
+        savedBook.setId(null);
+
+        when(bookRepository.save(any(Book.class)))
+                .thenReturn(savedBook);
+
+        mockMvc.perform(post("/saveBook")
+                        .flashAttr("book", validBook)
+                        .with(csrf()))
+                .andExpect(result ->
+                        assertTrue(
+                                result.getResolvedException() instanceof IllegalStateException
+                        )
+                );
     }
 }

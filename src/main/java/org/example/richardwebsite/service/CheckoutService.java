@@ -25,7 +25,9 @@ public class CheckoutService {
                 securityService.getCurrentUser().getId()
         ).orElseThrow();
 
-        if (cart.getItems().isEmpty()) return;
+        if (cart.getItems() == null || cart.getItems().isEmpty()) {
+            return;
+        }
 
         Order order = new Order();
         order.setUser(securityService.getCurrentUser());
@@ -47,5 +49,14 @@ public class CheckoutService {
 
             total = total.add(price.multiply(quantity));
         }
+
+        order.setTotal(total);
+
+        // ✅ THIS WAS MISSING
+        orderRepository.save(order);
+
+        // optional but expected by your test
+        cart.getItems().clear();
+        cartRepository.save(cart);
     }
 }
