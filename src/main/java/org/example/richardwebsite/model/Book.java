@@ -1,9 +1,9 @@
 package org.example.richardwebsite.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -26,14 +26,18 @@ public class Book {
     @Size(max = 50, message = "Input too long")
     private String author;
 
+    @NotBlank(message = "Genre is required")
     private String genre;   // ✅ ADDED
 
     @NotBlank(message = "About is required")
     @Size(max = 500, message = "About section cannot exceed 500 characters")
     private String about;
 
+    @NotNull(message = "Price is required")
     @Positive(message = "Price must be greater than 0")
-    private Double price = 0.00;
+    private BigDecimal price = BigDecimal.ZERO;
+
+    @Min(0)
     private Integer quantity = 0;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -44,7 +48,7 @@ public class Book {
 
     // Full constructor
     public Book(String cover, String title, String author, String genre,
-                String about, Double price, Integer quantity) {
+                String about, BigDecimal price, Integer quantity) {
         this.cover = cover;
         this.title = title;
         this.author = author;
@@ -74,8 +78,8 @@ public class Book {
     public String getAbout() { return about; }
     public void setAbout(String about) { this.about = about; }
 
-    public Double getPrice() { return price; }
-    public void setPrice(Double price) { this.price = price; }
+    public BigDecimal getPrice() { return price; }
+    public void setPrice(BigDecimal price) { this.price = price; }
 
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }

@@ -58,16 +58,30 @@ public class OrderController {
 
     // --- ADMIN VIEW: Manage All Orders ---
     @GetMapping("/admin/orders")
-    public String adminOrders(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+    public String adminOrders(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(required = false) String search,
+            Model model) {
+
         int size = 10;
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
-        Page<Order> orderPage = orderRepository.findAll(pageable);
+        Page<Order> orderPage;
 
-        // This 'orderPage' name is what the pagination fragment looks for
+        if (search != null && !search.trim().isEmpty()) {
+
+            orderPage = orderRepository
+                    .findByCustomerNameContainingIgnoreCaseOrUserOrderNumberContainingIgnoreCase(
+                            search, search, pageable);
+
+        } else {
+
+            orderPage = orderRepository.findAll(pageable);
+        }
+
         model.addAttribute("orderPage", orderPage);
-        // This 'orders' name is what your th:each loop in admin-orders.html looks for
         model.addAttribute("orders", orderPage.getContent());
+        model.addAttribute("search", search); // 🔥 important for input persistence
 
         return "admin-orders";
     }
@@ -95,4 +109,6 @@ public class OrderController {
     public void deleteOrder(@PathVariable Long id) {
         orderRepository.deleteById(id);
     }
+
+
 }

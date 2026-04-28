@@ -5,22 +5,25 @@
     <meta charset="UTF-8" />
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
-<body class="auth-page"> <div th:replace="~{fragments/navbar :: nav-header}"></div>
+<body class="auth-page">
+
+<div th:replace="~{fragments/navbar :: nav-header}"></div>
 
 <div class="content-wrapper">
     <div class="auth-container">
-        <div class="auth-card"> <h2>Add New Book</h2>
+        <div class="auth-card">
+
+            <h2>Add New Book</h2>
             <p class="auth-subtitle">Fill in the details to expand the collection</p>
 
-            <div th:if="${message}" class="error-banner" style="background-color: #e6fffa; color: #2c7a7b; border-color: #b2f5ea;">
+            <!-- SUCCESS -->
+            <div th:if="${message}" class="error-banner"
+                 style="background-color: #e6fffa; color: #2c7a7b;">
                 <p th:text="${message}" style="margin:0;"></p>
             </div>
 
-            <div th:if="${priceError}" class="error-banner">
-                <p th:text="${priceError}" style="margin:0;"></p>
-            </div>
-
             <form th:action="@{/saveBook}" th:object="${book}" method="post">
+
                 <input type="hidden" th:field="*{id}">
 
                 <div class="input-group">
@@ -29,7 +32,9 @@
                            placeholder="https://example.com/image.jpg"
                            required
                            maxlength="500">
-                    <p th:if="${#fields.hasErrors('cover')}" th:errors="*{cover}" class="popup-error" style="border:none; background:none; font-size:11px; color:red; margin:0; padding:5px 0;"></p>
+
+                    <p th:errors="*{cover}" class="popup-error" style="border:none; background:none; font-size:11px; color:red; margin:0; padding:5px 0;"></p>
+
                 </div>
 
                 <div class="input-group">
@@ -38,60 +43,70 @@
                            placeholder="Enter title"
                            required
                            maxlength="100">
-                    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="popup-error" style="border:none; background:none; font-size:11px; color:red; margin:0; padding:5px 0;"></p>
+
+                    <p th:errors="*{title}" class="popup-error" style="border:none; background:none; font-size:11px; color:red; margin:0; padding:5px 0;"></p>
+
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="input-group">
-                        <label>Author *</label>
-                        <input type="text" th:field="*{author}"
-                               placeholder="Author Name"
-                               required
-                               maxlength="100">
-                    </div>
+                    <label>Author *</label>
+                    <input type="text" th:field="*{author}"
+                           placeholder="Author Name"
+                           required
+                           maxlength="100">
 
-                    <div class="input-group">
-                        <label>Genre *</label>
-                        <select th:field="*{genre}" required>
-                            <option value="" disabled selected>Select a genre</option> <option value="Fantasy">Fantasy</option>
-                            <option value="Romance">Romance</option>
-                            <option value="Horror">Horror</option>
-                            <option value="Sci-Fi">Sci-Fi</option>
-                            <option value="Action">Action</option>
-                            <option value="Humor">Humor</option>
-                        </select>
-                    </div>
+                    <p th:errors="*{author}" style="color:red;"></p>
                 </div>
 
                 <div class="input-group">
-                    <label>About * (Maximum 500 characters)</label>
+                    <label>Genre *</label>
+                    <select th:field="*{genre}">
+                        <option value="" disabled selected>Select a genre</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Humor">Humor</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Mystery">Mystery</option>
+                        <option value="Sci-Fi">Sci-Fi</option>
+                        <option value="Non-Fiction">Non-Fiction</option>
+                    </select>
+                    <p th:errors="*{genre}" style="color:red;"></p>
+                </div>
+
+                <div class="input-group">
+                    <label>About *</label>
                     <textarea th:field="*{about}"
                               placeholder="Summarize the book..."
                               required
                               maxlength="500"
                               style="width: 100%; border-radius: 8px; border: 1px solid var(--border); padding: 10px; font-family: inherit; font-size: 14px; min-height: 120px;"></textarea>
                     <small style="color: var(--muted); font-size: 11px;">Limit description to 500 characters to keep cards tidy.</small>
+                    <p th:errors="*{about}" style="color:red;"></p>
                 </div>
 
                 <div class="input-group">
-                    <label>Price * (₱)</label>
-                    <input type="number"
+                    <label>Price (₱)</label>
+                    <input type="text"
                            th:field="*{price}"
-                           step="0.01"
-                           min="0.01"
                            placeholder="0.00"
                            required>
+                    <p th:errors="*{price}" style="color:red;"></p>
                 </div>
 
-                <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 15px;">
-                    <button type="submit" class="btn" style="background: var(--text); color: white; width: 100%; padding: 12px;">
+                <div style="margin-top: 30px;">
+                    <button type="submit" class="btn"
+                            style="background: var(--text); color: white; width: 100%;">
                         Save New Book
                     </button>
-                    <a th:href="@{/admin/books}" class="auth-footer" style="display: block; text-decoration: none;">
-                        &larr; Return to Manage Books
+
+                    <a th:href="@{/admin/books}" class="auth-footer"
+                       style="display:block; text-align:center; margin-top:15px;">
+                        ← Return to Manage Books
                     </a>
                 </div>
+
             </form>
+
         </div>
     </div>
 </div>

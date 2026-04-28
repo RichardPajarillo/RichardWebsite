@@ -6,6 +6,8 @@ import org.example.richardwebsite.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CartTest {
@@ -19,7 +21,7 @@ class CartTest {
         testBook = new Book();
         testBook.setId(1L);
         testBook.setTitle("Test Book");
-        testBook.setPrice(20.0);
+        testBook.setPrice(BigDecimal.ONE);
     }
 
     @Test
@@ -88,7 +90,7 @@ class CartTest {
         // Testing a different book to ensure the loop continues correctly (No find)
         Book secondBook = new Book();
         secondBook.setId(2L);
-        secondBook.setPrice(15.0);
+        secondBook.setPrice(BigDecimal.ONE);
 
         cart.addItem(secondBook, 1);
         assertEquals(2, cart.getItems().size());

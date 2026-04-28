@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +30,7 @@ class OrderServiceTest {
         User user = mock(User.class);
         when(user.getId()).thenReturn(1L);
 
-        Book book = new Book("cover", "title", "author", "genre", "about", 10.0, 5);
+        Book book = new Book("cover", "title", "author", "genre", "about", BigDecimal.TEN, 5);
         CartItem cartItem = new CartItem();
         cartItem.setBook(book);
         cartItem.setQuantity(2);

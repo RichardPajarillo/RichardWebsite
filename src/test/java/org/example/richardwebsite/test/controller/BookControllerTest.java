@@ -15,6 +15,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,7 +102,7 @@ class BookControllerTest {
 
     @Test
     void saveBook_shouldRedirectToNewForm_WhenCreationSuccessful() throws Exception {
-        Book newBook = new Book("url", "Title", "Author", "Genre", "About", 10.0, 1);
+        Book newBook = new Book("url", "Title", "Author", "Genre", "About", BigDecimal.ONE, 1);
         // id is null
 
         mockMvc.perform(post("/saveBook")
@@ -116,7 +117,7 @@ class BookControllerTest {
     @Test
     void saveBook_shouldRedirectToUpdateForm_WhenUpdateSuccessful() throws Exception {
         // Arrange
-        Book existingBook = new Book("url", "Title", "Author", "Genre", "About", 10.0, 1);
+        Book existingBook = new Book("url", "Title", "Author", "Genre", "About", BigDecimal.ONE, 1);
         existingBook.setId(55L);
 
         // Act & Assert

@@ -2,6 +2,8 @@ package org.example.richardwebsite.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 public class OrderItem {
 
@@ -10,7 +12,7 @@ public class OrderItem {
     private Long id;
 
     private String bookTitle;
-    private Double price;
+    private BigDecimal price;
     private Integer quantity;
 
     @ManyToOne
@@ -19,21 +21,20 @@ public class OrderItem {
 
     public OrderItem() {}
 
-    public OrderItem(String bookTitle, Double price, Integer quantity) {
+    public OrderItem(String bookTitle, BigDecimal price, Integer quantity) {
         this.bookTitle = bookTitle;
         this.price = price;
         this.quantity = quantity;
     }
 
     public String getBookTitle() { return bookTitle; }
-    public Double getPrice() { return price; }
+    public BigDecimal getPrice() { return price; }
     public Integer getQuantity() { return quantity; }
 
     public Order getOrder() {
         return order;
     }
 
-    // ✅ THIS is what you're missing
     public void setOrder(Order order) {
         this.order = order;
     }

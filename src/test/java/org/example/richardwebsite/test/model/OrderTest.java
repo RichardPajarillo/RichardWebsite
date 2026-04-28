@@ -13,7 +13,7 @@ class OrderTest {
     @Test
     void addItem_shouldEstablishBidirectionalLink() {
         Order order = new Order();
-        OrderItem item = new OrderItem("Java Guide", 50.0, 1);
+        OrderItem item = new OrderItem("Java Guide", BigDecimal.TEN, 1);
 
         order.addItem(item);
 

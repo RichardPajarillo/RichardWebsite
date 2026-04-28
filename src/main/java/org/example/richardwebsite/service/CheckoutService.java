@@ -33,27 +33,19 @@ public class CheckoutService {
         BigDecimal total = BigDecimal.ZERO;
 
         for (CartItem ci : cart.getItems()) {
-            // Assuming getPrice() returns double or BigDecimal
-            BigDecimal price = BigDecimal.valueOf(ci.getBook().getPrice());
+
+            BigDecimal price = ci.getBook().getPrice();
             BigDecimal quantity = BigDecimal.valueOf(ci.getQuantity());
 
             OrderItem item = new OrderItem(
                     ci.getBook().getTitle(),
-                    ci.getBook().getPrice(),
+                    price,
                     ci.getQuantity()
             );
 
             order.addItem(item);
 
-            // Multiply price by quantity and add to total
             total = total.add(price.multiply(quantity));
         }
-
-        order.setTotal(total);
-
-        orderRepository.save(order);
-
-        cart.getItems().clear();
-        cartRepository.save(cart);
     }
 }

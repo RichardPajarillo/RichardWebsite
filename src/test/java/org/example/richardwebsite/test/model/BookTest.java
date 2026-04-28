@@ -3,6 +3,8 @@ package org.example.richardwebsite.test.model;
 import org.example.richardwebsite.model.Book;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BookTest {
@@ -15,13 +17,13 @@ class BookTest {
 
     @Test
     void fullConstructor_shouldSetAllFields() {
-        Book book = new Book("cover", "title", "author", "genre", "about", 10.0, 5);
+        Book book = new Book("cover", "title", "author", "genre", "about", BigDecimal.ONE, 5);
         assertEquals("cover", book.getCover());
         assertEquals("title", book.getTitle());
         assertEquals("author", book.getAuthor());
         assertEquals("genre", book.getGenre());
         assertEquals("about", book.getAbout());
-        assertEquals(10.0, book.getPrice());
+        assertEquals(BigDecimal.ONE, book.getPrice());
         assertEquals(5, book.getQuantity());
     }
 
@@ -34,7 +36,7 @@ class BookTest {
         book.setAuthor("author");
         book.setGenre("genre");
         book.setAbout("about");
-        book.setPrice(10.0);
+        book.setPrice(BigDecimal.ONE);
         book.setQuantity(5);
 
         assertEquals(1L, book.getId());
@@ -43,7 +45,7 @@ class BookTest {
         assertEquals("author", book.getAuthor());
         assertEquals("genre", book.getGenre());
         assertEquals("about", book.getAbout());
-        assertEquals(10.0, book.getPrice());
+        assertEquals(BigDecimal.ONE, book.getPrice());
         assertEquals(5, book.getQuantity());
     }
 }

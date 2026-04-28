@@ -9,36 +9,42 @@
 <div th:replace="~{fragments/navbar :: nav-header}"></div>
 
 <div class="content-wrapper">
+  <div class="dashboard-header">
+    <h2>Order Details</h2>
+    <p class="auth-subtitle">Order ID: <span th:text="${order.userOrderNumber}"></span>
+      Customer: <span th:text="${order.customerName}"></span>
+    </p>
+  </div>
 
-  <h2>Order Details (User)</h2>
-
-  <p>Order ID: <span th:text="${order.userOrderNumber}"></span></p>
-  <p>Total: ₱<span th:text="${#numbers.formatDecimal(order.total, 1, 2)}">0.00</span></p>
-
-
-  <table border="1" style="width: 100%; margin-top: 20px;">
-    <thead>
-    <tr>
-      <th>Book</th>
-      <th>Price</th>
-      <th>Quantity</th>
-      <th>Subtotal</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <tr th:each="item : ${order.items}">
-      <td th:text="${item.bookTitle}"></td>
-      <td th:text="${#numbers.formatDecimal(item.price, 1, 2)}"></td>
-      <td th:text="${item.quantity}"></td>
-      <td th:text="${#numbers.formatDecimal(item.price * item.quantity, 1, 2)}"></td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+      <tr>
+        <th>Book</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="item : ${order.items}">
+        <td><strong th:text="${item.bookTitle}"></strong></td>
+        <td th:text="'₱' + ${#numbers.formatDecimal(item.price, 1, 2)}"></td>
+        <td th:text="${item.quantity}"></td>
+        <td><strong th:text="'₱' + ${#numbers.formatDecimal(item.price * item.quantity, 1, 2)}"></strong></td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="3" style="text-align: right; padding: 20px;"><strong>Total Amount:</strong></td>
+        <td style="padding: 20px;"><strong style="font-size: 1.2em;" th:text="'₱' + ${#numbers.formatDecimal(order.total, 1, 2)}">0.00</strong></td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
 
   <br>
-  <a th:href="@{/orders}" class="nav-btn">Back to Orders</a>
-
+  <a th:href="@{/orders}" class="btn">Back to My Orders</a>
 </div>
 
 </body>

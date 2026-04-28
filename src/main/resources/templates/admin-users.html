@@ -25,6 +25,28 @@
         Add New User
     </a>
 
+    <a th:href="@{/admin/dashboard}" class="btn small-btn" style="margin-bottom: 15px; display: inline-block;">
+        Back to Dashboard
+    </a>
+
+    <form method="get" th:action="@{/admin/users}"
+          style="display:flex; gap:10px; margin-bottom:15px;">
+
+        <input type="text"
+               name="search"
+               th:value="${search}"
+               placeholder="Search username..." />
+
+        <select name="role" onchange="this.form.submit()">
+            <option value="">All Roles</option>
+            <option value="USER" th:selected="${role == 'USER'}">USER</option>
+            <option value="ADMIN" th:selected="${role == 'ADMIN'}">ADMIN</option>
+        </select>
+
+        <button type="submit">Filter</button>
+
+        <a th:href="@{/admin/users}" class="btn small-btn">Reset</a>
+    </form>
 
     <br>
     <div class="table-wrapper">

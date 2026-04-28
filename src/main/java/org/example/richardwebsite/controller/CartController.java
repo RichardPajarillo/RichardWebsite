@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @Controller
 @RequestMapping("/cart")
 public class CartController {
@@ -88,8 +90,8 @@ public class CartController {
 
     @PostMapping("/update")
     @ResponseBody
-    public Double updateQty(@RequestParam Long bookId,
-                            @RequestParam int qty) {
+    public BigDecimal updateQty(@RequestParam Long bookId,
+                                @RequestParam int qty) {
 
         Cart cart = getCart();
 

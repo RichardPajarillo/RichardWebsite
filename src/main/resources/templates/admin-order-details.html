@@ -3,45 +3,55 @@
 <head>
     <title>Order Details (Admin)</title>
     <link th:href="@{/css/style.css}" rel="stylesheet">
-    <link th:href="@{/css/cardstyle.css}" rel="stylesheet">
 </head>
-
 <body>
 
 <div th:replace="~{fragments/navbar :: nav-header}"></div>
 
 <div class="content-wrapper">
-
-    <h2>Order #<span th:text="${order.id}"></span></h2>
-
-    <p>
-        User:
-        <span th:text="${order.customerName}"></span>
-    </p>
-
-    <p>
-        Total: ₱<span th:text="${order.total}"></span>
-    </p>
-
-    <hr>
-
-    <h3>Items (admin) </h3>
-
-    <div th:each="item : ${order.items}">
-        <p>
-            <strong th:text="${item.bookTitle}"></strong>
-            - ₱<span th:text="${item.price}"></span>
-            × <span th:text="${item.quantity}"></span>
+    <div class="dashboard-header">
+        <h2>Admin Order Review</h2>
+        <p class="auth-subtitle">
+            UserOrder ID: #<span class="order-number" th:text="${order.userOrderNumber}"></span>
+            Customer: <span th:text="${order.customerName}"></span>
+        </p>
+        <p class="auth-subtitle">
+            Customer: <span th:text="${order.customerName}"></span>
+            Internal DB ID: #<span th:text="${order.id}"></span>
         </p>
     </div>
 
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>Item Description</th>
+                <th>Unit Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${order.items}">
+                <td><strong th:text="${item.bookTitle}"></strong></td>
+                <td th:text="'₱' + ${item.price}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td><strong th:text="'₱' + ${item.price * item.quantity}"></strong></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3" style="text-align: right; padding: 20px;"><strong>Order Total:</strong></td>
+                <td style="padding: 20px;"><strong style="font-size: 1.2em;" th:text="'₱' + ${order.total}"></strong></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
     <br>
-
-    <a th:href="@{/admin/orders}" class="nav-btn">
-        Back to Orders
-    </a>
-
+    <div class="actions-cell">
+        <a th:href="@{/admin/orders}" class="btn">Back to All Orders</a>
+    </div>
 </div>
-
 </body>
 </html>

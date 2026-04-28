@@ -16,6 +16,17 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     // genre + pagination
     Page<Book> findByGenreIgnoreCase(String genre, Pageable pageable);
 
+    Page<Book> findByTitleContainingIgnoreCaseAndGenreIgnoreCase(
+            String title,
+            String genre,
+            Pageable pageable
+    );
+
+    Page<Book> findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(
+            String title,
+            String author,
+            Pageable pageable
+    );
 
 }
 

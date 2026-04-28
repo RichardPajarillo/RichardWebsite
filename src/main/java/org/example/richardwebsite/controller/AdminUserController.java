@@ -5,6 +5,7 @@ import org.example.richardwebsite.model.User;
 import org.example.richardwebsite.repository.CartRepository;
 import org.example.richardwebsite.repository.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -38,14 +39,40 @@ public class AdminUserController {
 
     @GetMapping
     public String manageUsers(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String role,
             @RequestParam(name = "page", defaultValue = "0") int page,
             Model model) {
 
         int size = 10;
-        Page<User> userPage = userRepository.findAll(PageRequest.of(page, size));
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<User> userPage;
+
+        // 🔍 SEARCH + ROLE combined (like your book controller logic)
+        if (search != null && !search.trim().isEmpty() &&
+                role != null && !role.trim().isEmpty()) {
+
+            userPage = userRepository
+                    .findByUsernameContainingIgnoreCaseAndRoleIgnoreCase(search, role, pageable);
+
+        } else if (search != null && !search.trim().isEmpty()) {
+
+            userPage = userRepository.findByUsernameContainingIgnoreCase(search, pageable);
+
+        } else if (role != null && !role.trim().isEmpty()) {
+
+            userPage = userRepository.findByRoleIgnoreCase(role, pageable);
+
+        } else {
+
+            userPage = userRepository.findAll(pageable);
+        }
 
         model.addAttribute("userPage", userPage);
         model.addAttribute("users", userPage.getContent());
+        model.addAttribute("search", search);
+        model.addAttribute("role", role);
         model.addAttribute("baseUrl", "/admin/users");
 
         return "admin-users";

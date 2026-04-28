@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.data.domain.Pageable;
 
 @Controller
 public class AdminBookController { // RENAME THIS to avoid ambiguity
@@ -22,15 +23,45 @@ public class AdminBookController { // RENAME THIS to avoid ambiguity
 
     // This handles the Admin Table View with Pagination
     @GetMapping("/admin/books")
-    public String adminBooks(
+    public String manageBooks(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String genre,
             @RequestParam(name = "page", defaultValue = "0") int page,
             Model model) {
 
-        int size = 10; // Show 10 books per page in admin table
-        Page<Book> bookPage = bookRepository.findAll(PageRequest.of(page, size));
+        int size = 10;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Book> bookPage;
+
+        if (search != null && !search.trim().isEmpty() &&
+                genre != null && !genre.trim().isEmpty()) {
+
+            // 🔥 BOTH filters (AND)
+            bookPage = bookRepository
+                    .findByTitleContainingIgnoreCaseAndGenreIgnoreCase(
+                            search, genre, pageable);
+
+        } else if (search != null && !search.trim().isEmpty()) {
+
+            bookPage = bookRepository
+                    .findByTitleContainingIgnoreCase(search, pageable);
+
+        } else if (genre != null && !genre.trim().isEmpty()) {
+
+            bookPage = bookRepository
+                    .findByGenreIgnoreCase(genre, pageable);
+
+        } else {
+
+            bookPage = bookRepository.findAll(pageable);
+        }
 
         model.addAttribute("bookPage", bookPage);
-        model.addAttribute("books", bookPage.getContent()); // Matches your th:each="book : ${books}"
+        model.addAttribute("books", bookPage.getContent());
+        model.addAttribute("search", search);
+        model.addAttribute("genre", genre);
+        model.addAttribute("baseUrl", "/admin/books");
 
         return "admin-books";
     }
@@ -48,29 +79,26 @@ public class AdminBookController { // RENAME THIS to avoid ambiguity
                            Model model,
                            RedirectAttributes redirectAttributes) {
 
-        if (result.hasErrors()) {
-            model.addAttribute("priceError", "Invalid Input!");
-            return book.getId() == null ? "new_book" : "update_book";
+        if (book.getQuantity() == null) {
+            book.setQuantity(0);
         }
 
-        // 1. Capture whether this is an update before saving
-        Long originalId = book.getId();
+        if (result.hasErrors()) {
+            System.out.println("VALIDATION ERRORS:");
+            result.getAllErrors().forEach(System.out::println);
+
+            model.addAttribute("book", book);
+            return "new_book";
+        }
+
+        boolean isUpdate = (book.getId() != null);
 
         bookRepository.save(book);
 
-        // 2. Set the message dynamically based on whether it was an update
-        String successMessage = (originalId == null)
-                ? "Book saved successfully!"
-                : "Book updated successfully!";
+        redirectAttributes.addFlashAttribute("message",
+                isUpdate ? "Book updated!" : "Book saved!");
 
-        redirectAttributes.addFlashAttribute("message", successMessage);
-
-        // 3. Handle redirects based on update vs new
-        if (originalId != null) {
-            return "redirect:/admin/books/update/" + originalId;
-        }
-
-        return "redirect:/admin/books/new";
+        return "redirect:/admin/books";
     }
 
 

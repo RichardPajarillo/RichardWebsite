@@ -23,4 +23,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     // For Admin View (Paginated - uses JpaRepository's findAll(Pageable))
     Page<Order> findAll(Pageable pageable);
+
+    Page<Order> findByCustomerNameContainingIgnoreCaseOrUserOrderNumberContainingIgnoreCase(
+            String customerName,
+            String orderNumber,
+            Pageable pageable
+    );
 }

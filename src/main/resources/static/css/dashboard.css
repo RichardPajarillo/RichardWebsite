@@ -1,6 +1,5 @@
 /* Dashboard Header */
 .dashboard-header {
-    margin-bottom: 40px;
     border-bottom: 1px solid var(--border);
     padding-bottom: 20px;
 }

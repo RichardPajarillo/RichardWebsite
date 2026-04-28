@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -23,8 +25,8 @@ class BookRepositoryTest {
     @Test
     void findAll_shouldReturnPagedBooks() {
         // Arrange
-        Book book1 = new Book("cover1", "Title1", "Author1", "Genre1", "About1", 10.0, 5);
-        Book book2 = new Book("cover2", "Title2", "Author2", "Genre2", "About2", 20.0, 3);
+        Book book1 = new Book("cover1", "Title1", "Author1", "Genre1", "About1", BigDecimal.ONE, 5);
+        Book book2 = new Book("cover2", "Title2", "Author2", "Genre2", "About2", BigDecimal.TWO, 3);
         bookRepository.save(book1);
         bookRepository.save(book2);
 
@@ -40,8 +42,8 @@ class BookRepositoryTest {
     @Test
     void findByTitleContainingIgnoreCase_shouldReturnMatchingBooks() {
         // Arrange
-        Book book1 = new Book("cover1", "Java Book", "Author1", "Genre1", "About1", 10.0, 5);
-        Book book2 = new Book("cover2", "Python Book", "Author2", "Genre2", "About2", 20.0, 3);
+        Book book1 = new Book("cover1", "Java Book", "Author1", "Genre1", "About1", BigDecimal.ONE, 5);
+        Book book2 = new Book("cover2", "Python Book", "Author2", "Genre2", "About2", BigDecimal.TWO, 3);
         bookRepository.save(book1);
         bookRepository.save(book2);
 
@@ -56,8 +58,8 @@ class BookRepositoryTest {
     @Test
     void findByGenreIgnoreCase_shouldReturnMatchingBooks() {
         // Arrange
-        Book book1 = new Book("cover1", "Title1", "Author1", "Fiction", "About1", 10.0, 5);
-        Book book2 = new Book("cover2", "Title2", "Author2", "Non-Fiction", "About2", 20.0, 3);
+        Book book1 = new Book("cover1", "Title1", "Author1", "Fiction", "About1", BigDecimal.ONE, 5);
+        Book book2 = new Book("cover2", "Title2", "Author2", "Non-Fiction", "About2", BigDecimal.TWO, 3);
         bookRepository.save(book1);
         bookRepository.save(book2);
 

@@ -16,6 +16,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -150,7 +151,7 @@ class CartControllerTest {
         // Setup cart with one item
         Book book = new Book();
         book.setId(5L);
-        book.setPrice(10.0);
+        book.setPrice(BigDecimal.ONE);
 
         CartItem item = new CartItem();
         item.setBook(book);

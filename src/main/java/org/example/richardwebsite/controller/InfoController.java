@@ -21,4 +21,6 @@ public class InfoController {
     public String contact() {
         return "contact";
     }
+
+
 }

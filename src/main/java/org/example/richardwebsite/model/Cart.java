@@ -1,6 +1,8 @@
 package org.example.richardwebsite.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,9 +64,16 @@ public class Cart {
         );
     }
 
-    public double getTotal() {
-        return items.stream()
-                .mapToDouble(i -> i.getBook().getPrice() * i.getQuantity())
-                .sum();
+    public BigDecimal getTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (CartItem item : items) {
+            BigDecimal price = item.getBook().getPrice();
+            BigDecimal quantity = BigDecimal.valueOf(item.getQuantity());
+
+            total = total.add(price.multiply(quantity));
+        }
+
+        return total;
     }
 }

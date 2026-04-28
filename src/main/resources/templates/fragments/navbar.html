@@ -6,12 +6,12 @@
 
         <span class="brand">FORMULA BOOK</span>
 
-        <a th:href="@{/}" class="nav-btn">Home</a>
-        <a th:href="@{/news}" class="nav-btn">News</a>
-        <a th:href="@{/contact}" class="nav-btn">Contact</a>
-        <a th:href="@{/about}" class="nav-btn">About</a>
-        <a th:href="@{/orders}" class="nav-btn">Orders</a>
-        <a th:href="@{/cart}" class="nav-btn">Cart</a>
+        <a th:href="@{/}" sec:authorize="hasAnyRole('USER','ADMIN')" class="nav-btn">Home</a>
+        <a th:href="@{/news}" sec:authorize="hasAnyRole('USER','ADMIN')" class="nav-btn">News</a>
+        <a th:href="@{/contact}" sec:authorize="hasAnyRole('USER','ADMIN')" class="nav-btn">Contact</a>
+        <a th:href="@{/about}" sec:authorize="hasAnyRole('USER','ADMIN')" class="nav-btn">About</a>
+        <a th:href="@{/orders}" sec:authorize="hasAnyRole('USER','ADMIN')" class="nav-btn">Orders</a>
+        <a th:href="@{/cart}" sec:authorize="hasAnyRole('USER','ADMIN')" class="nav-btn">Cart</a>
 
 
         <a th:href="@{/admin/dashboard}"

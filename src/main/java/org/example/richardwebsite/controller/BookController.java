@@ -28,13 +28,33 @@ public class BookController {
 
         int size = 8;
         int pageNumber = (page == null || page < 0) ? 0 : page;
+
+        boolean hasSearch = search != null && !search.trim().isEmpty();
+        boolean hasGenre = genre != null && !genre.trim().isEmpty();
+
         Page<Book> booksPage;
 
-        if (search != null && !search.trim().isEmpty()) {
-            booksPage = bookRepository.findByTitleContainingIgnoreCase(search, PageRequest.of(pageNumber, size));
-        } else if (genre != null && !genre.trim().isEmpty()) {
-            booksPage = bookRepository.findByGenreIgnoreCase(genre, PageRequest.of(pageNumber, size));
+        if (hasSearch && hasGenre) {
+
+            // BOTH filters applied
+            booksPage = bookRepository
+                    .findByTitleContainingIgnoreCaseAndGenreIgnoreCase(
+                            search, genre, PageRequest.of(pageNumber, size));
+
+        } else if (hasSearch) {
+
+            booksPage = bookRepository
+                    .findByTitleContainingIgnoreCase(
+                            search, PageRequest.of(pageNumber, size));
+
+        } else if (hasGenre) {
+
+            booksPage = bookRepository
+                    .findByGenreIgnoreCase(
+                            genre, PageRequest.of(pageNumber, size));
+
         } else {
+
             booksPage = bookRepository.findAll(PageRequest.of(pageNumber, size));
         }
 

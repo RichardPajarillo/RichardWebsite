@@ -12,8 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,7 +45,7 @@ class CheckoutServiceTest {
         when(securityService.getCurrentUser()).thenReturn(user);
 
         // 2. Define the Book
-        Book book = new Book("cover", "title", "author", "genre", "about", 10.0, 5);
+        Book book = new Book("cover", "title", "author", "genre", "about", BigDecimal.ONE, 5);
 
         // 3. Define the CartItem (This must come BEFORE creating the list)
         CartItem cartItem = new CartItem(); // This defines the symbol 'cartItem'
@@ -53,7 +55,10 @@ class CheckoutServiceTest {
         // 4. Initialize the Cart with a MUTABLE ArrayList
         Cart cart = new Cart();
         // Use the variable 'cartItem' defined above
-        cart.setItems(new ArrayList<>(Arrays.asList(cartItem)));
+        List<CartItem> items = new ArrayList<>();
+        items.add(cartItem);
+        cart.setItems(items);
+        cartItem.setCart(cart);
 
         // 5. Setup Repository Mocks
         when(cartRepository.findByUser_Id(1L)).thenReturn(Optional.of(cart));
